@@ -1,0 +1,48 @@
+/* 默认样式 */
+.g-btn {
+  outline: none;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: var(--gray-6);
+}
+
+.g-btn:active {
+  background-color: var(--gray-5);
+}
+
+
+/* 主要按钮 */
+.g-btn.g-primary-btn {
+  background: var(--accent-color);
+  color: white;
+  letter-spacing: 1px;
+}
+
+.g-btn.g-primary-btn:hover {
+  background-color: var(--accent-color-lighten);
+}
+
+.g-btn.g-primary-btn:active {
+  background-color: var(--accent-color-darken);
+}
+
+.g-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.g-link:hover {
+  color: var(--accent-color);
+}
+
+.g-link.g-page-link {
+  color: inherit;
+  transition: all 0.3s ease-in-out;
+  border-bottom: 1px solid var(--accent-color-lighten);
+}
+
+.g-link.g-page-link:hover {
+  border-bottom: 2px solid var(--accent-color);
+}
