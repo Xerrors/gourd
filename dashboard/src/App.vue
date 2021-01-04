@@ -6,7 +6,7 @@
 import { defineComponent } from 'vue'
 import Layout from './components/Layout.vue'
 
-import "/@/styles/index.scss"
+import "./styles/index.scss"
 
 export default defineComponent({
   name: 'App',

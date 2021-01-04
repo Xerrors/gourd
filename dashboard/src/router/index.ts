@@ -4,22 +4,32 @@ const routes = [
   {
     path: "/",
     name: "HelloWorld",
-    component: () => import("/@/views/HelloWorld.vue"),
+    component: () => import("../views/HelloWorld.vue"),
   },
   {
     path: "/dashboard",
     name: "Home",
-    component: () => import("/@/views/Home.vue"),
+    component: () => import("../views/Home.vue"),
   },
   {
-    path: "/login",
-    name: "Login",
-    component: () => import("/@/views/Login.vue"),
+    path: "/pages",
+    name: "Pages",
+    component: () => import("../views/Pages.vue"),
+  },
+  {
+    path: "/messages",
+    name: "Messages",
+    component: () => import("../views/Messages.vue"),
+  },
+  {
+    path: "/server-monitor",
+    name: "ServerMonitor",
+    component: () => import("../views/ServerMonitor.vue"),
   },
   {
     path: "/404",
     name: "404",
-    component: () => import("/@/views/404.vue"),
+    component: () => import("../views/404.vue"),
   },
 ];
 

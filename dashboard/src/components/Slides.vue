@@ -6,9 +6,9 @@
 
     <div class="button-panel">
       <router-link to="/dashboard">后台总览</router-link>
-      <router-link to="/">文章管理</router-link>
-      <router-link to="/a">消息管理</router-link>
-      <router-link to="/b">服务器</router-link>
+      <router-link to="/pages">文章管理</router-link>
+      <router-link to="/messages">消息管理</router-link>
+      <router-link to="/server-monitor">服务器</router-link>
     </div>
   </div>
 </template>
@@ -26,6 +26,14 @@
   align-items: center;
 
   background: white;
+  border-radius: 0 32px 32px 0;
+
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid #FFFFFF;
+  box-sizing: border-box;
+  backdrop-filter: blur(32px);
+
+  box-shadow: 1px 0px 20px 8px rgba(0,0,0,0.05);
   
   .logo, .button-panel {
     width: 200px;
@@ -75,7 +83,7 @@
     }
 
     .router-link-active {
-      background: linear-gradient(124.51deg, #DA62C7 11.89%, #E147D2 86.3%);
+      background: black;
       color: white;
     }
   }

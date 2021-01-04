@@ -1,5 +1,83 @@
 <template>
   <div class="main-container">
-    main
+    <div class="block spc8 spr2">
+      1
+    </div>
+    <div class="block spc4">
+      2
+    </div>
+    <div class="block spc4 spr3">
+      3
+    </div>
+    <div class="block spc4 spr3">
+      4
+    </div>
+    <div class="block spc4">
+      5
+    </div>
+    <div class="block spc4">
+      6
+    </div>
+    <div class="block spc4">
+      7
+    </div>
+    <div class="block spc4 spr2">
+      8
+    </div>
+    <div class="block spc4 spr2">
+      9
+    </div>
+    <div class="block">
+      10
+    </div>
+    <div class="block">
+      11
+    </div>
+    <div class="block">
+      12
+    </div>
+    <div class="block">
+      13
+    </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.main-container > * {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid #FFFFFF;
+  box-sizing: border-box;
+  backdrop-filter: blur(32px);
+  /* Note: backdrop-filter has minimal browser support */
+
+  border-radius: 16px;
+
+  /* just for test */ 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* test */
+}
+
+/* Grid Layout */
+.main-container {
+  display: grid;
+
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: 100px;
+  grid-gap: 16px 24px;
+
+  .spc8 { grid-column: span 8; }
+  .spc7 { grid-column: span 7; }
+  .spc6 { grid-column: span 6; }
+  .spc5 { grid-column: span 5; }
+  .spc4 { grid-column: span 4; }
+  .spc3 { grid-column: span 3; }
+  .spc2 { grid-column: span 2; }
+  .spc1 { grid-column: span 1; }
+  .spr4 { grid-row: span 4; }
+  .spr3 { grid-row: span 3; }
+  .spr2 { grid-row: span 2; }
+  .spr1 { grid-row: span 1; }
+}
+</style>

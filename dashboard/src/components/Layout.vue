@@ -26,7 +26,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-  .default-container main{
+  .default-container {
+
+    background: linear-gradient(124.51deg, #EBF8FF 11.89%, #e5f1ff 86.3%);
+
+    main{
       margin-left: var(--slides-width);
       min-height: 100vh;
       width: auto;
@@ -35,7 +39,6 @@ export default defineComponent({
 
       /* for test */
       height: 1000px;
-
-      background: linear-gradient(124.51deg, #EBF8FF 11.89%, #EEF6FF 86.3%);
+    } 
   }
 </style>

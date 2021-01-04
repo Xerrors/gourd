@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <h1>预览</h1>
+    <h1>后台总览</h1>
     <button class="m-btn nav-btn">开始写作</button>
   </div>
 </template>
@@ -15,6 +15,11 @@
 
   display: flex;
   align-items: center;
+
+  h1 {
+    font-size: 28px;
+    line-height: 40px;
+  }
 
   .nav-btn {
     margin-left: auto;
