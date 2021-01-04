@@ -20,3 +20,4 @@
 - 基于 [vitepress](https://github.com/vuejs/vitepress)
 - BootStrap [v5](https://v5.bootcss.com)
 
+- 后台部分基于 vite + ts + vue3 搭建
