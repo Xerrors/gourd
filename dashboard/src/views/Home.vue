@@ -1,3 +1,5 @@
 <template>
-  1
+  <div class="main-container">
+    main
+  </div>
 </template>
