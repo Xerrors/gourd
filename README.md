@@ -17,3 +17,7 @@
 
 - 博客设计的思维导图-[GitMind.cn](https://gitmind.cn/app/doc/e43752359)
 - 开发日志-[CHANGELOG](CHANGELOG.md)
+- 基于 [vitepress](https://github.com/vuejs/vitepress)
+- BootStrap [v5](https://v5.bootcss.com)
+
+- 后台部分基于 vite + ts + vue3 搭建
