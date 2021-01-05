@@ -63,9 +63,8 @@
 .main-container {
   display: grid;
 
-  grid-template-columns: repeat(12, 1fr);
   grid-auto-rows: 100px;
-  grid-gap: 16px 24px;
+  grid-gap: 20px 24px;
 
   .spc8 { grid-column: span 8; }
   .spc7 { grid-column: span 7; }
@@ -79,5 +78,24 @@
   .spr3 { grid-row: span 3; }
   .spr2 { grid-row: span 2; }
   .spr1 { grid-row: span 1; }
+}
+
+
+.main-container {
+  grid-template-columns: repeat(12, 1fr);
+}
+
+// 大于 1700px 的
+@media (min-width: 1700px) {
+  .main-container {
+    grid-template-columns: repeat(16, 1fr);
+  }
+}
+
+// 小于 1200px 的
+@media (max-width: 1200px) {
+  .main-container {
+    grid-template-columns: repeat(8, 1fr);
+  }
 }
 </style>

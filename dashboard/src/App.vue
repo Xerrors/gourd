@@ -3,10 +3,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import Layout from './components/Layout.vue'
-
-import "./styles/index.scss"
+import { defineComponent } from 'vue';
+import Layout from './components/Layout.vue';
 
 export default defineComponent({
   name: 'App',
@@ -16,5 +14,5 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 </style>
