@@ -2,6 +2,8 @@
 
 > 【提醒】项目处于起步阶段 In Progress
 
+![preview](https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/homepage.png)
+
 ## 项目介绍
 
 项目的功能分为三个部分，博客网页、后台管理系统、后端数据支持；
