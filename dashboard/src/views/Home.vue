@@ -48,6 +48,7 @@
   border: 1px solid #FFFFFF;
   box-sizing: border-box;
   backdrop-filter: blur(32px);
+  box-shadow: 1px 0px 20px 8px rgba(0,0,0,0.05);
   /* Note: backdrop-filter has minimal browser support */
 
   border-radius: 16px;

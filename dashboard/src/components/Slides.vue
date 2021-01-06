@@ -18,15 +18,15 @@
   position: fixed;
   top: 0;
 
-  width: var(--slides-width);
-  height: 100vh;
+  width: calc(var(--slides-width) - 20px);
+  height: calc(100vh - 40px);
 
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  background: white;
-  border-radius: 0 32px 32px 0;
+  border-radius: 32px;
+  margin: 20px;
 
   background: rgba(255, 255, 255, 0.6);
   border: 1px solid #FFFFFF;
