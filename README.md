@@ -22,9 +22,9 @@
 
 ### 项目相关资源
 
-- 博客设计文档 by [Notion.so](https://www.notion.so/krance/1cbf60650c0f455cbb13c9fbbb96f0cb)
-- 后台设计文档 by [Notion.so](https://www.notion.so/krance/Dashboard-0940dcf050b84838b16e6b47b6b69cf6)
-- 后端设计文档 by [Notion.so](https://www.notion.so/krance/eada9f4c33d94e70b027bd9e5dd31ff3)
+- 博客设计文档 [GitHub](./docs/Blog_Design_Doc.md)
+- 后台设计文档 [GitHub](./docs/Dashboard_Design_and_Develop.md)
+- 后端设计文档 [GitHub](./docs/Backend_Design_and_Develop.md)
 - 博客设计的思维导图-[GitMind.cn](https://gitmind.cn/app/doc/e43752359)
 - 开发日志-[CHANGELOG](./docs/CHANGELOG.md)
 - 基于 [vitepress](https://github.com/vuejs/vitepress)
