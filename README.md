@@ -2,7 +2,7 @@
 
 > 【提醒】项目处于起步阶段 In Progress
 
-![preview](https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/homepage.png)
+![preview](https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/homepage1.png)
 
 ## 项目介绍
 
