@@ -31,7 +31,7 @@
   background: rgba(255, 255, 255, 0.6);
   border: 1px solid #FFFFFF;
   box-sizing: border-box;
-  backdrop-filter: blur(32px);
+  // backdrop-filter: blur(32px);
 
   box-shadow: 1px 0px 20px 8px rgba(0,0,0,0.05);
   

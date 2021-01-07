@@ -16,8 +16,8 @@
         <span class="msg__icon">{{ msg.id }}</span>
         <span class="msg__time">{{ msg.time }}</span>
         <span class="msg__text">{{ msg.content }}</span>
-        <button class="msg-view">查看</button>
-        <button class="msg-delete">删除</button>
+        <button class="btn-text msg-view">查看</button>
+        <button class="btn-text msg-delete">删除</button>
       </div>
     </div>
   </div>
@@ -88,7 +88,7 @@ export default {
 
       border: 1px solid #FFFFFF;
       box-sizing: border-box;
-      backdrop-filter: blur(32px);
+      // backdrop-filter: blur(32px);
       /* Note: backdrop-filter has minimal browser support */
 
       border-radius: 8px;
@@ -123,7 +123,7 @@ export default {
       border: 1px solid #FFFFFF;
       box-sizing: border-box;
       box-shadow: 0px 2px 16px rgba(47, 116, 219, 0.05);
-      backdrop-filter: blur(32px);
+      // backdrop-filter: blur(32px);
       /* Note: backdrop-filter has minimal browser support */
 
       border-radius: 8px;
@@ -149,14 +149,7 @@ export default {
       }
 
       .msg-view, .msg-delete {
-        height: 24px;
-        padding: 4px 12px;
-        
-        background: rgba(0,0,0,0);
-        box-sizing: border-box;
-
-        border-radius: 8px;
-        margin-left: auto;
+        // height: 24px;
       }
 
       .msg-view {
