@@ -1,7 +1,7 @@
 <template>
   <div class="main-container">
     <div class="block spc8 spr2">
-      1
+      数据表现图表
     </div>
     <div class="block spc4">
       2
