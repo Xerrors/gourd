@@ -148,10 +148,6 @@ export default {
         color: #222;
       }
 
-      .msg-view, .msg-delete {
-        // height: 24px;
-      }
-
       .msg-view {
         color: #2F74DB;
       }

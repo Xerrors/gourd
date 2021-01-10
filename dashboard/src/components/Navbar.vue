@@ -1,7 +1,9 @@
 <template>
   <div class="navbar">
     <h1>后台总览</h1>
-    <button class="m-btn nav-btn">开始写作</button>
+    <a-button type="primary" class="nav-btn">
+      Primary
+    </a-button>
   </div>
 </template>
 
