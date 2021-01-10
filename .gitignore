@@ -7,3 +7,13 @@ package-lock.json
 .temp
 .cache
 .DS_Store
+
+# flask
+__pycache__
+instance
+.env
+
+.idea
+
+# 数据文件
+*.db
