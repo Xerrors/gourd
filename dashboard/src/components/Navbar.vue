@@ -2,7 +2,7 @@
   <div class="navbar">
     <h1>后台总览</h1>
     <a-button type="primary" class="nav-btn">
-      Primary
+      开始写作
     </a-button>
   </div>
 </template>
@@ -20,11 +20,13 @@
 
   h1 {
     font-size: 28px;
+    font-weight: 600;
     line-height: 40px;
   }
 
   .nav-btn {
     margin-left: auto;
+    border-radius: 4px;
   }
 }
 </style>

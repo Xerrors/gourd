@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-const {resolve} = require('path')
+import { resolve } from 'path'
 
 import vue from '@vitejs/plugin-vue'
 
@@ -10,5 +10,16 @@ export default defineConfig({
     '/@/': resolve(__dirname, './src')
     // '/@components/': path.resolve(__dirname, './src/components')
   },
+  optimizeDeps: {
+    include: ["axios"]
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://116.62.110.131:5000/',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
+  },
 })
-
