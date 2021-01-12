@@ -1,35 +1,22 @@
 import re
-
 import scrapy
+import config
 
-
-
-class MyBlogItem(scrapy.Item):
-    # define the fields for your item here like:
-    article_id = scrapy.Field()
-    type = scrapy.Field()
-    title = scrapy.Field()
-    content = scrapy.Field()
-    update_date = scrapy.Field()
-    read_count = scrapy.Field()
-    comments_count = scrapy.Field()
-    pass
-
+from server.items import CsdnBlogItem
 
 class CsdnSpiderSpider(scrapy.Spider):
     name = 'csdn_spider'
     allowed_domains = ['blog.csdn.net']
-    start_urls = ['http://blog.csdn.net/jiangshanwe']
+    start_urls = ['http://blog.csdn.net/' + config.CSDN_NAME]
 
     def parse(self, response):
         article_list = response.xpath("//div[@class='article-list']//div[contains(@class, 'article-item-box')]")
         for i_item in article_list:
-            blog_item = MyBlogItem()
+            blog_item = CsdnBlogItem()
             blog_item['article_id'] = i_item.xpath(".//@data-articleid").extract_first()
-            blog_item['type'] = i_item.xpath(".//h4//a//span[1]//text()").extract_first()
             blog_item['title'] = i_item.xpath(".//h4//a//text()[2]").extract_first().strip()
             # blog_item['content'] = i_item.xpath(".//p[@class='content']//a//text()").extract_first().strip()
-            blog_item['update_date'] = i_item.xpath(".//span[contains(@class, 'date')]//text()").extract_first().strip()
+            blog_item['create_date'] = i_item.xpath(".//span[contains(@class, 'date')]//text()").extract_first().strip()
             blog_item['read_count'] = i_item.xpath(".//span[@class='read-num'][1]//text()").extract_first().strip()
             blog_item['comments_count'] = i_item.xpath(
                 ".//span[@class='read-num'][2]//text()").extract_first().strip() if i_item.xpath(
@@ -39,6 +26,6 @@ class CsdnSpiderSpider(scrapy.Spider):
         page_size = re.compile(r'var[\s]+pageSize[\s]*=[\s]*(\d*?)[\s]*[\;]').findall(response.text)[0]
         list_total = re.compile(r'var[\s]+listTotal[\s]*=[\s]*(\d*?)[\s]*[\;]').findall(response.text)[0]
         if int(list_total) > (int(current_page) * int(page_size)):
-            yield scrapy.Request("https://blog.csdn.net/jiangshanwe/article/list/" + str(int(current_page) + 1),
+            yield scrapy.Request("https://blog.csdn.net/jaykm/article/list/" + str(int(current_page) + 1),
                                  callback=self.parse)
         pass

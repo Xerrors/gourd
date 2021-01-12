@@ -1,7 +1,7 @@
 import os
 import frontmatter
 
-from config import BLOG_PATH
+from config import BLOG_PATH, CSDN_NAME
 
 # def parse_md(arg, dirname, files):
 #     for file in files:
@@ -30,3 +30,32 @@ def get_article_list():
 
     extend_dir(BLOG_PATH)
     return article_list
+
+
+def get_articles_from_csdn():
+    """ 从数据库中找寻已经爬取的 CSDN 文章 """
+    from data.Tables import CsdnArticlesTable, CsdnCount
+
+    article_list = []
+    query_result = CsdnArticlesTable.query.all()
+
+    for item in query_result:
+        item_dict = {}
+        item_dict['title'] = item.title
+        item_dict['date'] = item.create_date
+        item_dict['article_id'] = item.article_id
+
+        article_count = CsdnCount.query.filter_by(article_id=item.article_id).first()
+
+        item_dict['read_count'] = article_count.read_count
+        item_dict['comment_count'] = article_count.comment_count
+
+        article_list.append(item_dict)
+
+    return article_list
+
+
+def get_articles_from_zhihu():
+    return []
+
+

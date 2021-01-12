@@ -9,7 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_restful import fields, marshal_with, reqparse, Api, Resource, abort
 
 import config
-from utils import get_article_list
+from utils import get_article_list, get_articles_from_csdn, get_articles_from_zhihu
 
 WIN = sys.platform.startswith('win')
 if WIN:  # 如果是 Windows 系统，使用三个斜线
@@ -19,13 +19,12 @@ else:  # 否则使用四个斜线
 
 app = Flask(__name__)
 app.config["Debug"] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = prefix + os.path.join(app.root_path, 'data.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = prefix + os.path.join(app.root_path, 'data', 'data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # 关闭对模型修改的监控
 
 # api = Api(app)
 db = SQLAlchemy(app)
 
-from data.Tables import Zone
 
 # class Zone(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)  # 主键
@@ -90,7 +89,13 @@ def create_zone():
 
 @app.route('/articles', methods=['GET'])
 def get_articles():
-    articles = get_article_list()
+    source = request.args.get('source')
+    if source == 'csdn':
+        articles = get_articles_from_csdn()
+    elif source == 'zhihu':
+        articles = get_articles_from_zhihu()
+    else:
+        articles = get_article_list()
     return jsonify({"data": articles})
 
 
@@ -100,4 +105,5 @@ def page_not_found(e):
 
 
 if __name__ == '__main__':
+    from data.Tables import Zone
     app.run(debug=app.config["Debug"])
