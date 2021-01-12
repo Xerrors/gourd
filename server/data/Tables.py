@@ -34,4 +34,8 @@ class CsdnCount(db.Model):
     read_count = db.Column(db.Integer)
     comment_count = db.Column(db.Integer)
 
+    def update_count(read, comment):
+        self.read_count = read
+        self.comment_count = comment
+
 

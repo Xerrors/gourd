@@ -1,13 +1,13 @@
 import re
 import scrapy
-import config
+from config import CSDN_NAME
 
 from server.items import CsdnBlogItem
 
 class CsdnSpiderSpider(scrapy.Spider):
     name = 'csdn_spider'
     allowed_domains = ['blog.csdn.net']
-    start_urls = ['http://blog.csdn.net/' + config.CSDN_NAME]
+    start_urls = ['http://blog.csdn.net/' + CSDN_NAME]
 
     def parse(self, response):
         article_list = response.xpath("//div[@class='article-list']//div[contains(@class, 'article-item-box')]")
@@ -26,6 +26,6 @@ class CsdnSpiderSpider(scrapy.Spider):
         page_size = re.compile(r'var[\s]+pageSize[\s]*=[\s]*(\d*?)[\s]*[\;]').findall(response.text)[0]
         list_total = re.compile(r'var[\s]+listTotal[\s]*=[\s]*(\d*?)[\s]*[\;]').findall(response.text)[0]
         if int(list_total) > (int(current_page) * int(page_size)):
-            yield scrapy.Request("https://blog.csdn.net/jaykm/article/list/" + str(int(current_page) + 1),
+            yield scrapy.Request("https://blog.csdn.net/" + "CSDN_NAME" + "/article/list/" + str(int(current_page) + 1),
                                  callback=self.parse)
         pass
