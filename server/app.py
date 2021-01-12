@@ -25,20 +25,22 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # 关闭对模型修改的
 # api = Api(app)
 db = SQLAlchemy(app)
 
-class Zone(db.Model):
-    id = db.Column(db.Integer, primary_key=True)  # 主键
-    date = db.Column(db.DateTime, default=datetime.now)
-    msg = db.Column(db.Text)
-    status = db.Column(db.String(20))
+from data.Tables import Zone
 
-    def to_json(self):
-        json_zone = {
-            'id': self.id,
-            'date': self.date,
-            'msg': self.msg,
-            'status': self.status
-        }
-        return json_zone
+# class Zone(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)  # 主键
+#     date = db.Column(db.DateTime, default=datetime.now)
+#     msg = db.Column(db.Text)
+#     status = db.Column(db.String(20))
+
+#     def to_json(self):
+#         json_zone = {
+#             'id': self.id,
+#             'date': self.date,
+#             'msg': self.msg,
+#             'status': self.status
+#         }
+#         return json_zone
 
 
 def rtn_zones():
