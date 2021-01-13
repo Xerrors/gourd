@@ -22,4 +22,14 @@ export default defineConfig({
       }
     }
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `$injectedColor: orange;`
+      },
+      less: {
+        additionalData: `$primary-color: red;`
+      }
+    }
+  }
 })

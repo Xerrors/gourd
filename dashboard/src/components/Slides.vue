@@ -111,6 +111,5 @@ export default defineComponent({
       color: white;
     }
   }
-
 }
 </style>
