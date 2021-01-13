@@ -17,7 +17,7 @@ class MyBlogPipeline:
 
     def process_item(self, item, spider):
         # 查看当前文章是否在服务器中
-        if not CsdnArticlesTable.query.filter_by(article_id=1).first():
+        if not CsdnArticlesTable.query.filter_by(article_id=item['article_id']).first():
             db.session.add(CsdnArticlesTable(
                 article_id=item['article_id'],
                 title=item['title'],
@@ -25,13 +25,22 @@ class MyBlogPipeline:
             ))
             db.session.commit()
 
-
-        db.session.add(CsdnCount(
+        
+        csdn_count = CsdnCount.query.filter_by(
             article_id=item['article_id'],
-            read_count=item['read_count'],
-            comment_count=item['comments_count']
-        ))
+            date=datetime.today().strftime('%Y-%m-%d')
+            ).first()
 
+        # 查看今天是否已经爬取完成
+        if not csdn_count:
+            db.session.add(CsdnCount(
+                article_id=item['article_id'],
+                read_count=item['read_count'],
+                comment_count=item['comments_count']
+            ))
+        else:
+            csdn_count.update_count(item['read_count'], item['comments_count'])
+    
         db.session.commit()
 
         return item
