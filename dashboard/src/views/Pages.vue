@@ -4,14 +4,16 @@
       class="demo-loadmore-list"
       :loading="data.loading"
       item-layout="horizontal"
-      :data-source="data.articles"
+      :data-source="data.filted_articles"
     >
       <template #header>
-        <h2 class="header-title">共 {{ data.articles.length }} 篇文章</h2>
-        <!-- <a-date-picker :value="data.endDate" @change="data.onDateChange" /> -->
+        <h2 class="header-title">
+          共 {{ data.filted_articles.length }} 篇文章
+        </h2>
+        <a-date-picker :value="data.endDate" @change="data.onDateChange" />
         <a-select
           :value="data.source"
-          style="width: 120px"
+          style="width: 100px"
           ref="select"
           @change="data.getData"
           :loading="data.loading"
@@ -31,7 +33,7 @@
           </a-list-item-meta>
           <template #actions>
             <a-popconfirm
-              placement="leftBottom"
+              placement="left"
               title="编辑文章需要在对应平台登录，是否跳转？"
               ok-text="是的"
               cancel-text="取消"
@@ -64,7 +66,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive } from "vue";
+import { defineComponent, ref, reactive, computed } from "vue";
 
 import request from "../utils/request";
 import { parseTime, joinPath } from "../utils/format";
@@ -74,17 +76,27 @@ import { message } from "ant-design-vue";
 export default defineComponent({
   name: "Pages",
   setup() {
-    let loading = ref(false);
-
     let data = reactive({
-      source: "csdn",
+      source: "",
       articles: [],
+      filted_articles: [],
       loading: false,
-      // endDate: new Date(Date.now()),
-      // onDateChange: (date:Date, dateString:string) => {
-      //   data.endDate = date;
-      //   console.log(dateString);
-      // }
+      endDate: "",
+
+      filter_date: (item:any):boolean => { return true},
+
+      onDateChange: (selectDate: Date, dateString: string) => {
+        data.endDate = dateString;
+        if (dateString) {
+          data.filter_date = (item) => {
+            return new Date(item.date) < new Date(dateString)
+          };
+        } else {
+          data.filter_date = ():boolean => { return true};
+        }
+        data.filted_articles = data.articles.filter(data.filter_date);
+      },
+
       getData: (source: string) => {
         data.loading = true;
         new Promise((resolve, reject): void => {
@@ -94,7 +106,7 @@ export default defineComponent({
             params: { source: source },
           })
             .then((res) => {
-              let articles = res.data.data.map((item) => {
+              let articles = res.data.data.map((item:any) => {
                 item.date = parseTime(new Date(item.date));
                 if (source === "csdn") {
                   item.link =
@@ -112,11 +124,12 @@ export default defineComponent({
                 return item;
               });
 
-              articles.sort((a, b) => {
+              articles.sort((a:any, b:any) => {
                 return Number(new Date(b.date)) - Number(new Date(a.date));
               });
 
               data.articles = articles;
+              data.filted_articles = articles.filter(data.filter_date);
               data.loading = false;
               message.success("加载完成");
             })
@@ -132,7 +145,6 @@ export default defineComponent({
 
     return {
       data,
-      loading,
     };
   },
   methods: {
@@ -164,7 +176,7 @@ export default defineComponent({
   // color: rgba(0, 0, 0, 0.8);
   margin: 4px;
 }
-  // 未生效
+// 未生效
 .ant-popover-inner {
   backdrop-filter: blur(16px);
   background: rgba(255, 255, 255, 0.5);
@@ -173,8 +185,10 @@ export default defineComponent({
   box-shadow: 1px 1px 12px 2px rgba(0, 0, 0, 0.05);
 }
 
-.ant-select {
+.ant-select,
+.ant-calendar-picker {
   margin-left: 20px;
+  float: right;
 }
 </style>
 
@@ -182,7 +196,7 @@ export default defineComponent({
 .pages {
   padding: 8px 20px;
   background: rgba(255, 255, 255, 0.8);
-  border-radius: 16px;
+  border-radius: 8px;
   box-shadow: 1px 1px 12px 2px rgba(0, 0, 0, 0.05);
 }
 </style>

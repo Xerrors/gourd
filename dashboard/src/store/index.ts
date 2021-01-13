@@ -3,7 +3,7 @@ import { createStore } from "vuex";
 export default createStore({
   state() {
     return {
-      count: 0,
+      cur_view: 0,
     };
   },
   mutations: {
