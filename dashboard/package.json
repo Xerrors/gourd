@@ -7,6 +7,7 @@
     "vite-version": "vite --version"
   },
   "dependencies": {
+    "@kangc/v-md-editor": "^2.2.0",
     "@types/node": "^14.14.20",
     "ant-design-vue": "^2.0.0-rc.8",
     "axios": "^0.21.1",
@@ -24,6 +25,6 @@
     "less-loader": "^7.2.1",
     "sass": "^1.32.2",
     "typescript": "^4.1.3",
-    "vite": "^2.0.0-beta.25"
+    "vite": "^2.0.0-beta.29"
   }
 }

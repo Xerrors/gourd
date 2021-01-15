@@ -11,7 +11,11 @@ export default defineConfig({
     // '/@components/': path.resolve(__dirname, './src/components')
   },
   optimizeDeps: {
-    include: ["axios"]
+    include: [
+      "axios",
+      '@kangc/v-md-editor/lib/base-editor.js',
+      '@kangc/v-md-editor/lib/theme/github.js',
+    ]
   },
   server: {
     proxy: {
