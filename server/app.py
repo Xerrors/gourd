@@ -113,9 +113,12 @@ def uploadMarkdown():
         f.write(md)
     with open('temp.md', encoding='UTF-8') as f:
         md = frontmatter.load(f)
+    
+    if not md.get('title') or not md.get('date'):
+        return jsonify({"message": "请上传符合博客文章要求的文章"}), 403
 
     # 解析文件名并根据分类保存到对应的文件目录下
-    file_name = md['date'].strftime('%Y-%m-%d') + '-' + md['title'].replace(' ', '-')
+    file_name = md['date'].strftime('%Y-%m-%d') + '-' + md['title'].replace(' ', '-') + '.md'
     if md.get('zhuanlan'):
         file_path = os.path.join(BLOG_PATH, md.get('zhuanlan'), file_name)
     elif type(md.get('categories')) == type([]):
