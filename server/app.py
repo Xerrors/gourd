@@ -3,7 +3,7 @@ import os
 import sys
 from datetime import datetime
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from flask_sqlalchemy import SQLAlchemy
 
 from flask_restful import fields, marshal_with, reqparse, Api, Resource, abort
@@ -128,10 +128,27 @@ def uploadMarkdown():
     else:
         file_path = os.path.join(BLOG_PATH, 'Others', file_name)
 
+    if os.path.exists(file_path):
+        os.remove(file_path)
     os.renames('temp.md', file_path)
 
     # TODO: 后续需要添加自动编译提交的功能
     return jsonify({"message": "已经保存到{}".format(file_path)})
+
+
+@app.route('/server/md_source', methods=["GET"])
+def getMarkdown():
+    path = request.args.get('path')
+    for item in get_article_list():
+        if item.get('permalink') == path:
+            with open(item['path'], encoding='UTF-8') as f:
+                data = f.read()
+                return jsonify({"data": data})
+
+    return jsonify({"message": "没有该资源~"}), 404
+
+
+
 
 
 @app.errorhandler(404)

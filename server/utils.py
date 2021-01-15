@@ -26,6 +26,7 @@ def get_article_list():
             else:
                 with open(markdown_path, encoding='UTF-8') as f:
                     md = frontmatter.load(f)
+                    md['path'] = markdown_path
                     article_list.append(md.metadata)
 
     extend_dir(BLOG_PATH)
