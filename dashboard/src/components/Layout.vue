@@ -1,18 +1,24 @@
 <template>
-  <div class="default-container">
-    <slides/>
-
-    <main>
-      <navbar></navbar>
+  <div>
+    <div v-if="route_meta.specialLayout">
       <router-view/>
-    </main>
+    </div>
 
+    <div v-else class="default-container">
+      <slides/>
+
+      <main>
+        <navbar></navbar>
+        <router-view/>
+      </main>
+
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
+import { defineComponent, toRaw } from 'vue'
+import { useRoute } from 'vue-router'
 import Slides from './Slides.vue'
 import Navbar from './Navbar.vue'
 
@@ -21,7 +27,15 @@ export default defineComponent({
   components: {
     Slides,
     Navbar,
-  }
+  },
+  setup() {
+    let route = useRoute();
+    let route_meta = toRaw(route).meta;
+
+    return {
+      route_meta,
+    }
+  },
 })
 </script>
 

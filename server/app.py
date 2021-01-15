@@ -87,7 +87,7 @@ def create_zone():
     return jsonify({"data": rtn_zones()})
 
 
-@app.route('/articles', methods=['GET'])
+@app.route('/articles', methods=["GET"])
 def get_articles():
     source = request.args.get('source')
     if source == 'csdn':
@@ -97,6 +97,13 @@ def get_articles():
     else:
         articles = get_article_list()
     return jsonify({"data": articles})
+
+
+@app.route('/server/status', methods=["GET"])
+def get_server_status():
+    from monitor.status import MachineStatus as MS
+
+    
 
 
 @app.errorhandler(404)

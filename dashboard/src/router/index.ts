@@ -27,9 +27,20 @@ const routes = [
     component: () => import("../views/ServerMonitor.vue"),
   },
   {
+    path: "/edit/:path",
+    name: "编辑文章",
+    component: () => import("../views/NewPage.vue"),
+    meta: {
+      specialLayout: true,
+    }
+  },
+  {
     path: "/404",
     name: "404",
     component: () => import("../views/404.vue"),
+    meta: {
+      specialLayout: true,
+    }
   },
 ];
 

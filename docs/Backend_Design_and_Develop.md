@@ -50,3 +50,23 @@ pip install -r requirements.txt
 
 看到一个很好的教程：https://programminghistorian.org/en/lessons/creating-apis-with-python-and-flask
 API：http://www.pythondoc.com/flask-restful/
+
+
+服务器监测内容：
+
+基本配置：
+- CPU 基本配置
+- GPU 基本配置
+- 架构信息
+- 系统发行版本
+
+低频信息：
+- 数据库状态
+- 磁盘使用率
+- 运行时间
+- 服务状态
+
+高频访问：
+- CPU使用率
+- 内存使用率
+- 当前进程
