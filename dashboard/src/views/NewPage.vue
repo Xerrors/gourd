@@ -4,7 +4,7 @@
       <v-md-editor 
         v-model="myEditor.text" 
         :disabled-menus="[]"
-        right-toolbar="preview toc sync-scroll fullscreen | upload"
+        right-toolbar="preview toc sync-scroll | upload"
         @upload-image="handleUploadImage"
         @save="handleSave"
         :toolbar="toolbar"
@@ -19,18 +19,21 @@ import request from "../utils/request";
 import { parseTime } from '../utils/format';
 import { message } from "ant-design-vue";
 
+import { useRoute, useRouter } from "vue-router";
 
 export default defineComponent({
   name: "NewPage",
   setup() {
     const date:string = parseTime(new Date());
-    const oriText:string = '---\ntitle: \ndate: ' + date + '\npermalink: /temp-link\ncover: \ntag: \n - blog\n - \ncategories: \n\n---\n';
+    const oriText:string = '---\ntitle: \ndate: ' + date + '\npermalink: draft\ncover: \ntag: \n - blog\n - \ncategories: \n\n---\n';
+
+    let route = useRoute();
+    let router = useRouter();
 
     let myEditor = reactive({
       text: oriText,
       resetContent: () => {
-        console.log("heer2");
-        myEditor.text = '---\ntitle: \ndate: ' + date + '\npermalink: /temp-link\ncover: \ntag: \n - blog\n - \ncategories: \n\n---\n';
+        myEditor.text = oriText;
       }
     })
 
@@ -64,14 +67,33 @@ export default defineComponent({
         title: '重置内容',
         action(editor:any) {
           myEditor.resetContent();
-          localStorage.removeItem("draft");
+          localStorage.removeItem(route.params.path);
         }
       },
     })
 
     onMounted(() => {
-      if (localStorage.draft) {
+      if (route.params.path == "draft" && localStorage.getItem("draft")) {
         myEditor.text = localStorage.getItem("draft");
+      } else {
+        new Promise((resolve, reject): void => {
+          request({
+            url: "/api/server/md_source",
+            method: "get",
+            params: {
+              path: route.params.path
+            }
+          })
+            .then((res) => {
+              myEditor.text = res.data.data;
+              resolve(res);
+            })
+            .catch((err) => {
+              message.error("所访问的资源不存在")
+              router.push('/edit/draft');
+              reject(err);
+            });
+        });
       }
     })
 
