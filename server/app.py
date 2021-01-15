@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from flask_restful import fields, marshal_with, reqparse, Api, Resource, abort
 
-import config
+from config import BLOG_PATH
 from utils import get_article_list, get_articles_from_csdn, get_articles_from_zhihu
 
 WIN = sys.platform.startswith('win')
@@ -102,8 +102,33 @@ def get_articles():
 @app.route('/server/status', methods=["GET"])
 def get_server_status():
     from monitor.status import MachineStatus as MS
+    pass
 
-    
+
+@app.route('/server/md_source', methods=["POST"])
+def uploadMarkdown():
+    import frontmatter
+    md = request.get_data()
+    with open('temp.md', 'wb+') as f:
+        f.write(md)
+    with open('temp.md', encoding='UTF-8') as f:
+        md = frontmatter.load(f)
+
+    # 解析文件名并根据分类保存到对应的文件目录下
+    file_name = md['date'].strftime('%Y-%m-%d') + '-' + md['title'].replace(' ', '-')
+    if md.get('zhuanlan'):
+        file_path = os.path.join(BLOG_PATH, md.get('zhuanlan'), file_name)
+    elif type(md.get('categories')) == type([]):
+        file_path = os.path.join(BLOG_PATH, md.get('categories')[0], file_name)
+    elif type(md.get('categories')) == type(""):
+        file_path = os.path.join(BLOG_PATH, md.get('categories'), file_name)
+    else:
+        file_path = os.path.join(BLOG_PATH, 'Others', file_name)
+
+    os.renames('temp.md', file_path)
+
+    # TODO: 后续需要添加自动编译提交的功能
+    return jsonify({"message": "已经保存到{}".format(file_path)})
 
 
 @app.errorhandler(404)
