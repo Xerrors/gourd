@@ -133,12 +133,16 @@ def getMarkdown():
 
     item = LocalArticlesTable.query.filter_by(path=path).first()
 
+    if not item:
+        scan_article_to_db()
+        item = LocalArticlesTable.query.filter_by(path=path).first()
+
     if item:
         with open(item.local_path, encoding='UTF-8') as f:
             data = f.read()
             return jsonify({"data": data})
-
-    return abort(404, "不存在该文章！")
+    else:
+        return abort(404, "不存在该文章！")
 
 
 @app.route('/server/status', methods=["GET"])
