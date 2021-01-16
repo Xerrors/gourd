@@ -1,7 +1,6 @@
 from app import db
 from datetime import datetime
 
-from utils import parse_markdown
 
 class Zone(db.Model):
     __tablename__ = 'ZoneTable'
@@ -44,7 +43,7 @@ class CsdnCount(db.Model):
 class LocalArticlesTable(db.Model):
     __tablename__ = 'LocalArticlesTable'
     id = db.Column(db.Integer, primary_key=True)
-    path = db.Column(db.String(50))
+    path = db.Column(db.String(50), unique=True)
     local_path = db.Column(db.String(50))
     read_count = db.Column(db.Integer, default=0)
     like_count = db.Column(db.Integer, default=0)
@@ -60,7 +59,7 @@ class LocalArticlesTable(db.Model):
 class LocalArticlesComment(db.Model):
     __tablename__ = 'LocalArticlesComment'
     id = db.Column(db.Integer, primary_key=True)
-    path = db.Column(db.String(50), db.ForeignKey('LocalArticlesTable.path'), unique=True)
+    path = db.Column(db.String(50), db.ForeignKey('LocalArticlesTable.path'))
     date = db.Column(db.String(30), default=datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
     reviewer = db.Column(db.String(20))
     follow_by = db.Column(db.String(20), default=None)

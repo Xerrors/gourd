@@ -5,9 +5,8 @@
 
 
 # useful for handling different item types with a single interface
-from itemadapter import ItemAdapter
 from datetime import datetime
-from data.Tables import CsdnCount, CsdnArticlesTable
+from app.tables import CsdnCount, CsdnArticlesTable
 from app import db
 
 class MyBlogPipeline:

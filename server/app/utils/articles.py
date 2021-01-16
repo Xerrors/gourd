@@ -1,7 +1,11 @@
 import os
 import frontmatter
 
-from config import BLOG_PATH, CSDN_NAME
+from app import db
+
+from app.config import BLOG_PATH
+from app.tables import LocalArticlesTable, LocalArticlesComment
+from app.tables import CsdnArticlesTable, CsdnCount
 
 
 def get_article_list_from_dirs():
@@ -17,15 +21,13 @@ def get_article_list_from_dirs():
             if os.path.isdir(markdown_path):
                 extend_dir(path=os.path.join(path, file))
             else:
-                article_list.append(parse_markdown(markdown_path))
+                article_list.append(parse_markdown(markdown_path).metadata)
 
     extend_dir(BLOG_PATH)
     return article_list
 
 
 def scan_article_to_db():
-    from app import db
-    from data.Tables import LocalArticlesTable
     assert os.path.exists(BLOG_PATH)
     article_list = []
 
@@ -58,7 +60,6 @@ def scan_article_to_db():
 
 
 def get_articles_from_db():
-    from data.Tables import LocalArticlesTable, LocalArticlesComment
 
     article_list = []
     query_result = LocalArticlesTable.query.all()
@@ -74,18 +75,8 @@ def get_articles_from_db():
     return article_list
 
 
-def parse_markdown(markdown_path):
-    with open(markdown_path, encoding='UTF-8') as f:
-        md = frontmatter.load(f)
-        # 去除不规范的链接名称
-        if md['permalink'][0] == '/':
-            md['permalink'] = md['permalink'][1:]
-        return md
-
-
 def get_articles_from_csdn():
     """ 从数据库中找寻已经爬取的 CSDN 文章 """
-    from data.Tables import CsdnArticlesTable, CsdnCount
 
     article_list = []
     query_result = CsdnArticlesTable.query.all()
@@ -109,4 +100,29 @@ def get_articles_from_csdn():
 def get_articles_from_zhihu():
     return []
 
+
+def parse_markdown(markdown_path):
+    with open(markdown_path, encoding='UTF-8') as f:
+        md = frontmatter.load(f)
+        # 去除不规范的链接名称
+        if md['permalink'][0] == '/':
+            md['permalink'] = md['permalink'][1:]
+        return md
+
+
+def rename_markdown(md):
+    # 解析文件名并根据分类保存到对应的文件目录下
+    file_name = md['date'].strftime('%Y-%m-%d') + '-' + md['title'].replace(' ', '-') + '.md'
+    if md.get('zhuanlan'):
+        file_path = os.path.join(BLOG_PATH, md.get('zhuanlan'), file_name)
+    elif type(md.get('categories')) == type([]):
+        file_path = os.path.join(BLOG_PATH, md.get('categories')[0], file_name)
+    elif type(md.get('categories')) == type(""):
+        file_path = os.path.join(BLOG_PATH, md.get('categories'), file_name)
+    else:
+        file_path = os.path.join(BLOG_PATH, 'Others', file_name)
+    if os.path.exists(file_path):
+        os.remove(file_path)
+    os.renames('temp.md', file_path)
+    return file_path
 
