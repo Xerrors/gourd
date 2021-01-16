@@ -1,7 +1,7 @@
 from flask import request, jsonify, abort
 from app import app, db
 from app.utils.articles import get_article_list_from_dirs, get_articles_from_db, scan_article_to_db, rename_markdown
-from app.utils.articles import get_articles_from_zhihu, get_articles_from_csdn
+from app.utils.articles import get_articles_from_zhihu, get_articles_from_csdn, rebuild
 from app.utils.zone import rtn_zones
 
 
@@ -121,6 +121,7 @@ def uploadMarkdown():
         return abort(404, '请上传符合博客文章要求的文章~')
 
     file_path = rename_markdown(md)
+    scan_article_to_db()
 
     # TODO: 后续需要添加自动编译提交的功能
     return jsonify({"message": "已经保存到{}".format(file_path)})
@@ -148,6 +149,12 @@ def getMarkdown():
 @app.route('/server/status', methods=["GET"])
 def get_server_status():
     pass
+
+
+@app.route('/rebuild', methods=["GET"])
+def get_rebuild():
+    rebuild()
+    return jsonify({"message": "Good Job!"})
 
 
 @app.errorhandler(404)
