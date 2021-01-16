@@ -9,7 +9,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_restful import fields, marshal_with, reqparse, Api, Resource, abort
 
 from config import BLOG_PATH
-from utils import get_article_list, get_articles_from_csdn, get_articles_from_zhihu
+from utils import get_article_list_from_dirs, get_articles_from_csdn, get_articles_from_zhihu, get_articles_from_db
+from utils import scan_article_to_db
 
 WIN = sys.platform.startswith('win')
 if WIN:  # 如果是 Windows 系统，使用三个斜线
@@ -26,27 +27,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # 关闭对模型修改的
 db = SQLAlchemy(app)
 
 
-# class Zone(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)  # 主键
-#     date = db.Column(db.DateTime, default=datetime.now)
-#     msg = db.Column(db.Text)
-#     status = db.Column(db.String(20))
-
-#     def to_json(self):
-#         json_zone = {
-#             'id': self.id,
-#             'date': self.date,
-#             'msg': self.msg,
-#             'status': self.status
-#         }
-#         return json_zone
-
-
 def rtn_zones():
     results = Zone.query.all()
     zones = [zone.to_json() for zone in results]
     return zones
-
 
 
 @app.route('/zones', methods=['GET'])
@@ -94,9 +78,45 @@ def get_articles():
         articles = get_articles_from_csdn()
     elif source == 'zhihu':
         articles = get_articles_from_zhihu()
+    elif source == 'db':
+        articles = get_articles_from_db()
     else:
-        articles = get_article_list()
+        articles = get_article_list_from_dirs()
     return jsonify({"data": articles})
+
+
+# TODO 仅用作测试使用
+@app.route('/scan-article-to-db', methods=['GET'])
+def scan_to_db():
+    scan_article_to_db()
+    articles = get_articles_from_db()
+    return jsonify({"data": articles})
+
+
+# TODO 数据验证
+@app.route('/articles/like', methods=['POST'])
+def add_like():
+    from data.Tables import LocalArticlesTable
+    item = LocalArticlesTable.query.filter_by(path=request.args.get('path')).first()
+    if item:
+        item.add_like()
+        db.session.commit()
+        return jsonify({"message": "Good"})
+    else:
+        return jsonify({"message": "不存在"}), 404
+
+
+# TODO 数据验证
+@app.route('/articles/comment', methods=['POST'])
+def add_comment():
+    from data.Tables import LocalArticlesComment
+    db.session.add(LocalArticlesComment(
+        path=request.args.get('path'),
+        reviewer=request.args.get('reviewer'),
+        content=request.args.get('content')
+    ))
+    db.session.commit()
+    return jsonify({"message": "Good"})
 
 
 @app.route('/server/status', methods=["GET"])
@@ -139,16 +159,13 @@ def uploadMarkdown():
 @app.route('/server/md_source', methods=["GET"])
 def getMarkdown():
     path = request.args.get('path')
-    for item in get_article_list():
+    for item in get_article_list_from_dirs():
         if item.get('permalink') == path:
             with open(item['path'], encoding='UTF-8') as f:
                 data = f.read()
                 return jsonify({"data": data})
 
     return jsonify({"message": "没有该资源~"}), 404
-
-
-
 
 
 @app.errorhandler(404)
