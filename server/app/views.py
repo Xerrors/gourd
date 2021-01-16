@@ -1,7 +1,7 @@
 from flask import request, jsonify, abort
 from app import app, db
 from app.utils.articles import get_article_list_from_dirs, get_articles_from_db, scan_article_to_db, rename_markdown
-from app.utils.articles import get_articles_from_zhihu, get_articles_from_csdn, rebuild
+from app.utils.articles import get_articles_from_zhihu, get_articles_from_csdn
 from app.utils.zone import rtn_zones
 
 
@@ -149,12 +149,6 @@ def getMarkdown():
 @app.route('/server/status', methods=["GET"])
 def get_server_status():
     pass
-
-
-@app.route('/rebuild', methods=["GET"])
-def get_rebuild():
-    rebuild()
-    return jsonify({"message": "Good Job!"})
 
 
 @app.errorhandler(404)
