@@ -1,6 +1,6 @@
 import re
 import scrapy
-from config import CSDN_NAME
+from app.config import CSDN_NAME
 
 from server.items import CsdnBlogItem
 
