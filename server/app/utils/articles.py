@@ -113,14 +113,19 @@ def parse_markdown(markdown_path):
 def rename_markdown(md):
     # 解析文件名并根据分类保存到对应的文件目录下
     file_name = md['date'].strftime('%Y-%m-%d') + '-' + md['title'].replace(' ', '-') + '.md'
-    if md.get('zhuanlan'):
-        file_path = os.path.join(BLOG_PATH, md.get('zhuanlan'), file_name)
-    elif type(md.get('categories')) == type([]):
-        file_path = os.path.join(BLOG_PATH, md.get('categories')[0], file_name)
+
+    if type(md.get('categories')) == type([]):
+        file_path = os.path.join(BLOG_PATH, md.get('categories')[0])
     elif type(md.get('categories')) == type(""):
-        file_path = os.path.join(BLOG_PATH, md.get('categories'), file_name)
+        file_path = os.path.join(BLOG_PATH, md.get('categories'))
     else:
-        file_path = os.path.join(BLOG_PATH, 'Others', file_name)
+        file_path = os.path.join(BLOG_PATH, 'Others')
+
+    if md.get('zhuanlan'):
+        file_path = os.path.join(file_path, md.get('zhuanlan', file_name))
+    else:
+        file_path = os.path.join(file_path, file_name)
+
     if os.path.exists(file_path):
         os.remove(file_path)
     os.renames('temp.md', file_path)
