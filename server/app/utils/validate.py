@@ -4,4 +4,6 @@ from app.config import SERVER_TOKEN, ADMIN_NAME
 
 
 def validate_srver_token(username, password):
-    return username == ADMIN_NAME and hashlib.md5(password) == hashlib.md5(SERVER_TOKEN)
+    client_md5 = hashlib.md5(password.encode('utf-8')).hexdigest()
+    server_md5 = hashlib.md5(SERVER_TOKEN.encode('utf-8')).hexdigest()
+    return username == ADMIN_NAME and client_md5 == server_md5

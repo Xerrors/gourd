@@ -153,16 +153,20 @@ def admin_login():
         return jsonify({"message": '你已经登录过了~'})
 
     data = request.get_data()
-    data = json.loads(data)
+
+    print(data)
+
+    data = json.loads(data, encoding="UTF-8")
     username = data.get("username")
     password = data.get("password")
 
-    if not username or password:
+    if not username or not password:
         abort(403, "请填写所有字段~")
 
     if validate_srver_token(username, password):
         session['login'] = True
-        # TODO
+    else:
+        return jsonify({"message": "你不对劲~"}), 403
     # 添加密码验证
     return jsonify({"message": 'Yes'})
 
