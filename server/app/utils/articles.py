@@ -112,17 +112,60 @@ def parse_markdown(markdown_path):
 
 def rename_markdown(md):
     # 解析文件名并根据分类保存到对应的文件目录下
+    path = md['permalink'][1:] if md['permalink'][0] == '/' else md['permalink']
+
     file_name = md['date'].strftime('%Y-%m-%d') + '-' + md['title'].replace(' ', '-') + '.md'
-    if md.get('zhuanlan'):
-        file_path = os.path.join(BLOG_PATH, md.get('zhuanlan'), file_name)
-    elif type(md.get('categories')) == type([]):
-        file_path = os.path.join(BLOG_PATH, md.get('categories')[0], file_name)
+
+    if type(md.get('categories')) == type([]):
+        file_path = os.path.join(BLOG_PATH, md.get('categories')[0])
     elif type(md.get('categories')) == type(""):
-        file_path = os.path.join(BLOG_PATH, md.get('categories'), file_name)
+        file_path = os.path.join(BLOG_PATH, md.get('categories'))
     else:
-        file_path = os.path.join(BLOG_PATH, 'Others', file_name)
+        file_path = os.path.join(BLOG_PATH, 'Others')
+
+    if md.get('zhuanlan'):
+        file_path = os.path.join(file_path, md.get('zhuanlan'), file_name)
+    else:
+        file_path = os.path.join(file_path, file_name)
+
+    # 判断该文章是否是已经存在数据库或者本地路径里面
+    item = LocalArticlesTable.query.filter_by(path=path).first()
+
+    if item and os.path.exists(item.local_path):
+        os.remove(item.local_path)
     if os.path.exists(file_path):
         os.remove(file_path)
+
     os.renames('temp.md', file_path)
     return file_path
+
+
+# def rebuild():
+#     def extend_dir(path):
+#         for file in os.listdir(path):
+#             # 遍历所有文件
+#             markdown_path = os.path.join(path, file)
+
+#             # 如果是文件夹递归读取，否则读取文件
+#             if os.path.isdir(markdown_path):
+#                 extend_dir(path=os.path.join(path, file))
+#             else:
+#                 md = parse_markdown(markdown_path)
+
+#                 file_name = md['date'].strftime('%Y-%m-%d') + '-' + md['title'].replace(' ', '-') + '.md'
+#                 if type(md.get('categories')) == type([]):
+#                     file_path = os.path.join(BLOG_PATH, md.get('categories')[0])
+#                 elif type(md.get('categories')) == type(""):
+#                     file_path = os.path.join(BLOG_PATH, md.get('categories'))
+#                 else:
+#                     file_path = os.path.join(BLOG_PATH, 'Others')
+
+#                 if md.get('zhuanlan'):
+#                     file_path = os.path.join(file_path, md.get('zhuanlan'), file_name)
+#                 else:
+#                     file_path = os.path.join(file_path, file_name)
+                
+#                 os.renames(markdown_path, file_path)
+
+#     extend_dir(BLOG_PATH)
 

@@ -122,6 +122,7 @@ def uploadMarkdown():
         return abort(404, '请上传符合博客文章要求的文章~')
 
     file_path = rename_markdown(md)
+    scan_article_to_db()
 
     # TODO: 后续需要添加自动编译提交的功能
     return jsonify({"message": "已经保存到{}".format(file_path)})
@@ -134,12 +135,16 @@ def getMarkdown():
 
     item = LocalArticlesTable.query.filter_by(path=path).first()
 
+    if not item:
+        scan_article_to_db()
+        item = LocalArticlesTable.query.filter_by(path=path).first()
+
     if item:
         with open(item.local_path, encoding='UTF-8') as f:
             data = f.read()
             return jsonify({"data": data})
-
-    return abort(404, "不存在该文章！")
+    else:
+        return abort(404, "不存在该文章！")
 
 
 @app.route('/admin/login', methods=["POST"])
