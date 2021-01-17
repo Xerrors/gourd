@@ -14,3 +14,8 @@ else:  # 否则使用四个斜线
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_DATABASE_URI = prefix + os.path.join(app.root_path, '../data', 'data.db')
+
+SECRET_KEY = "&%J87jVyt68JbF68IbvTG79kBy*"
+
+ADMIN_NAME = "krance"
+SERVER_TOKEN = "place-your-sendgrid-api-key-here"

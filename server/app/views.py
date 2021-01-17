@@ -1,7 +1,8 @@
-from flask import request, jsonify, abort
+from flask import request, jsonify, abort, json, session
 from app import app, db
 from app.utils.articles import get_article_list_from_dirs, get_articles_from_db, scan_article_to_db, rename_markdown
-from app.utils.articles import get_articles_from_zhihu, get_articles_from_csdn, rebuild
+from app.utils.articles import get_articles_from_zhihu, get_articles_from_csdn
+from app.utils.validate import validate_srver_token
 from app.utils.zone import rtn_zones
 
 
@@ -146,17 +147,40 @@ def getMarkdown():
         return abort(404, "不存在该文章！")
 
 
+@app.route('/admin/login', methods=["POST"])
+def admin_login():
+    if session.get('login'):
+        return jsonify({"message": '你已经登录过了~'})
+
+    data = request.get_data()
+
+    print(data)
+
+    data = json.loads(data, encoding="UTF-8")
+    username = data.get("username")
+    password = data.get("password")
+
+    if not username or not password:
+        abort(403, "请填写所有字段~")
+
+    if validate_srver_token(username, password):
+        session['login'] = True
+    else:
+        return jsonify({"message": "你不对劲~"}), 403
+    # 添加密码验证
+    return jsonify({"message": 'Yes'})
+
+
 @app.route('/server/status', methods=["GET"])
 def get_server_status():
     pass
 
 
-@app.route('/rebuild', methods=["GET"])
-def get_rebuild():
-    rebuild()
-    return jsonify({"message": "Good Job!"})
-
-
 @app.errorhandler(404)
 def page_not_found(e):
     return jsonify({"message": str(e)}), 404
+
+
+@app.errorhandler(403)
+def page_not_found(e):
+    return jsonify({"message": str(e)}), 403
