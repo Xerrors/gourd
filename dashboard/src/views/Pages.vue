@@ -18,7 +18,7 @@
           @change="data.getData"
           :loading="data.loading"
         >
-          <a-select-option value="local"> 本站 </a-select-option>
+          <a-select-option value="db"> 本站 </a-select-option>
           <a-select-option value="csdn"> CSDN </a-select-option>
           <a-select-option value="zhihu"> 知乎 </a-select-option>
         </a-select>
@@ -68,7 +68,7 @@ export default defineComponent({
     let router = useRouter();
 
     let data = reactive({
-      source: "local",
+      source: "db",
       articles: [],
       filted_articles: [],
       loading: false,
@@ -111,7 +111,7 @@ export default defineComponent({
                     item.article_id;
                   item.edit_link =
                     "https://editor.csdn.net/md/?articleId=" + item.article_id;
-                } else if (source == "local") {
+                } else if (source == "db") {
                   item.link = joinPath(
                     "https://www.xerrors.fun/",
                     item.permalink

@@ -45,7 +45,7 @@ export default defineComponent({
           console.log(myEditor.text);
           new Promise((resolve, reject): void => {
               request({
-                url: "/api/server/md_source",
+                url: "/api/articles/md_source",
                 method: "post",
                 data: myEditor.text,
                 headers: { 
@@ -73,12 +73,14 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      if (route.params.path == "draft" && localStorage.getItem("draft")) {
-        myEditor.text = localStorage.getItem("draft");
+      if (route.params.path == "draft") {
+        if (localStorage.getItem("draft")) {
+          myEditor.text = localStorage.getItem("draft");
+        }
       } else {
         new Promise((resolve, reject): void => {
           request({
-            url: "/api/server/md_source",
+            url: "/api/articles/md_source",
             method: "get",
             params: {
               path: route.params.path

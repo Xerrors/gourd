@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import { resolve } from 'path'
+import { defineConfig } from 'vite';
+import { resolve } from 'path';
 
 import vue from '@vitejs/plugin-vue'
 
@@ -12,7 +12,8 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: [
-      "axios",
+      'axios',
+      'js-cookie',
       '@kangc/v-md-editor/lib/base-editor.js',
       '@kangc/v-md-editor/lib/theme/github.js',
     ]
