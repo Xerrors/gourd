@@ -111,6 +111,9 @@ def add_comment():
 
 @app.route('/articles/md_source', methods=["POST"])
 def uploadMarkdown():
+    if not session.get('login'):
+        return jsonify({"message": '登录之后再试~', 'code': 1001}), 403
+
     import frontmatter
     md = request.get_data()
     with open('temp.md', 'wb+') as f:
@@ -119,7 +122,7 @@ def uploadMarkdown():
         md = frontmatter.load(f)
 
     if not md.get('title') or not md.get('date'):
-        return abort(404, '请上传符合博客文章要求的文章~')
+        abort(404, '请上传符合博客文章要求的文章~')
 
     file_path = rename_markdown(md)
     scan_article_to_db()
@@ -144,7 +147,7 @@ def getMarkdown():
             data = f.read()
             return jsonify({"data": data})
     else:
-        return abort(404, "不存在该文章！")
+        abort(404, "不存在该文章！")
 
 
 @app.route('/admin/login', methods=["POST"])
@@ -156,19 +159,31 @@ def admin_login():
 
     print(data)
 
-    data = json.loads(data, encoding="UTF-8")
+    data = json.loads(data)
     username = data.get("username")
     password = data.get("password")
 
     if not username or not password:
-        abort(403, "请填写所有字段~")
+        return jsonify({"message": '把所有空都填上~别落下~', "code": '1001'})
 
     if validate_srver_token(username, password):
+        from datetime import timedelta
+        session.permanent =True
+        app.permanent_session_lifetime =timedelta(minutes=60)#存活60分钟
         session['login'] = True
+        return jsonify({"message": '登录成功~', "code": '1000'})
     else:
-        return jsonify({"message": "你不对劲~"}), 403
-    # 添加密码验证
-    return jsonify({"message": 'Yes'})
+        return jsonify({"message": '你不对劲！', "code": '1001'})
+
+
+@app.route('/admin/logout', methods=["POST"])
+def admin_logout():
+    if session.get('login'):
+        session.pop('login')
+        return jsonify({"message": '退出成功~', "code": '1000'})
+    else:
+        return jsonify({"message": '还没登录，你不对劲~', "code": '1002'})
+
 
 
 @app.route('/server/status', methods=["GET"])
