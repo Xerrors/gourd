@@ -3,17 +3,23 @@ import { createStore } from "vuex";
 export default createStore({
   state() {
     return {
-      cur_view: 0,
+      logged: true,
     };
   },
   mutations: {
-    increment(state) {
-      state.count++;
+    login(state) {
+      state.logged = true;
     },
+    logout(state) {
+      state.logged = false
+    }
   },
   actions: {
-    increment(context) {
-      context.commit("increment");
+    login(context) {
+      context.commit("login");
+    },
+    logout(context) {
+      context.commit("logout");
     },
   },
 });

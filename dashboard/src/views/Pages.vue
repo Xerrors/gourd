@@ -18,7 +18,7 @@
           @change="data.getData"
           :loading="data.loading"
         >
-          <a-select-option value=""> 本站 </a-select-option>
+          <a-select-option value="db"> 本站 </a-select-option>
           <a-select-option value="csdn"> CSDN </a-select-option>
           <a-select-option value="zhihu"> 知乎 </a-select-option>
         </a-select>
@@ -33,6 +33,7 @@
           </a-list-item-meta>
           <template #actions>
             <a-popconfirm
+              v-if="data.source=='csdn'"
               placement="left"
               title="编辑文章需要在对应平台登录，是否跳转？"
               ok-text="是的"
@@ -42,25 +43,12 @@
             >
               <a :href="item.edit_link" target="_blank">编辑</a>
             </a-popconfirm>
+            <a v-else @click="editLocal('/edit/' + item.permalink)">编辑</a>
             <a :href="item.link" target="_blank">查看</a>
             <a style="color: var(--error-color)">删除</a>
           </template>
         </a-list-item>
       </template>
-      <!-- <template #loadMore>
-        <div
-          v-if="showLoadingMore"
-          :style="{
-            textAlign: 'center',
-            marginTop: '12px',
-            height: '32px',
-            lineHeight: '32px',
-          }"
-        >
-          <a-spin v-if="loadingMore" />
-          <a-button v-else @click="onLoadMore"> loading more </a-button>
-        </div>
-      </template> -->
     </a-list>
   </div>
 </template>
@@ -72,33 +60,41 @@ import request from "../utils/request";
 import { parseTime, joinPath } from "../utils/format";
 
 import { message } from "ant-design-vue";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "Pages",
   setup() {
+    let router = useRouter();
+
     let data = reactive({
-      source: "",
+      source: "db",
       articles: [],
       filted_articles: [],
       loading: false,
       endDate: "",
 
-      filter_date: (item:any):boolean => { return true},
+      filter_date: (item: any): boolean => {
+        return true;
+      },
 
       onDateChange: (selectDate: Date, dateString: string) => {
         data.endDate = dateString;
         if (dateString) {
           data.filter_date = (item) => {
-            return new Date(item.date) < new Date(dateString)
+            return new Date(item.date) < new Date(dateString);
           };
         } else {
-          data.filter_date = ():boolean => { return true};
+          data.filter_date = (): boolean => {
+            return true;
+          };
         }
         data.filted_articles = data.articles.filter(data.filter_date);
       },
 
       getData: (source: string) => {
         data.loading = true;
+        data.source = source;
         new Promise((resolve, reject): void => {
           request({
             url: "/api/articles",
@@ -106,7 +102,7 @@ export default defineComponent({
             params: { source: source },
           })
             .then((res) => {
-              let articles = res.data.data.map((item:any) => {
+              let articles = res.data.data.map((item: any) => {
                 item.date = parseTime(new Date(item.date));
                 if (source === "csdn") {
                   item.link =
@@ -115,7 +111,7 @@ export default defineComponent({
                     item.article_id;
                   item.edit_link =
                     "https://editor.csdn.net/md/?articleId=" + item.article_id;
-                } else {
+                } else if (source == "db") {
                   item.link = joinPath(
                     "https://www.xerrors.fun/",
                     item.permalink
@@ -124,7 +120,7 @@ export default defineComponent({
                 return item;
               });
 
-              articles.sort((a:any, b:any) => {
+              articles.sort((a: any, b: any) => {
                 return Number(new Date(b.date)) - Number(new Date(a.date));
               });
 
@@ -143,8 +139,13 @@ export default defineComponent({
     // data.articles = context.getData(data.source);
     data.getData(data.source);
 
+    let editLocal = (path: string): void => {
+      router.push(path);
+    };
+
     return {
       data,
+      editLocal,
     };
   },
   methods: {

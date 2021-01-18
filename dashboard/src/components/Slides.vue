@@ -10,19 +10,56 @@
       <router-link to="/messages"><CommentOutlined />消息管理</router-link>
       <router-link to="/server-monitor"><DatabaseOutlined />服务器</router-link>
     </div>
+
+    <div class="logout">
+      <button @click="slides.logout">退出登录</button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { DashboardOutlined, FileTextOutlined, CommentOutlined, DatabaseOutlined } from '@ant-design/icons-vue';
+import { defineComponent, reactive } from 'vue'
+import Cookies from 'js-cookie';
+import request from '../utils/request';
 
-import { defineComponent } from 'vue'
+import { useRouter } from 'vue-router';
+import { message } from 'ant-design-vue';
 export default defineComponent({
   components: {
     DashboardOutlined,
     FileTextOutlined,
     DatabaseOutlined,
     CommentOutlined,
+  },
+  setup() {
+    let router = useRouter();
+
+    let slides = reactive({
+      logout: () => {
+        Cookies.remove('logged');
+
+        new Promise((resolve, reject) => {
+          request({
+            url: '/api/admin/logout',
+            method: 'post',
+          })
+          .then(res => {
+            message.success(res.data.message);
+            router.push('/login');
+            resolve(res);
+          })
+          .catch(err => {
+            // message.error(err.message);
+            reject(err);
+          })
+        })
+      }
+    })
+
+    return {
+      slides,
+    }
   }
 });
 </script>
