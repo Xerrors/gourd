@@ -153,7 +153,7 @@ def getMarkdown():
 @app.route('/admin/login', methods=["POST"])
 def admin_login():
     if session.get('login'):
-        return jsonify({"message": '你已经登录过了~'})
+        return jsonify({"message": '你已经登录过了~', "code": '1000'})
 
     data = request.get_data()
 
