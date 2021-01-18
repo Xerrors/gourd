@@ -4,7 +4,7 @@
     <form class="login-form">
       <input v-model="formdata.username" type="text" placeholder="Username" required/>
       <input v-model="formdata.password" type="password" placeholder="Password" required/>
-      <button type="button" @click="formdata.submit" :disabled=formdata.disabled>Login</button>
+      <a-button type="button" @click="formdata.submit" :disabled=formdata.disabled :loading=formdata.loading>Login</a-button>
     </form>
   </div>
 </template>
@@ -23,10 +23,12 @@ export default defineComponent({
     let formdata = reactive({
       username: '',
       password: '',
+      loading: false,
       disabled: computed(() => {
         return ! (Boolean(formdata.username) && Boolean(formdata.password));
       }),
       submit: () => {
+        formdata.loading = true;
         new Promise((resolve, reject): void => {
           request({
             url: '/api/admin/login',
@@ -47,10 +49,12 @@ export default defineComponent({
               cookie.set('logged', '1')
               router.push('/dashboard');
             }
+            formdata.loading = false;
             resolve(res);
           })
           .catch(err => {
             message.error(err.message);
+            formdata.loading = false;
             reject(err);
           })
         });

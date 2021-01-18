@@ -7,66 +7,85 @@
           {{ text }}
         </div>
       </div>
-      <button class="m-btn">
+      <button class="m-btn" @click="data.getMsgs">
         刷新
       </button>
     </div>
     <div class="msg-lists">
-      <div :class="{msg: true, 'readed_msg': msg.readed}" v-for="(msg, ind) in msgs" :key=ind>
+      <div :class="{msg: true, readed_msg: msg.readed}" v-for="(msg, ind) in data.msgs" :key=ind>
         <span class="msg__icon">{{ msg.id }}</span>
-        <span class="msg__time">{{ msg.time }}</span>
-        <span class="msg__text">{{ msg.content }}</span>
-        <button class="btn-text msg-view">查看</button>
-        <button class="btn-text msg-delete">删除</button>
+        <span class="msg__time">{{ msg.date }}</span>
+        <a class="msg__text" :href="msg.link" @click="data.markAsReaded(msg.id)">{{ msg.content }}</a>
+        <a-button type="link" class="msg-mark" @click="data.markAsReaded(msg.id)" :disabled="msg.readed">标记已读</a-button>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { ref } from "vue"
+import { reactive, ref, resolveComponent } from "vue";
+import request from '../utils/request';
+import { message } from 'ant-design-vue';
+import { parseTime } from '../utils/format';
 export default {
   setup() {
     const btn_text = ref(["总览", "本站", "微信", "知乎", "掘金"]);
-    const msgs = ref([
-    {
-      id: 1,
-      content:"消息标题", 
-      readed: false,
-      date: new Date(),
-      url: "",
-    }, {
-      id: 2,
-      content: "玉川在你的文章《青林紫竹风铃里》下评论了“英雄所见略同”", 
-      readed: false,
-      date: new Date(),
-      url: "",
-    }, {
-      id: 3,
-      content: "玉川在你的文章《青林紫竹风铃里》下评论了“英雄所见略同”", 
-      readed: false,
-      date: new Date(),
-      url: "",
-    }, {
-      id: 4,
-      content: "玉川在你的文章《青林紫竹风铃里》下评论了“英雄所见略同”", 
-      readed: false,
-      date: new Date(),
-      url: "",
-    }, {
-      id: 5,
-      content: "玉川在你的文章《青林紫竹风铃里》下评论了“英雄所见略同”", 
-      readed: true,
-      date: new Date(),
-      url: "",
-    }
-    ])
     const selected = ref(0);
 
+    const parseMsg = (item:any):any => {
+      item.date = parseTime(new Date(item.date))
+      return item
+    }
+
+    const data = reactive({
+      msgs: [],
+      source: 'db',
+      loading: false,
+      getMsgs: () => {
+        data.loading = true;
+        new Promise((resolve, reject) => {
+          request({
+            url: '/api/admin/messages',
+            method: 'get',
+            params: {
+              source: data.source,
+            },
+          })
+          .then(res => {
+            data.msgs = res.data.data.map(item => parseMsg(item));
+            data.loading = false;
+            resolve(res);
+          })
+          .catch(err => {
+            data.loading = false;
+            message.error(err.message);
+            reject(err)
+          })
+        })
+      },
+      markAsReaded: (id) => {
+        new Promise((resolve, reject) => {
+          request({
+            url: '/api/admin/readmessage',
+            method: 'post',
+            params: {
+              id: id
+            }
+          })
+          .then(res => {
+            data.msgs = res.data.data.map(item => parseMsg(item));
+            resolve(res);
+          })
+        })
+      }
+    })
+
+    data.getMsgs()
+
     return {
+      data,
       selected,
       btn_text,
-      msgs,
     };
   }
 }
@@ -129,10 +148,10 @@ export default {
       border-radius: 8px;
 
       display: grid;
-      grid-template-columns: 24px 170px auto 56px 56px;
+      grid-template-columns: 24px 170px auto 100px;
       grid-gap: 24px;
 
-      & > span {
+      & > span, & > a {
         height: 20px;
         margin: 4px 0;
 
@@ -140,21 +159,24 @@ export default {
         // border: 1px dashed #333;
       }
 
-      &__time {
-        color: #1d1d1d;
-      }
+      // &__time { color: #1d1d1d; }
 
       &__text {
         color: #222;
+        overflow: hidden;
       }
 
-      .msg-view {
+      .msg-mark {
         color: #2F74DB;
       }
+    }
 
-      .msg-delete {
-        color: #E31748;
-      }
+    .readed_msg {
+      background: rgba(255, 255, 255, 0.4);
+
+      .msg__time, .msg__text { color: #888; }
+
+      .msg-mark { color: gray; }
     }
   }
 }

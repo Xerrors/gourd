@@ -51,6 +51,9 @@ export default defineComponent({
                 headers: { 
                   'Content-Type': 'text/plain'
                 },
+                params: {
+                  path: route.params.path,
+                },
               })
                 .then((res) => {
                   message.success(res.data.message);
@@ -67,12 +70,13 @@ export default defineComponent({
         title: '重置内容',
         action(editor:any) {
           myEditor.resetContent();
-          localStorage.removeItem(route.params.path);
+          localStorage.removeItem(String(route.params.path));
         }
       },
     })
 
     onMounted(() => {
+      console.log(route.params.path);
       if (route.params.path == "draft") {
         if (localStorage.getItem("draft")) {
           myEditor.text = localStorage.getItem("draft");
