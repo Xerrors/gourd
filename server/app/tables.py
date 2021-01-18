@@ -47,7 +47,6 @@ class LocalArticlesTable(db.Model):
     local_path = db.Column(db.String(50))
     read_count = db.Column(db.Integer, default=0)
     like_count = db.Column(db.Integer, default=0)
-    front_matter = db.Column(db.Text)
 
     def add_like(self):
         self.like_count += 1
@@ -62,10 +61,39 @@ class LocalArticlesComment(db.Model):
     path = db.Column(db.String(50), db.ForeignKey('LocalArticlesTable.path'))
     date = db.Column(db.String(30), default=datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
     reviewer = db.Column(db.String(20))
-    follow_by = db.Column(db.String(20), default=None)
+    follow_id = db.Column(db.Integer, default=None) # 被评论的评论的 id
     content = db.Column(db.Text)
 
 
+class Messages(db.Model):
+    __tablename__ = 'Messages'
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.String(30), default=datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
+    type = db.Column(db.String(20))
+    link = db.Column(db.String(50))
+    content = db.Column(db.Text)
+    readed = db.Column(db.Boolean, default=False)
+
+    def set_as_readed(self):
+        self.readed = True
+
+    def to_json(self):
+        json_msgs = {
+            'id': self.id,
+            'date': self.date,
+            'type': self.type,
+            'link': self.link,
+            'content': self.content,
+            'readed': self.readed,
+        }
+        return json_msgs
 
 
-
+# 暂时觉得没有启用的必要
+class Visitors(db.Model):
+    __tablename__ = "Visitors"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20))
+    avatar = db.Column(db.String(50))  # 头像的链接，暂时不启用
+    email = db.Column(db.String(20))
+    site = db.Column(db.String(20))
