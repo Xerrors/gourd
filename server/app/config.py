@@ -19,3 +19,5 @@ SECRET_KEY = "&%J87jVyt68JbF68IbvTG79kBy*"
 
 ADMIN_NAME = "1"
 SERVER_TOKEN = "1"
+
+DOMAIN_PRE = "https://www.xerrors.fun/"

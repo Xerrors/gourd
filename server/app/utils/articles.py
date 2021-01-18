@@ -43,7 +43,6 @@ def scan_article_to_db():
                 cur_frontmatter = parse_markdown(markdown_path)
                 article = LocalArticlesTable.query.filter_by(path=cur_frontmatter['permalink']).first()
                 if article:
-                    article.front_matter = frontmatter.dumps(cur_frontmatter)
                     article.local_path = markdown_path
                     db.session.commit()
                 else:
@@ -51,7 +50,6 @@ def scan_article_to_db():
                     db.session.add(LocalArticlesTable(
                         path=cur_frontmatter['permalink'],
                         local_path=markdown_path,
-                        front_matter=frontmatter.dumps(cur_frontmatter)
                     ))
                     db.session.commit()
 
