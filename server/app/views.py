@@ -120,8 +120,8 @@ def add_comment():
 
     # 生成评论的消息
     md = parse_markdown(item.local_path).metadata
-    if content:
-        comment_msg = "网友“{}”评论了你的文章《{}》".format(reviewer, ['title'])
+    if reviewer:
+        comment_msg = "网友“{}”评论了你的文章《{}》".format(reviewer, md['title'])
     else:
         comment_msg = "有人评论了你的文章《{}》".format(md['title'])
 
@@ -218,6 +218,23 @@ def get_messages():
     else:
         msgs = []
     return jsonify({"data": msgs})
+
+
+@app.route('/admin/readmessage', methods=["POST"])
+def read_message():
+    if not session.get('login'):
+        abort(403, "登录之后再试~")
+    
+    id = request.args.get('id')
+    if not id:
+        abort(404, "请提供id~")
+    
+    from app.tables import Messages
+    msg = Messages.query.get(id)
+    msg.set_as_readed()
+    db.session.commit()
+    msgs = get_all_messages()
+    return jsonify({"message": "Success", "data": msgs})
 
 
 @app.route('/admin/logout', methods=["POST"])

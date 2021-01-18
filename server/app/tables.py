@@ -74,6 +74,9 @@ class Messages(db.Model):
     content = db.Column(db.Text)
     readed = db.Column(db.Boolean, default=False)
 
+    def set_as_readed(self):
+        self.readed = True
+
     def to_json(self):
         json_msgs = {
             'id': self.id,
@@ -94,8 +97,3 @@ class Visitors(db.Model):
     avatar = db.Column(db.String(50))  # 头像的链接，暂时不启用
     email = db.Column(db.String(20))
     site = db.Column(db.String(20))
-
-
-
-
-

@@ -46,7 +46,6 @@ def scan_article_to_db():
                     article.local_path = markdown_path
                     db.session.commit()
                 else:
-                    print(cur_frontmatter['permalink'], markdown_path, cur_frontmatter)
                     db.session.add(LocalArticlesTable(
                         path=cur_frontmatter['permalink'],
                         local_path=markdown_path,
