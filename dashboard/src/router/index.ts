@@ -42,9 +42,9 @@ const routes = [
     path: '/edit/:path',
     name: '编辑文章',
     component: () => import('../views/NewPage.vue'),
-    meta: {
-      specialLayout: true,
-    }
+    // meta: {
+    //   specialLayout: true,
+    // }
   },
   {
     path: '/404',

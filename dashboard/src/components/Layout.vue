@@ -8,8 +8,11 @@
       <slides/>
 
       <main>
-        <navbar></navbar>
-        <router-view/>
+        <!-- <navbar></navbar> -->
+        <transition name="fade-transform" mode="out-in">
+          <router-view/>
+        </transition>
+        <footer>Designed & Developed by Chen</footer>
       </main>
 
     </div>
@@ -43,6 +46,9 @@ export default defineComponent({
 .default-container {
   // background: linear-gradient(124.51deg, #EBF8FF 11.89%, #e5f1ff 86.3%);
   main{
+    display: flex;
+    flex-direction: column;
+
     margin-left: var(--slides-width);
     min-height: 100vh;
     width: auto;
@@ -51,6 +57,21 @@ export default defineComponent({
 
     /* for test */
     height: 1000px;
+
+    footer {
+      margin-top: auto;
+      height: var(--footer-height);
+      padding: 20px 0;
+
+      // display: flex;
+      // align-items: center;
+      // justify-content: center;
+
+      text-align: center;
+
+      color: #666;
+      line-height: calc(var(--footer-height) - 40px);
+    }
   } 
 }
 </style>

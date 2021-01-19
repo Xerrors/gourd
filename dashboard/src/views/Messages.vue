@@ -1,4 +1,8 @@
 <template>
+<div class="messages">
+  <div class="navbar">
+    <h1>消息中心</h1>
+  </div>
   <div class="message-container">
     <div class="button-list">
       <div class="platforms">
@@ -16,10 +20,11 @@
         <span class="msg__icon">{{ msg.id }}</span>
         <span class="msg__time">{{ msg.date }}</span>
         <a class="msg__text" :href="msg.link" @click="data.markAsReaded(msg.id)">{{ msg.content }}</a>
-        <a-button type="link" class="msg-mark" @click="data.markAsReaded(msg.id)" :disabled="msg.readed">标记已读</a-button>
+        <a-button v-if="!msg.readed" type="link" class="msg-mark" @click="data.markAsReaded(msg.id)">标记已读</a-button>
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script lang="ts">
