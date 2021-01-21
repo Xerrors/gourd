@@ -1,7 +1,11 @@
 <template>
-  <div class="pages">
+  <div>
+    <div class="navbar">
+      <h1>文章管理</h1>
+      <a-button  type="primary" class="nav-btn" @click="routerJump('/edit/draft')">新建文章</a-button>
+    </div>
     <a-list
-      class="demo-loadmore-list"
+      class="demo-loadmore-list pages"
       :loading="data.loading"
       item-layout="horizontal"
       :data-source="data.filted_articles"
@@ -43,7 +47,7 @@
             >
               <a :href="item.edit_link" target="_blank">编辑</a>
             </a-popconfirm>
-            <a v-else @click="editLocal('/edit/' + item.permalink)">编辑</a>
+            <a v-else @click="routerJump('/edit/' + item.permalink)">编辑</a>
             <a :href="item.link" target="_blank">查看</a>
             <a style="color: var(--error-color)">删除</a>
           </template>
@@ -139,13 +143,13 @@ export default defineComponent({
     // data.articles = context.getData(data.source);
     data.getData(data.source);
 
-    let editLocal = (path: string): void => {
+    let routerJump = (path: string): void => {
       router.push(path);
     };
 
     return {
       data,
-      editLocal,
+      routerJump,
     };
   },
   methods: {

@@ -1,4 +1,11 @@
 <template>
+<div class="home">
+  <div class="navbar">
+    <h1>后台总览</h1>
+    <a-button type="primary" class="nav-btn" @click="routerJump('/edit/draft')">
+      开始写作
+    </a-button>
+  </div>
   <div class="main-container">
     <div class="block spc8 spr2">
       数据表现图表
@@ -40,7 +47,28 @@
       13
     </div>
   </div>
+</div>
 </template>
+
+<script lang="ts">
+import { defineComponent, ref } from "vue";
+import { useRouter } from "vue-router";
+
+// import  from 'vue'
+export default defineComponent({
+  setup() {
+    let router = useRouter();
+
+    const routerJump = (path:string):void => {
+      router.push(path);
+    };
+
+    return {
+      routerJump,
+    }
+  }
+})
+</script>
 
 <style lang="scss" scoped>
 .main-container > * {

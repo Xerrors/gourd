@@ -30,25 +30,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.navbar {
-  //position: sticky;
-  top: 0;
 
-  width: 100%;
-  height: var(--navbar-height);
-
-  display: flex;
-  align-items: center;
-
-  h1 {
-    font-size: 28px;
-    font-weight: 600;
-    line-height: 40px;
-  }
-
-  .nav-btn {
-    margin-left: auto;
-    border-radius: 4px;
-  }
-}
 </style>
