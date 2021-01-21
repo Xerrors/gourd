@@ -5,7 +5,7 @@ from datetime import datetime
 class Zone(db.Model):
     __tablename__ = 'ZoneTable'
     id = db.Column(db.Integer, primary_key=True)  # 主键
-    date = db.Column(db.String(20), default=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    date = db.Column(db.String(20))
     msg = db.Column(db.Text)
     status = db.Column(db.String(20))
 
@@ -31,7 +31,7 @@ class CsdnCount(db.Model):
     __tablename__ = 'CsdnReadCount'
     id = db.Column(db.Integer, primary_key=True)
     article_id = db.Column(db.String(20), db.ForeignKey('CsdnArticlesTable.article_id'))
-    date = db.Column(db.String(30), default=datetime.today().strftime('%Y-%m-%d'))
+    date = db.Column(db.String(30))
     read_count = db.Column(db.Integer)
     comment_count = db.Column(db.Integer)
 
@@ -59,16 +59,31 @@ class LocalArticlesComment(db.Model):
     __tablename__ = 'LocalArticlesComment'
     id = db.Column(db.Integer, primary_key=True)
     path = db.Column(db.String(50), db.ForeignKey('LocalArticlesTable.path'))
-    date = db.Column(db.String(30), default=datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
+    date = db.Column(db.String(30))
     reviewer = db.Column(db.String(20))
+    reviewer_mail = db.Column(db.String(30))
     follow_id = db.Column(db.Integer, default=None) # 被评论的评论的 id
+    follow_name = db.Column(db.String(20), default=None) # 被评论的评论的 name
     content = db.Column(db.Text)
+
+    def to_json(self):
+        json_comment = {
+            'id': self.id,
+            'path': self.path,
+            'date': self.date,
+            'reviewer': self.reviewer,
+            'reviewer_mail': self.reviewer_mail,
+            'follow_id': self.follow_id,
+            'follow_name': self.follow_name,
+            'content': self.content,  
+        }
+        return json_comment
 
 
 class Messages(db.Model):
     __tablename__ = 'Messages'
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.String(30), default=datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
+    date = db.Column(db.String(30))
     type = db.Column(db.String(20))
     link = db.Column(db.String(50))
     content = db.Column(db.Text)
