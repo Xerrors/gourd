@@ -9,9 +9,7 @@
 
       <main>
         <!-- <navbar></navbar> -->
-        <transition name="fade-transform" mode="out-in">
-          <router-view/>
-        </transition>
+        <router-view/>
         <footer>Designed & Developed by Chen</footer>
       </main>
 

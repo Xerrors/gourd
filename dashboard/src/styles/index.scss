@@ -74,8 +74,15 @@ button {
 
   .nav-btn {
     margin-left: auto;
-    border-radius: 4px;
+    border-radius: 8px;
   }
 }
 
+.ant-message-notice-content {
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  pointer-events: all;
+  border-radius: 8px;
+  border: 1px solid white;
+}
 

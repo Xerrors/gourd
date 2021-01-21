@@ -27,12 +27,20 @@
           <a-select-option value="zhihu"> 知乎 </a-select-option>
         </a-select>
       </template>
-      <template #renderItem="{ item, index }">
+      <template #renderItem="{ item }">
         <a-list-item>
           <span class="list-date">{{ item.date }}</span>
           <a-list-item-meta>
             <template #title>
               <a :href="item.link" target="_blank">{{ item.title }}</a>
+            </template>
+            <template #description>
+              <EyeOutlined />
+              <span class="page-des-icon">{{ item.read_count }}</span>
+              <LikeOutlined />
+              <span class="page-des-icon">{{ item.like_count }}</span>
+              <MessageOutlined />
+              <span class="page-des-icon">{{ item.comment_count }}</span>
             </template>
           </a-list-item-meta>
           <template #actions>
@@ -59,15 +67,19 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, computed } from "vue";
-
-import request from "../utils/request";
-import { parseTime, joinPath } from "../utils/format";
-
-import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
+import { message } from "ant-design-vue";
+import { EyeOutlined, MessageOutlined, LikeOutlined } from '@ant-design/icons-vue';
+import { parseTime, joinPath } from "../utils/format";
+import request from "../utils/request";
 
 export default defineComponent({
   name: "Pages",
+  components: {
+    EyeOutlined,
+    MessageOutlined,
+    LikeOutlined,
+  },
   setup() {
     let router = useRouter();
 
@@ -177,9 +189,27 @@ export default defineComponent({
   width: 150px;
 }
 
+.ant-list-item-meta-content {
+  display: flex;
+}
+
+.ant-list-item-meta-description {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+
+  & > .page-des-icon {
+    width: 15px;
+    margin: 0 20px 0 5px;
+  }
+}
+
 .ant-list-item-meta-title {
-  // color: rgba(0, 0, 0, 0.8);
   margin: 4px;
+
+  & > a {
+    color: rgba(0, 0, 0, 0.8);
+  }
 }
 // 未生效
 .ant-popover-inner {
@@ -201,7 +231,9 @@ export default defineComponent({
 .pages {
   padding: 8px 20px;
   background: rgba(255, 255, 255, 0.8);
-  border-radius: 8px;
-  box-shadow: 1px 1px 12px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+  min-height: 300px;
+  border: 1px solid white;
+  // box-shadow: 1px 1px 12px 2px rgba(0, 0, 0, 0.05);
 }
 </style>
