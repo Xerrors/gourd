@@ -1,0 +1,455 @@
+<template>
+  <div :class="{ 'comment-box': true, 'hidden-comment': commenter.hidden }">
+    <div class="input-area">
+      <div class="info-inputs">
+        <input
+          class="info-name"
+          placeholder="Name"
+          spellcheck="false"
+          v-model="commenter.params.reviewer"
+        />
+        <input
+          class="info-email"
+          placeholder="Mail"
+          spellcheck="false"
+          v-model="commenter.params.reviewer_mail"
+        />
+      </div>
+      <textarea
+        maxlength=1024
+        rows=8
+        placeholder="Comment text."
+        spellcheck="false"
+        v-model="commenter.content"
+      ></textarea>
+    </div>
+    <div class="action-btns">
+      <button class="btn-like" @click="commenter.addLike">
+        鼓励一下
+      </button>
+      <button class="btn-close" @click="commenter.hiddenPanel">
+        收起
+      </button>
+      <button
+        class="btn-comment"
+        @click="commenter.showCommentBox"
+        :loading="commenter.loading && !commenter.hidden"
+      >
+        评论一下
+      </button>
+    </div>
+  </div>
+  <div class="comments">
+    <div
+      v-for="msg in commentList.comments"
+      :key="msg.id"
+      class="comment-card"
+    >
+      <div class="msg-card">
+        <div class="comment-header">
+          <span class="comment-header-name">{{ msg.reviewer }}</span>
+          <span class="comment-header-date">{{ msg.date }}</span>
+          <a-button
+            type="link"
+            class="comment-header-reply"
+            @click="commenter.reply(msg.id, msg.reviewer)"
+            >回复</a-button
+          >
+        </div>
+        <div
+          class="content"
+          style="text-align: justify; text-justify: inter-ideograph"
+        >
+          {{ msg.content }}
+        </div>
+      </div>
+      <div
+        v-for="follow_msg in msg.follows"
+        :key="follow_msg.id"
+        class="follow-comment msg-card"
+      >
+        <div class="comment-header">
+          <span class="comment-header-name">{{ follow_msg.reviewer }}</span>
+          <span class="comment-header-mail"> 回复 </span>
+          <span class="comment-header-name">{{
+            follow_msg.follow_name
+          }}</span>
+          <span class="comment-header-date">{{ follow_msg.date }}</span>
+          <a-button
+            type="link"
+            class="comment-header-reply"
+            @click="commenter.reply(msg.id, follow_msg.reviewer)"
+            >回复</a-button
+          >
+        </div>
+        <div
+          class="content"
+          style="text-align: justify; text-justify: inter-ideograph"
+        >
+          {{ follow_msg.content }}
+        </div>
+      </div>
+      <div class="comment-box" v-if="commenter.params.follow_id == msg.id">
+        <div class="input-area">
+          <textarea
+            maxlength=1024
+            rows=8
+            placeholder="Comment text."
+            spellcheck="false"
+            v-model="commenter.content"
+          ></textarea>
+          <div class="info-inputs">
+            <input
+              class="info-name"
+              placeholder="Name"
+              spellcheck="false"
+              v-model="commenter.params.reviewer"
+            />
+            <input
+              class="info-email"
+              placeholder="Mail"
+              spellcheck="false"
+              v-model="commenter.params.reviewer_mail"
+            />
+          </div>
+        </div>
+        <div class="action-btns">
+          <button class="btn-close" @click="commenter.cancelReply">
+            取消
+          </button>
+          <a-button
+            class="btn-comment"
+            @click="commenter.handelComment"
+            :loading="commenter.loading"
+          >
+            发表
+          </a-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { message } from "ant-design-vue";
+import { onMounted, reactive, ref } from "vue";
+import { formatTime, parseTime } from "../../utils/format";
+
+import axios from "axios";
+
+export default {
+  name: "server",
+  setup() {
+    let path = ref("Ve-007");
+    let commenter = reactive({
+      hidden: true,
+      loading: false,
+      params: {
+        path: path.value,
+        reviewer: "",
+        reviewer_mail: "",
+        follow_id: "",
+        follow_name: "",
+      },
+      content: "",
+      showPanel: () => (commenter.hidden = false),
+      hiddenPanel: () => (commenter.hidden = true),
+      showCommentBox: () => {
+        if (commenter.hidden) {
+          commenter.hidden = false;
+          // 判断之前是否是追评
+          if (commenter.params.follow_id) {
+            commenter.params.follow_id = "";
+            commenter.params.follow_name = "";
+            commenter.content = "";
+          }
+        } else {
+          commenter.handelComment();
+        }
+      },
+      handelComment: () => {
+        if (commenter.content.length == 0) {
+          message.error("请填写内容");
+        } else if (!commenter.params.reviewer) {
+          message.info("请问怎么称呼呢？");
+        } else {
+          commitComment();
+        }
+      },
+      addLike: () => {
+        new Promise((resolve, reject) => {
+          axios({
+            url: "http://116.62.110.131:5000/articles/like",
+            method: "post",
+            params: {
+              path: commenter.params.path,
+            },
+          })
+            .then((res) => {
+              message.success(res.data.message)
+              resolve(res);
+            })
+            .catch((err) => {
+              reject(err);
+            });
+        });
+      },
+      reply: (id, name) => {
+        commenter.hidden = true;
+        if (id != commenter.params.follow_id) {
+          commenter.content = "";
+          commenter.params.follow_id = id;
+          commenter.params.follow_name = name;
+        }
+      },
+      cancelReply: () => {
+        commenter.params.follow_id = "";
+      },
+    });
+
+    let commentList = reactive({
+      comments: [],
+      getComments: () => {
+        new Promise((resolve, reject) => {
+          axios({
+            url: "http://116.62.110.131:5000/articles/comment",
+            method: "get",
+            params: {
+              path: path.value,
+            },
+          })
+            .then((res) => {
+              console.log(res);
+              commentList.comments = praseComments(res.data.data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        });
+      },
+    });
+
+    // 解析服务器传回来的评论数据并进行初步处理
+    const praseComments = (comments) => {
+      let comment_groups = [];
+      comments.sort((a, b) => Number(a.id) - Number(b.id));
+      for (var i in comments) {
+        comments[i].date = formatTime(new Date(comments[i].date));
+        if (!comments[i].follow_id) {
+          comments[i].follows = [];
+          comment_groups.push(comments[i]);
+        } else {
+          for (var cmgs in comment_groups) {
+            if (comment_groups[cmgs].id == comments[i].follow_id) {
+              comment_groups[cmgs].follows.push(comments[i]);
+              break;
+            }
+          }
+        }
+      }
+      comment_groups.sort((a, b) => Number(b.id) - Number(a.id));
+      return comment_groups;
+    };
+
+    // 提交评论表单
+    const commitComment = () => {
+      // 将用户输入的用户名以及邮箱保存在 localstorage 里面
+      localStorage.setItem("reviewer", commenter.params.reviewer);
+      localStorage.setItem("reviewer_mail", commenter.params.reviewer_mail);
+      commenter.loading = true;
+      new Promise((resolve, reject) => {
+        axios({
+          url: "http://116.62.110.131:5000/articles/comment",
+          method: "post",
+          params: commenter.params,
+          data: commenter.content,
+          headers: {
+            "Content-Type": "text/plain",
+          },
+        })
+          .then((res) => {
+            console.log(res);
+            commentList.getComments();
+            commenter.content = "";
+            commenter.loading = false;
+            commenter.params.follow_id = "";
+            resolve(res);
+          })
+          .catch((err) => {
+            console.log(err);
+            commenter.loading = false;
+            reject(err);
+          });
+      });
+    };
+
+    commentList.getComments();
+
+    onMounted(() => {
+      // 从 localstorage 获取信息
+      if (localStorage.getItem("reviewer")) {
+        commenter.params.reviewer = localStorage.getItem("reviewer");
+      }
+      if (localStorage.getItem("reviewer_mail")) {
+        commenter.params.reviewer_mail = localStorage.getItem("reviewer_mail");
+      }
+    });
+
+    return {
+      path,
+      commenter,
+      commentList,
+    };
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.comment-box {
+  margin-top: 50px;
+  padding: 4px 12px 16px 12px;
+  border: 1px solid black;
+
+  .input-area {
+    background: white;
+    border-radius: 8px;
+
+    textarea {
+      width: 100%;
+      border: none;
+      padding: 12px 4px;
+      height: auto;
+      vertical-align: bottom;
+      box-shadow: none;
+      // line-height:10px;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .info-inputs {
+      width: 100%;
+      display: flex;
+      height: 50px;
+      input {
+        // padding-left: 20px;
+        border: none;
+        border-radius: 0;
+        padding: 8px 4px;
+        flex-grow: 1;
+        border-bottom: 1px dashed #dedede;
+
+        &:focus {
+          border-color: #d7191a;
+          outline: none;
+        }
+      }
+    }
+  }
+
+  .action-btns {
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      background: rgba(255, 255, 255, 0.7);
+      padding: 4px 12px;
+      margin-top: 20px;
+      border: 1px solid white;
+      margin-right: 16px;
+      border-radius: 4px;
+    }
+
+    button.btn-comment {
+      margin-right: 0;
+      background: #3fbb82;
+      color: white;
+    }
+
+    // button:not()
+    button.btn-like {
+      background: #eb3941;
+      color: white;
+    }
+
+    button.btn-close {
+      background: none;
+      justify-self: flex-end;
+      margin-left: auto;
+      border: none;
+    }
+  }
+}
+
+.comment-box.hidden-comment {
+  border: none;
+}
+
+.comment-box.hidden-comment .btn-close {
+  display: none;
+}
+
+.hidden-comment {
+  .input-area {
+    display: none;
+  }
+  .action-btns {
+    justify-content: flex-start;
+
+    .btn-comment {
+      background: rgba(255, 255, 255, 0.7);
+    }
+  }
+}
+
+.comment-card {
+  background: white;
+  width: 100%;
+  padding: 16px 20px;
+  margin: 16px 0;
+  border-radius: 8px;
+
+  .comment-header {
+    height: 30px;
+    &-name {
+      color: black;
+      font-weight: 500;
+      border-bottom: 1px dashed red;
+    }
+    &-date {
+      color: #666;
+      font-size: 12px;
+      margin-left: 10px;
+      display: none;
+    }
+    &-reply {
+      float: right;
+      display: none;
+      transition: all 0.3s ease-in-out;
+    }
+  }
+
+  &:hover {
+    .comment-header-date {
+      display: inline-block;
+    }
+  }
+
+  .msg-card:hover {
+    .comment-header-reply {
+      display: inline-block;
+      padding: 0;
+      height: auto;
+    }
+  }
+  .input-area {
+    padding: 0;
+    padding-top: 20px;
+  }
+
+  .follow-comment {
+    margin-top: 20px;
+  }
+}
+</style>

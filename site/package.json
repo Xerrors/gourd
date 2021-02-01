@@ -1,0 +1,22 @@
+{
+  "name": "site",
+  "version": "0.0.1",
+  "description": "frontend website",
+  "main": "index.js",
+  "repository": "https://github.com/Xerrors/Gourd",
+  "author": "Xerrors",
+  "license": "MIT",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs"
+  },
+  "devDependencies": {
+    "sass": "^1.32.5",
+    "vitepress": "^0.11.5"
+  },
+  "dependencies": {
+    "ant-design-vue": "^2.0.0-rc.9",
+    "axios": "^0.21.1"
+  }
+}
