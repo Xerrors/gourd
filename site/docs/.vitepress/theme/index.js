@@ -1,15 +1,20 @@
-import Antd from 'ant-design-vue';
-import Layout from './Layout.vue'
+import DefaultTheme from 'vitepress/theme'
 
-import 'ant-design-vue/dist/antd.css';
+import Antd from 'ant-design-vue';
+// import 'ant-design-vue/dist/antd.css';
+
+import Comment from "./components/Comment.vue";
+import Blog from "./components/Blog.vue";
+
 
 export default {
-  Layout,
+  ...DefaultTheme,
   enhanceApp({ app, router, siteData }) {
+    
     // 注册组件
     app.use(Antd);
-    
-    app.config.productionTip = false;
+    app.component("Comment", Comment);
+    app.component("Blog", Blog);
 
     // app is the Vue 3 app instance from createApp()
     // router is VitePress' custom router (see `lib/app/router.js`)

@@ -12,6 +12,9 @@
     "docs:serve": "vitepress serve docs"
   },
   "devDependencies": {
+    "globby": "^11.0.2",
+    "gray-matter": "^4.0.2",
+    "mz": "^2.7.0",
     "sass": "^1.32.5",
     "vitepress": "^0.11.5"
   },
