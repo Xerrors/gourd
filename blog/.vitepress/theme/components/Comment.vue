@@ -166,9 +166,11 @@ export default {
       },
       handelComment: () => {
         if (commenter.content.length == 0) {
-          message.error("请填写内容");
+          // message.error("请填写内容");
+          alert("请填写内容");
         } else if (!commenter.params.reviewer) {
-          message.info("请问怎么称呼呢？");
+          // message.info("请问怎么称呼呢？");
+          alert("请问怎么称呼呢？");
         } else {
           commitComment();
         }
@@ -183,7 +185,8 @@ export default {
             },
           })
             .then((res) => {
-              message.success(res.data.message);
+              // message.success(res.data.message);
+              alert(res.data.message);
               resolve(res);
             })
             .catch((err) => {
