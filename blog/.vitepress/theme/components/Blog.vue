@@ -235,8 +235,8 @@ body {
 
 .blog-right {
   position: sticky;
-  top: 100px;
-  height: 100%;
+  top: 80px;
+  height: fit-content;;
 
   h4 {
     margin-top: 16px;

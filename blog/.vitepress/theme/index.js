@@ -1,6 +1,6 @@
 import DefaultTheme from 'vitepress/theme'
 
-import Antd from 'ant-design-vue';
+// import Antd from 'ant-design-vue';
 // import 'ant-design-vue/dist/antd.css';
 
 import Comment from "./components/Comment.vue";
@@ -13,7 +13,7 @@ export default {
   enhanceApp({ app, router, siteData }) {
     
     // 注册组件
-    app.use(Antd);
+    // app.use(Antd);
     app.component("Comment", Comment);
     app.component("Home", Home);
     app.component("Blog", Blog);
