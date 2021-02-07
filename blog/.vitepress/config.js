@@ -4,7 +4,8 @@ async function getConfig() {
   const config = {
     head: [
       ["meta", { name: "keywords", content: "Gourd" }],
-      ["link", { rel: "icon", href: "/favicon.ico" }],
+      ['link', { rel: 'manifest', href: '/manifest.json' }],
+      ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }]
     ],
     extend: '@vitepress/theme-default',
     title: "Gourd",
@@ -16,8 +17,8 @@ async function getConfig() {
       search: false,
       nav: [
         { text: "首页", link: "/" },
-        { text: "Guide", link: "/guide" },
-        { text: "Blog", link: "/blogs" },
+        { text: "Guide", link: "/pages/guide" },
+        { text: "Blog", link: "/pages/blogs" },
       ],
     },
     dest: "public",

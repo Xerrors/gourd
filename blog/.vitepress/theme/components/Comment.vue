@@ -66,7 +66,7 @@
         >
           <div class="comment-header">
             <span class="comment-header-name">{{ follow_msg.reviewer }}</span>
-            <span class="comment-header-mail"> 回复 </span>
+            <span class="comment-header-text"> 回复 </span>
             <span class="comment-header-name">{{ follow_msg.follow_name }}</span>
             <span class="comment-header-date">{{ follow_msg.date }}</span>
             <button
@@ -124,16 +124,20 @@
 </template>
 
 <script>
-import { message } from "ant-design-vue";
+// import { message } from "ant-design-vue";
 import { onMounted, reactive, ref } from "vue";
 import { formatTime, parseTime } from "../../utils/format";
+import { useFrontmatter } from 'vitepress';
 
 import axios from "axios";
 
 export default {
   name: "server",
   setup() {
+    const frontMatter = useFrontmatter();
+
     let path = ref("Ve-007");
+    console.log(path);
     let commenter = reactive({
       hidden: true,
       loading: false,
@@ -212,7 +216,6 @@ export default {
             },
           })
             .then((res) => {
-              console.log(res);
               commentList.comments = praseComments(res.data.data);
             })
             .catch((err) => {
@@ -261,7 +264,6 @@ export default {
           },
         })
           .then((res) => {
-            console.log(res);
             commentList.getComments();
             commenter.content = "";
             commenter.loading = false;
@@ -426,8 +428,8 @@ export default {
   display: flex;
 
   .comment-icon {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     margin-right: 12px;
     border-radius: 4px;
   }
@@ -451,14 +453,18 @@ export default {
       &-reply {
         display: none;
       }
+      &-text {
+        color: #999;
+      }
     }
 
     .content {
-      background: #fafafa;
+      background: #f2f5f5;
       padding: 16px 24px;
       color: #666;
-      border-radius: 12px;
+      border-radius: 0 12px 12px 12px;
       width: fit-content;
+      line-height: 1.7;
     }
   }
 
