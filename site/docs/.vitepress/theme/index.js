@@ -5,6 +5,7 @@ import Antd from 'ant-design-vue';
 
 import Comment from "./components/Comment.vue";
 import Blog from "./components/Blog.vue";
+import Home from "./components/Home.vue";
 
 
 export default {
@@ -14,6 +15,7 @@ export default {
     // 注册组件
     app.use(Antd);
     app.component("Comment", Comment);
+    app.component("Home", Home);
     app.component("Blog", Blog);
 
     // app is the Vue 3 app instance from createApp()

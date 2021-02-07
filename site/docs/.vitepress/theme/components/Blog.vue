@@ -25,12 +25,12 @@
         v-for="(page, ind) in filtedPages"
         :key="ind"
         >
-        <div class="blog-card__image">
+        <div class="blog-card__image" @click="goToPage(page.regularPath)">
           <img :src="page.frontMatter.cover" alt="">
         </div>
 
         <div class="blog-card__info">
-          <h3>{{ page.frontMatter.title }}</h3>
+          <h3 @click="goToPage(page.regularPath)">{{ page.frontMatter.title }}</h3>
           <span>{{ page.frontMatter.formattedDate }}</span>
         </div>
       </div>
@@ -38,22 +38,21 @@
 
     <div class="blog-right">
 
-      <h3>我的专栏</h3>
+      <h4>我的专栏</h4>
 
       <div class="zhuanlan-slideshow">
         <img src="https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20201009130905.png" alt="">
       </div>
 
-      <h3>标签查询</h3>
+      <h4>标签查询</h4>
 
-      
     </div>
   </div>
 </template>
 
 <script>
 import { defineComponent, ref, reactive, computed } from 'vue';
-import { usePageData, useSiteData } from "vitepress";
+import { useSiteDataByRoute, useRouter } from "vitepress";
 import { formatTime } from "../../utils/format";
 
 export default defineComponent({
@@ -67,8 +66,7 @@ export default defineComponent({
       }
     })
 
-    let pages = useSiteData().value.themeConfig.pages;
-
+    let pages = useSiteDataByRoute().value.themeConfig.pages;
     let filtedPages = computed(() => {
       if (categories.active != "全部") {
         return pages.filter(item => {
@@ -80,9 +78,15 @@ export default defineComponent({
       }
     })
 
+    const router = useRouter();
+    const goToPage = (path) => {
+      router.go(path)
+    }
+
     return {
       filtedPages,
       categories,
+      goToPage,
     }
   }
 })
@@ -126,9 +130,10 @@ export default defineComponent({
     padding: 8px 20px;
     margin-right: 16px;
     cursor: pointer;
+    transition: all 0.2s ease-in-out;
 
     &:not(.active):hover {
-      background: #f2f2f2;
+      background: #fafafa;
       border-radius: 4px;
     }
   }
@@ -170,6 +175,11 @@ export default defineComponent({
       transition: all 0.3s ease-in-out;
 
       h3 {
+        color: #1A1A26;
+        margin-top: 38px;
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 24px;
         cursor: pointer;
         max-height: 56px;
         overflow: hidden;
@@ -178,6 +188,7 @@ export default defineComponent({
       span {
         position: absolute;
         bottom: 27px;
+        color: #41414E;
       }
     }
   }
@@ -200,15 +211,19 @@ export default defineComponent({
 }
 
 .blog-right {
+  position: sticky;
+  top: 100px;
+  height: 100%;
 
-  h3 {
+  h4 {
+    margin-top: 16px;
     font-weight: normal;
     padding: 2px 16px;
     margin-bottom: 12px;
     border-left: 4px solid #E63657;
   }
 
-  h3:first-child {
+  h4:first-child {
     margin-top: 0;
   }
 
