@@ -1,0 +1,26 @@
+{
+  "name": "site",
+  "version": "0.0.1",
+  "description": "frontend website",
+  "main": "index.js",
+  "repository": "https://github.com/Xerrors/Gourd.git",
+  "author": "Xerrors <xerrors@163.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vitepress dev .",
+    "build": "vitepress build .",
+    "serve": "vitepress serve ."
+  },
+  "devDependencies": {
+    "@ant-design/icons-vue": "^6.0.1",
+    "globby": "^11.0.2",
+    "gray-matter": "^4.0.2",
+    "mz": "^2.7.0",
+    "sass": "^1.32.5",
+    "vitepress": "^0.11.5"
+  },
+  "dependencies": {
+    "ant-design-vue": "^2.0.0",
+    "axios": "^0.21.1"
+  }
+}
