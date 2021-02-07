@@ -6,6 +6,7 @@ async function getConfig() {
       ["meta", { name: "keywords", content: "Gourd" }],
       ["link", { rel: "icon", href: "/favicon.ico" }],
     ],
+    extend: '@vitepress/theme-default',
     title: "Gourd",
     lang: 'zh-CN',
     description: 'Just playing around.',

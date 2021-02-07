@@ -7,11 +7,12 @@
   "author": "Xerrors <xerrors@163.com>",
   "license": "MIT",
   "scripts": {
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:serve": "vitepress serve docs"
+    "dev": "vitepress dev .",
+    "build": "vitepress build .",
+    "serve": "vitepress serve ."
   },
   "devDependencies": {
+    "@ant-design/icons-vue": "^6.0.1",
     "globby": "^11.0.2",
     "gray-matter": "^4.0.2",
     "mz": "^2.7.0",
@@ -19,7 +20,7 @@
     "vitepress": "^0.11.5"
   },
   "dependencies": {
-    "ant-design-vue": "^2.0.0-rc.9",
+    "ant-design-vue": "^2.0.0",
     "axios": "^0.21.1"
   }
 }

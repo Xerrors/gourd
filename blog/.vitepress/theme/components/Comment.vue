@@ -16,20 +16,16 @@
         />
       </div>
       <textarea
-        maxlength=1024
-        rows=8
+        maxlength="1024"
+        rows="8"
         placeholder="Comment text."
         spellcheck="false"
         v-model="commenter.content"
       ></textarea>
     </div>
     <div class="action-btns">
-      <button class="btn-like" @click="commenter.addLike">
-        鼓励一下
-      </button>
-      <button class="btn-close" @click="commenter.hiddenPanel">
-        收起
-      </button>
+      <button class="btn-like" @click="commenter.addLike">鼓励一下</button>
+      <button class="btn-close" @click="commenter.hiddenPanel">收起</button>
       <button
         class="btn-comment"
         @click="commenter.showCommentBox"
@@ -39,91 +35,88 @@
       </button>
     </div>
   </div>
+  <!-- 评论详情 -->
   <div class="comments">
-    <div
-      v-for="msg in commentList.comments"
-      :key="msg.id"
-      class="comment-card"
-    >
-      <div class="msg-card">
-        <div class="comment-header">
-          <span class="comment-header-name">{{ msg.reviewer }}</span>
-          <span class="comment-header-date">{{ msg.date }}</span>
-          <a-button
-            type="link"
-            class="comment-header-reply"
-            @click="commenter.reply(msg.id, msg.reviewer)"
-            >回复</a-button
+    <div v-for="msg in commentList.comments" :key="msg.id" class="comment-card">
+      <img class="comment-icon" :src="randomAvatar()">
+      <div style="width: 100%;">
+        <div class="msg-card">
+          <div class="comment-header">
+            <span class="comment-header-name">{{ msg.reviewer }}</span>
+            <span class="comment-header-date">{{ msg.date }}</span>
+            <button
+              class="comment-header-reply"
+              @click="commenter.reply(msg.id, msg.reviewer)"
+            >
+              回复
+            </button>
+          </div>
+          <div
+            class="content"
+            style="text-align: justify; text-justify: inter-ideograph"
           >
-        </div>
-        <div
-          class="content"
-          style="text-align: justify; text-justify: inter-ideograph"
-        >
-          {{ msg.content }}
-        </div>
-      </div>
-      <div
-        v-for="follow_msg in msg.follows"
-        :key="follow_msg.id"
-        class="follow-comment msg-card"
-      >
-        <div class="comment-header">
-          <span class="comment-header-name">{{ follow_msg.reviewer }}</span>
-          <span class="comment-header-mail"> 回复 </span>
-          <span class="comment-header-name">{{
-            follow_msg.follow_name
-          }}</span>
-          <span class="comment-header-date">{{ follow_msg.date }}</span>
-          <a-button
-            type="link"
-            class="comment-header-reply"
-            @click="commenter.reply(msg.id, follow_msg.reviewer)"
-            >回复</a-button
-          >
-        </div>
-        <div
-          class="content"
-          style="text-align: justify; text-justify: inter-ideograph"
-        >
-          {{ follow_msg.content }}
-        </div>
-      </div>
-      <div class="comment-box" v-if="commenter.params.follow_id == msg.id">
-        <div class="input-area">
-          <textarea
-            maxlength=1024
-            rows=8
-            placeholder="Comment text."
-            spellcheck="false"
-            v-model="commenter.content"
-          ></textarea>
-          <div class="info-inputs">
-            <input
-              class="info-name"
-              placeholder="Name"
-              spellcheck="false"
-              v-model="commenter.params.reviewer"
-            />
-            <input
-              class="info-email"
-              placeholder="Mail"
-              spellcheck="false"
-              v-model="commenter.params.reviewer_mail"
-            />
+            {{ msg.content }}
           </div>
         </div>
-        <div class="action-btns">
-          <button class="btn-close" @click="commenter.cancelReply">
-            取消
-          </button>
-          <a-button
-            class="btn-comment"
-            @click="commenter.handelComment"
-            :loading="commenter.loading"
+        <!-- 追评 -->
+        <div
+          v-for="follow_msg in msg.follows"
+          :key="follow_msg.id"
+          class="follow-comment msg-card"
+        >
+          <div class="comment-header">
+            <span class="comment-header-name">{{ follow_msg.reviewer }}</span>
+            <span class="comment-header-mail"> 回复 </span>
+            <span class="comment-header-name">{{ follow_msg.follow_name }}</span>
+            <span class="comment-header-date">{{ follow_msg.date }}</span>
+            <button
+              class="comment-header-reply"
+              @click="commenter.reply(msg.id, follow_msg.reviewer)"
+            >
+              回复
+            </button>
+          </div>
+          <div
+            class="content"
+            style="text-align: justify; text-justify: inter-ideograph"
           >
-            发表
-          </a-button>
+            {{ follow_msg.content }}
+          </div>
+        </div>
+        <div class="comment-box reply-box" v-if="commenter.params.follow_id == msg.id">
+          <div class="input-area">
+            <div class="info-inputs">
+              <input
+                class="info-name"
+                placeholder="Name"
+                spellcheck="false"
+                v-model="commenter.params.reviewer"
+              />
+              <input
+                class="info-email"
+                placeholder="Mail"
+                spellcheck="false"
+                v-model="commenter.params.reviewer_mail"
+              />
+            </div>
+            <textarea
+              maxlength="1024"
+              rows="8"
+              placeholder="Comment text."
+              spellcheck="false"
+              v-model="commenter.content"
+            ></textarea>
+          </div>
+          <div class="action-btns">
+            <button class="btn-close" @click="commenter.cancelReply">取消</button>
+            <button
+              class="btn-comment"
+              @click="commenter.handelComment"
+              :loading="commenter.loading"
+            >
+              发表
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -186,7 +179,7 @@ export default {
             },
           })
             .then((res) => {
-              message.success(res.data.message)
+              message.success(res.data.message);
               resolve(res);
             })
             .catch((err) => {
@@ -283,6 +276,10 @@ export default {
       });
     };
 
+    const randomAvatar = () => {
+      return "https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/5.jpg";
+    }
+
     commentList.getComments();
 
     onMounted(() => {
@@ -299,6 +296,7 @@ export default {
       path,
       commenter,
       commentList,
+      randomAvatar,
     };
   },
 };
@@ -308,7 +306,8 @@ export default {
 .comment-box {
   margin-top: 50px;
   padding: 4px 12px 16px 12px;
-  border: 1px solid black;
+  border: 1px solid #aaa;
+  border-radius: 8px;
 
   .input-area {
     background: white;
@@ -321,6 +320,7 @@ export default {
       height: auto;
       vertical-align: bottom;
       box-shadow: none;
+      font-size: 14px;
       // line-height:10px;
 
       &:focus {
@@ -354,23 +354,23 @@ export default {
 
     button {
       background: rgba(255, 255, 255, 0.7);
-      padding: 4px 12px;
+      padding: 8px 12px;
+      color: white;
       margin-top: 20px;
       border: 1px solid white;
       margin-right: 16px;
       border-radius: 4px;
+      cursor: pointer;
     }
 
     button.btn-comment {
       margin-right: 0;
       background: #3fbb82;
-      color: white;
     }
 
     // button:not()
     button.btn-like {
       background: #eb3941;
-      color: white;
     }
 
     button.btn-close {
@@ -378,16 +378,23 @@ export default {
       justify-self: flex-end;
       margin-left: auto;
       border: none;
+      color: #1a1a26;
+
+      &:focus {
+        outline: none;
+      }
     }
   }
 }
 
+// 收起之后
 .comment-box.hidden-comment {
   border: none;
-}
+  padding: 0;
 
-.comment-box.hidden-comment .btn-close {
-  display: none;
+  .btn-close {
+    display: none;
+  }
 }
 
 .hidden-comment {
@@ -403,30 +410,55 @@ export default {
   }
 }
 
-.comment-card {
-  background: white;
-  width: 100%;
-  padding: 16px 20px;
-  margin: 16px 0;
-  border-radius: 8px;
+.reply-box {
+  margin-top: 10px;
+}
 
-  .comment-header {
-    height: 30px;
-    &-name {
-      color: black;
-      font-weight: 500;
-      border-bottom: 1px dashed red;
+.comments {
+  font-family: none;
+  margin-top: 50px;
+}
+
+.comment-card {
+  width: 100%;
+  margin: 40px 0;
+  border-radius: 8px;
+  display: flex;
+
+  .comment-icon {
+    width: 48px;
+    height: 48px;
+    margin-right: 12px;
+    border-radius: 4px;
+  }
+
+  .msg-card {
+    .comment-header {
+      height: 30px;
+      font-size: 15px;
+      &-name {
+        color: #1a1a26;
+        font-weight: 500;
+        letter-spacing: 1px;
+        // border-bottom: 1px dashed red;
+      }
+      &-date {
+        color: #666;
+        font-size: 12px;
+        margin-left: 10px;
+        display: none;
+      }
+      &-reply {
+        display: none;
+      }
     }
-    &-date {
+
+    .content {
+      background: #fafafa;
+      padding: 16px 24px;
       color: #666;
-      font-size: 12px;
-      margin-left: 10px;
-      display: none;
-    }
-    &-reply {
-      float: right;
-      display: none;
-      transition: all 0.3s ease-in-out;
+      border-radius: 12px;
+      width: fit-content;
     }
   }
 
@@ -439,17 +471,50 @@ export default {
   .msg-card:hover {
     .comment-header-reply {
       display: inline-block;
-      padding: 0;
+      animation: fade-in-bottom 0.3s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+
+      float: right;
+      padding-left: 10px;
+      background: none;
+      border: none;
       height: auto;
+      transition: all 0.3s ease-in-out;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+      }
     }
-  }
-  .input-area {
-    padding: 0;
-    padding-top: 20px;
   }
 
   .follow-comment {
     margin-top: 20px;
   }
 }
+
+/* ----------------------------------------------
+ * Generated by Animista on 2021-2-7 21:36:13
+ * Licensed under FreeBSD License.
+ * See http://animista.net/license for more info. 
+ * w: http://animista.net, t: @cssanimista
+ * ---------------------------------------------- */
+
+/**
+ * ----------------------------------------
+ * animation fade-in-bottom
+ * ----------------------------------------
+ */
+@keyframes fade-in-bottom {
+  0% {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
+
 </style>

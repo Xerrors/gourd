@@ -16,7 +16,12 @@
     </div>
 
     <div class="search-box">
-      搜索
+      <!-- <a-input-search
+        v-model:value="searcher.value"
+        placeholder="input search text"
+        style="width: 200px"
+        @search="searcher.onSearch"
+      /> -->
     </div>
 
     <div class="blogs">
@@ -54,9 +59,20 @@
 import { defineComponent, ref, reactive, computed } from 'vue';
 import { useSiteDataByRoute, useRouter } from "vitepress";
 import { formatTime } from "../../utils/format";
+import { SearchOutlined } from '@ant-design/icons-vue';
 
 export default defineComponent({
+  name: "Blog",
+  components: {
+    SearchOutlined,
+  },
   setup() {
+    const searcher = reactive({
+      value: "",
+      onSearch: () => {
+        console.log("onSearch");
+      }
+    })
 
     const categories = reactive({
       labels: ["全部", "前端", "人工智能", "算法", "基础"],
@@ -87,12 +103,19 @@ export default defineComponent({
       filtedPages,
       categories,
       goToPage,
+      searcher,
     }
   }
 })
 
 
 </script>
+
+<style lang="scss">
+body {
+  font-family: serif;
+}
+</style>
 
 <style lang="scss" scoped>
 .blog-container {
