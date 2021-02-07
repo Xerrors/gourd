@@ -136,7 +136,7 @@ export default {
   setup() {
     const frontMatter = useFrontmatter();
 
-    let path = ref("Ve-007");
+    let path = ref(frontMatter.value.permalink);
     console.log(path);
     let commenter = reactive({
       hidden: true,
