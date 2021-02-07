@@ -5,6 +5,7 @@ from app.utils.articles import get_articles_from_zhihu, get_articles_from_csdn, 
 from app.utils.validate import validate_server_token
 from app.utils.database import rtn_zones, get_all_messages
 from app.config import DOMAIN_PRE
+from datetime import datetime
 
 
 ###
@@ -47,7 +48,7 @@ def create_zone():
     from app.tables import Zone
     msg = request.args.get('msg')
     status = request.args.get('status')
-    db.session.add(Zone(msg=msg, status=status))
+    db.session.add(Zone(msg=msg, status=status, date=datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
     db.session.commit()
     return jsonify({"data": rtn_zones()})
 
@@ -96,11 +97,12 @@ def add_like():
     md = parse_markdown(item.local_path).metadata
     db.session.add(Messages(
         type="like",
+        date=datetime.today().strftime('%Y-%m-%d %H:%M:%S'),
         link=DOMAIN_PRE + path,
         content="有人点赞了你的文章《{}》".format(md['title'])
     ))
     db.session.commit()
-    return jsonify({"message": "Good"})
+    return jsonify({"message": "感谢支持~"})
 
 
 # TODO 数据验证
@@ -111,12 +113,18 @@ def add_comment():
 
     path = request.args.get('path')
     reviewer = request.args.get('reviewer')
-    content = request.args.get('content')
+    reviewer_mail = request.args.get('reviewer_mail')
+    content = request.get_data()
+    content = str(content, encoding = "utf-8")
     follow_id = request.args.get('follow_id')
+    follow_name = request.args.get('follow_name')
     item = LocalArticlesTable.query.filter_by(path=path).first()
 
     if not item:
         abort(403, "你不对劲！")
+    
+    if len(content) == 0:
+        return abort(403, "你不对劲~")
 
     # 生成评论的消息
     md = parse_markdown(item.local_path).metadata
@@ -125,14 +133,35 @@ def add_comment():
     else:
         comment_msg = "有人评论了你的文章《{}》".format(md['title'])
 
-    db.session.add(LocalArticlesComment(path=path, reviewer=reviewer, content=content, follow_id=follow_id))
+    db.session.add(LocalArticlesComment(
+        path=path, 
+        reviewer=reviewer,
+        reviewer_mail=reviewer_mail,
+        content=content,
+        follow_id=follow_id,
+        follow_name=follow_name,
+        date=datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+    ))
     db.session.add(Messages(
         type="comment",
         link=DOMAIN_PRE+path,
-        content=comment_msg
+        content=comment_msg,
+        date=datetime.today().strftime('%Y-%m-%d %H:%M:%S')
     ))
     db.session.commit()
     return jsonify({"message": "Good"})
+
+
+@app.route('/articles/comment', methods=['GET'])
+def get_comments():
+    path = request.args.get('path')
+    if not path:
+        abort(403, "你就是不对劲，搞事情啊~")
+    
+    from app.tables import LocalArticlesComment
+    query_result = LocalArticlesComment.query.filter_by(path=path).all()
+    comments = [result.to_json() for result in query_result]
+    return jsonify({"message": "Good!", "data": comments}) 
 
 
 @app.route('/articles/md_source', methods=["POST"])
@@ -151,7 +180,7 @@ def upload_markdown():
     with open('temp.md', encoding='UTF-8') as f:
         md = frontmatter.load(f)
 
-    if not md.get('title') or not md.get('date'):
+    if not md.get('title') or not md.get('date') or not md.get('permalink'):
         abort(404, '请上传符合博客文章要求的文章~')
 
     file_path = rename_markdown(md)
@@ -224,15 +253,25 @@ def get_messages():
 def read_message():
     if not session.get('login'):
         abort(403, "登录之后再试~")
-    
+
+    from app.tables import Messages
+
     id = request.args.get('id')
     if not id:
         abort(404, "请提供id~")
-    
-    from app.tables import Messages
-    msg = Messages.query.get(id)
-    msg.set_as_readed()
-    db.session.commit()
+    if id == 'all':
+        msgs = Messages.query.all()
+        for msg in msgs:
+            msg.set_as_readed()
+        db.session.commit()
+    else:
+        msg = Messages.query.get(id)
+        if msg:
+            msg.set_as_readed()
+            db.session.commit()
+        else:
+            abort(403, "不存在该id")
+
     msgs = get_all_messages()
     return jsonify({"message": "Success", "data": msgs})
 

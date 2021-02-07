@@ -35,7 +35,8 @@ class MyBlogPipeline:
             db.session.add(CsdnCount(
                 article_id=item['article_id'],
                 read_count=item['read_count'],
-                comment_count=item['comments_count']
+                comment_count=item['comments_count'],
+                date=datetime.today().strftime('%Y-%m-%d')
             ))
         else:
             csdn_count.update_count(item['read_count'], item['comments_count'])
