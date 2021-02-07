@@ -1,4 +1,6 @@
-[ ] vitepress 暂时不支持 permalink 的问题
+[] vitepress 暂时不支持 permalink 的问题
+[] 添加 randomAvatar 支持
+[] 压缩封面尺寸，使用缩略图 
 
 ## 2021.02.07
 
