@@ -2,7 +2,7 @@ import os
 import sys
 from app import app
 
-BLOG_PATH = 'blog'
+BLOG_PATH = '../blog/blog'
 Debug=True
 CSDN_NAME="jaykm"
 
