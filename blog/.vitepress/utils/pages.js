@@ -134,7 +134,7 @@ module.exports = async () => {
 
       return {
         frontMatter: data,
-        regularPath: `/${item.replace(".md", ".html")}`.slice(5),
+        regularPath: `/${item.replace(".md", ".html")}`,
         relativePath: item,
       };
     })
