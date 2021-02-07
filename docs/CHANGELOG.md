@@ -1,10 +1,16 @@
+[ ] vitepress 暂时不支持 permalink 的问题
+
 ## 
 
-blog-right position sticky 不生效的问题
+**【新增】** 新增项目主页
 
-vitepress 暂时不支持 permalink 的问题
+**【优化】** 由于不明 BUG，暂时删除项目中的 antd-design-vue 依赖
 
-评论组件的评论详情无法加载的问题
+**【优化】** 评论组件的评论详情无法加载的问题
+
+**【优化】** 评论组件的逻辑布局以及 UI 优化
+
+**【优化】** blog-right position sticky 不生效的问题
 
 ## 2021.02.06
 
