@@ -36,7 +36,7 @@ def del_zone():
         if zone:
             db.session.delete(zone)
             db.session.commit()
-            return jsonify({"message": "已删除"})
+            return jsonify({"message": "已删除", "data": rtn_zones()})
         else:
             return jsonify({"message": "没有该动态~"}), 404
     else:
