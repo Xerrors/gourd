@@ -1,7 +1,7 @@
 ---
 title: 博客
-permalink: blog
-customLayout: Blog
+permalink: blogs
+customLayout: BlogPage
 ---
 
-<Blog/>
+<BlogPage/>

@@ -19,6 +19,7 @@ async function getConfig() {
         { text: "首页", link: "/" },
         { text: "Guide", link: "/pages/guide" },
         { text: "Blog", link: "/pages/blogs" },
+        { text: "Zone", link: "/pages/zone" },
       ],
     },
     dest: "public",

@@ -1,11 +1,14 @@
 import DefaultTheme from 'vitepress/theme'
+import IconifyIcon from '@iconify/vue';
 
 // import Antd from 'ant-design-vue';
 // import 'ant-design-vue/dist/antd.css';
 
+import Loading from "./components/Loading.vue";
 import Comment from "./components/Comment.vue";
-import Blog from "./components/Blog.vue";
-import Home from "./components/Home.vue";
+import BlogPage from "./components/BlogPage.vue";
+import HomePage from "./components/HomePage.vue";
+import ZonePage from "./components/ZonePage.vue";
 
 
 export default {
@@ -14,9 +17,12 @@ export default {
     
     // 注册组件
     // app.use(Antd);
+    app.component("IconifyIcon", IconifyIcon);
     app.component("Comment", Comment);
-    app.component("Home", Home);
-    app.component("Blog", Blog);
+    app.component("HomePage", HomePage);
+    app.component("BlogPage", BlogPage);
+    app.component("ZonePage", ZonePage);
+    app.component("Loading", Loading);
 
     // app is the Vue 3 app instance from createApp()
     // router is VitePress' custom router (see `lib/app/router.js`)

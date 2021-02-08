@@ -31,7 +31,7 @@
         :key="ind"
         >
         <div class="blog-card__image" @click="goToPage(page.regularPath)">
-          <img :src="page.frontMatter.cover" alt="">
+          <img :src="page.frontMatter.cover + '?x-oss-process=image/resize,m_fill,h_180,w_340'" alt="">
         </div>
 
         <div class="blog-card__info">
