@@ -21,3 +21,5 @@ ADMIN_NAME = "1"
 SERVER_TOKEN = "1"
 
 DOMAIN_PRE = "https://www.xerrors.fun/"
+
+TOKEN = "szmmzmf"

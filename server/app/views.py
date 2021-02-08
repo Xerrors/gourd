@@ -4,7 +4,7 @@ from app.utils.articles import get_article_list_from_dirs, get_articles_from_db,
 from app.utils.articles import get_articles_from_zhihu, get_articles_from_csdn, parse_markdown
 from app.utils.validate import validate_server_token
 from app.utils.database import rtn_zones, get_all_messages
-from app.config import DOMAIN_PRE
+from app.config import DOMAIN_PRE, TOKEN
 from datetime import datetime
 
 
@@ -31,7 +31,11 @@ def get_zones():
 def del_zone():
     from app.tables import Zone
     id = request.args.get('id')
-    if id:
+    token = request.args.get('token')
+
+    if token != TOKEN:
+        abort(403, "Token 不对劲！")
+    elif id:
         zone = Zone.query.get(id)
         if zone:
             db.session.delete(zone)
@@ -48,6 +52,10 @@ def create_zone():
     from app.tables import Zone
     msg = request.args.get('msg')
     status = request.args.get('status')
+    token = request.args.get('token')
+
+    if token != TOKEN:
+        abort(403, "Token 不对劲！")
     db.session.add(Zone(msg=msg, status=status, date=datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
     db.session.commit()
     return jsonify({"data": rtn_zones()})
