@@ -38,7 +38,7 @@
   <!-- 评论详情 -->
   <div class="comments">
     <div v-for="msg in commentList.comments" :key="msg.id" class="comment-card">
-      <img class="comment-icon" :src="randomAvatar()">
+      <img class="comment-icon" :src="randomAvatar(msg.reviewer)">
       <div style="width: 100%;">
         <div class="msg-card">
           <div class="comment-header">
@@ -281,8 +281,25 @@ export default {
       });
     };
 
-    const randomAvatar = () => {
-      return "https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/5.jpg";
+    // 此哈希函数来源于提问的解答：
+    // https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
+    function customHash (str) {
+      var hash = 0, i, chr;
+      for (i = 0; i < str.length; i++) {
+        chr   = str.charCodeAt(i);
+        hash  = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+      }
+      return hash;
+    }
+    
+    // https://tools.prodless.com/avatar
+    // 此处使用了网友的随机头像服务，由于相同的链接会导致浏览器只加载一次资源，
+    // 所以使用评论的昵称的哈希值转化为颜色的16进制，这样就可以获取不同的 uri 了，
+    // 同时也解决的相同的昵称不一样头像的问题。
+    const randomAvatar = (name) => {
+      const color = Math.abs(customHash(name)).toString(16).slice(2).toUpperCase();
+      return "https://api.prodless.com/avatar.png?size=40&color=" + color;
     }
 
     commentList.getComments();
@@ -480,7 +497,7 @@ export default {
   .msg-card:hover {
     .comment-header-reply {
       display: inline-block;
-      animation: fade-in-bottom 0.3s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+      animation: fade-in-bottom 0.1s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 
       float: right;
       padding-left: 10px;

@@ -1,5 +1,7 @@
-import DefaultTheme from 'vitepress/theme'
+import DefaultTheme from 'vitepress/theme';
 import IconifyIcon from '@iconify/vue';
+
+import './styles/index.css';
 
 // import Antd from 'ant-design-vue';
 // import 'ant-design-vue/dist/antd.css';
@@ -9,6 +11,7 @@ import Comment from "./components/Comment.vue";
 import BlogPage from "./components/BlogPage.vue";
 import HomePage from "./components/HomePage.vue";
 import ZonePage from "./components/ZonePage.vue";
+import AboutPage from "./components/AboutPage.vue";
 
 
 export default {
@@ -22,6 +25,7 @@ export default {
     app.component("HomePage", HomePage);
     app.component("BlogPage", BlogPage);
     app.component("ZonePage", ZonePage);
+    app.component("AboutPage", AboutPage);
     app.component("Loading", Loading);
 
     // app is the Vue 3 app instance from createApp()

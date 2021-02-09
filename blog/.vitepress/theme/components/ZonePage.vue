@@ -1,7 +1,7 @@
 <template>
   <div class="zone-container">
-    <div style="background: #fafafa">
-      <div class="page-header">
+    <div class="page-header">
+      <div class="page-header-content">
         <h2>鹅鹅鹅，曲颈向天歌。</h2>
         <p>
           信息时代，交流变得更加的方便，但是有些话，却总是不想跟别人表达，每个人都是一个独立的个体，都有自己的想法，是真实的自己，也有想要表达出去的欲望，不如在这里，说个痛快！
@@ -13,12 +13,12 @@
     </div>
     <div class="commit-box" v-if="showCommit">
       <div class="emoji-selector">
-        <span
+        <div
           v-for="(emoji, ind) in msgCtrl.status"
           :key="ind"
           :class="{ selected: emoji == newMsg.status }"
           @click="newMsg.status = emoji"
-          >{{ emoji }}</span
+          >{{ emoji }}</div
         >
       </div>
       <input type="password" name="token" id="" v-model="newMsg.token" placeholder="token"/>
@@ -215,56 +215,61 @@ export default defineComponent({
 })
 </script>
 
+<style lang="scss">
+.page-header {
+  background: #fafafa;
+
+  .page-header-content {
+    position: relative;
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 10px 0 40px 0;
+
+    h2 {
+      font-size: 36px;
+      line-height: 56px;
+      color: #1a1a26;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 24px;
+      color: #20202f;
+    }
+
+    .button-show {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 30px;
+      color: white;
+
+      position: absolute;
+      bottom: -25px;
+      cursor: pointer;
+      right: -25px;
+      background: var(--accent-color);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .button-close {
+      transform: rotate(-45deg);
+    }
+  }
+}
+</style>
+
 <style lang="scss" scoped>
-$page-wdith : 780px;
 .zone-container {
-  padding-top: 80px;
+  padding-top: var(--header-height);
   width: 100%;
 }
 
-.page-header {
-  position: relative;
-  max-width: $page-wdith;
-  margin: 0 auto;
-  padding: 10px 0 40px 0;
-
-  h2 {
-    font-size: 36px;
-    line-height: 56px;
-    color: #1a1a26;
-  }
-
-  p {
-    font-size: 16px;
-    line-height: 24px;
-    color: #20202f;
-  }
-
-  .button-show {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 30px;
-    color: white;
-
-    position: absolute;
-    bottom: -30px;
-    cursor: pointer;
-    right: -30px;
-    background: #e63657;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    transition: all 0.3s ease-in-out;
-  }
-
-  .button-close {
-    transform: rotate(-45deg);
-  }
-}
-
 .commit-box {
-  max-width: $page-wdith;
+  max-width: var(--page-width);
   margin: 80px auto 40px auto;
   user-select: none;
 
@@ -280,29 +285,29 @@ $page-wdith : 780px;
 
   .emoji-selector {
     height: 40px;
+    display: flex;
     padding-top: 10px;
-    span {
-      height: 40px;
-      width: 40px;
+    div {
       margin-right: 10px;
       font-size: larger;
       cursor: pointer;
+      transition: all 0.1s ease-in-out;
     }
     
-    span.selected {
+    div.selected {
       position: relative;
-      bottom: 4px;
+      transform: translateY(-8px);
 
       &::before {
         content: "";
         position: absolute;
-        bottom: -12px;
+        bottom: -4px;
         // width: 100%;
         left: 8px;
         right: 8px;
         height: 4px;
         border-radius: 2px;
-        background: #e63657;
+        background: var(--accent-color);
       }
     }
   }
@@ -375,7 +380,7 @@ $page-wdith : 780px;
 
 
 .posts {
-  max-width: $page-wdith;
+  max-width: var(--page-width);
   margin: 80px auto;
   width: 100%;
   position: relative;
@@ -392,6 +397,7 @@ $page-wdith : 780px;
     margin-bottom :2.5rem;
     border-radius: 3px;
     padding-left: 2rem;
+    animation: swing-in-top-fwd 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
     &::before {
       z-index: 3;
       content: '';

@@ -163,10 +163,10 @@ body {
 
   .active {
     font-weight: Bold;
-    color: #e63657;
+    color: var(--accent-color);
     padding: 12px 20px;
 
-    border-bottom: 4px solid #E63657;
+    border-bottom: 4px solid var(--accent-color);
   }
 }
 
@@ -243,7 +243,7 @@ body {
     font-weight: normal;
     padding: 2px 16px;
     margin-bottom: 12px;
-    border-left: 4px solid #E63657;
+    border-left: 4px solid var(--accent-color);
   }
 
   h4:first-child {

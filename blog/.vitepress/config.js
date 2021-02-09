@@ -14,12 +14,15 @@ async function getConfig() {
     themeConfig: {
       pages: await getPages(),
       author: "玉川",
+      mail: "xerrors@163.com",
+      github: "https://www.github.com/Xerrors",
       search: false,
       nav: [
         { text: "首页", link: "/" },
-        { text: "Guide", link: "/pages/guide" },
-        { text: "Blog", link: "/pages/blogs" },
-        { text: "Zone", link: "/pages/zone" },
+        { text: "测试", link: "/pages/guide" },
+        { text: "博客", link: "/pages/blogs" },
+        { text: "动态", link: "/pages/zone" },
+        { text: "关于", link: "/pages/about" },
       ],
     },
     dest: "public",
