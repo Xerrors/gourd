@@ -1,5 +1,15 @@
-[] vitepress 暂时不支持 permalink 的问题
-[] 添加 randomAvatar 支持
+- vitepress 暂时不支持 permalink 的问题
+- prompt、alert 暂时使用的是默认样式，之后需要进行优化
+
+## 2021.02.09
+
+**【新增】** 新增关于页面
+
+**【新增】** 主题配置中的邮件和GitHub地址配置
+
+**【新增】** 评论区添加 randomAvatar 支持
+
+**【优化】** 动态页面添加更多的动画以及一些小细节的优化
 
 ## 2021.02.08
 
