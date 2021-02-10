@@ -1,0 +1,14 @@
+.nav-bar {
+  max-width: var(--page-width-w);
+  margin: 0 auto;
+  border-bottom: none !important;
+  padding: 0 !important;
+}
+
+.container {
+  max-width: 58rem !important;
+}
+
+.container .content p {
+  text-align: justify;
+}

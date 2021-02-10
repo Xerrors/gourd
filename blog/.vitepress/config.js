@@ -17,6 +17,7 @@ async function getConfig() {
       mail: "xerrors@163.com",
       github: "https://www.github.com/Xerrors",
       search: false,
+      sidebar: false,
       nav: [
         { text: "首页", link: "/" },
         { text: "测试", link: "/pages/guide" },

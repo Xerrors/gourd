@@ -480,7 +480,7 @@ export default {
 
     .content {
       background: #f2f5f5;
-      padding: 16px 24px;
+      padding: 10px 16px;
       color: #666;
       border-radius: 0 12px 12px 12px;
       width: fit-content;

@@ -1,6 +1,23 @@
+@import "./cover.css";
+
+body {
+  font-family: serif;
+}
+
+::-webkit-scrollbar {
+  width: 0!important;
+  height: .4rem!important;
+  cursor: pointer;
+}
+
 :root {
     /* color */
+    --c-brand: #e63657;
     --accent-color: #e63657;
 
+    /* width */
+    --page-width-w: 1136px;
     --page-width: 800px;
+
+    --header-height: 6rem;
 }

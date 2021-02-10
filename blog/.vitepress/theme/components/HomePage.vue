@@ -34,7 +34,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .home-container {
-  max-width: 1300px;
+  max-width: var(--page-width-w);
   margin: 0 auto;
 }
 
