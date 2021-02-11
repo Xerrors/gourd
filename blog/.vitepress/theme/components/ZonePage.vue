@@ -117,6 +117,7 @@ export default defineComponent({
           newMsg.msg = "";
           newMsg.status = "😘";
           newMsg.token = "";
+          showCommit.value = false;
           resolve(res);
         })
         .catch((err) => {
