@@ -34,7 +34,7 @@
 
 ### 1. 创建虚拟环境以及生成依赖
 
-```sh
+```shell
 conda create -n flask python=3.7
 conda activate flask
 
