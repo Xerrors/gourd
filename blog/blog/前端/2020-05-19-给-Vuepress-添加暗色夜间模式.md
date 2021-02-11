@@ -602,7 +602,7 @@ export default {
 
 上面的文件中使用到了一个工具需要自行安装：
 
-```sh
+```shell
 $ yarn add vue-click-outside -D
 ```
 
@@ -703,7 +703,7 @@ function render (mode) {
 
 首先安装这些工具：
 
-```sh
+```shell
 $ yarn global add gulp gulp-clean-css gulp-css-wrap
 ```
 
@@ -738,7 +738,7 @@ gulp.task('move-font', function() {
 
 这里我不清楚为什么对任务进行组合执行的时候会出问题，索性就分开执行吧！也不麻烦：
 
-```sh
+```shell
 $ gulp css-wrap-dark
 $ gulp css-wrap-light
 $ gulp move-font

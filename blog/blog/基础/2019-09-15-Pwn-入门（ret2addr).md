@@ -82,7 +82,7 @@ echo 0 > /proc/sys/kernel/randomize_va_space
 
 - 此时ESP指向了所希望的 shellcode 的位置，也就是我们的自定义代码的位置。
 
-  ```sh
+  ```shell
   gdb-peda$ print $esp
   0xffffcf80
   ```
