@@ -281,7 +281,7 @@ export default defineComponent({
   border-radius: 8px;
   padding: 16px 20px;
 
-  animation: swing-in-top-fwd 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
+  animation: scale-in-tr 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 
   .emoji-selector {
     height: 40px;
@@ -389,7 +389,7 @@ export default defineComponent({
     content: '';
     width: 2px;
     height: 100%;
-    background: #fafafa;
+    background: #f5f5f5;
     position: absolute;
   }
 
@@ -397,7 +397,7 @@ export default defineComponent({
     margin-bottom :2.5rem;
     border-radius: 3px;
     padding-left: 2rem;
-    animation: swing-in-top-fwd 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
+    animation: swing-in-top-fwd 0.3s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
     &::before {
       z-index: 3;
       content: '';
@@ -408,13 +408,14 @@ export default defineComponent({
       margin-top: 11px;
       border-radius: 100%;
       width: 14px;
-      border: 2px solid #fafafa;
+      border: 2px solid #f5f5f5;
     }
 
     &__head {
       position: relative;
       padding: 0.5rem;
-      background-color: #fafafa;
+      background-color: #f5f5f5;
+      border-radius: 4px 4px 0 0;
       &::before {
         position: absolute;
         right: 100%;
@@ -424,12 +425,13 @@ export default defineComponent({
         border-style: solid;
         border-width: 10px 18px 10px 0;
         border-width: 10px 15px 10px 0;
-        border-color: transparent #fafafa transparent transparent;
+        border-color: transparent #f5f5f5 transparent transparent;
       }
     }
 
     &__body {
-      border: 1px solid #fafafa;
+      border: 1px solid #f5f5f5;
+      border-radius: 0 0 4px 4px;
       letter-spacing: 1px;
       padding: 0 1rem;
     }
@@ -504,5 +506,19 @@ export default defineComponent({
     background-position: right;
   }
 }
+
+@keyframes scale-in-tr {
+  0% {
+    transform: scale(0);
+    transform-origin: 100% 0%;
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    transform-origin: 100% 0%;
+    opacity: 1;
+  }
+}
+
 
 </style>

@@ -7,9 +7,6 @@
       :style="{
         width: sliderArray.length * 100 + '%',
         marginLeft: -shuffler.index * 100 + '%',
-        display: 'flex',
-        marginTop: '0px',
-        transition: '0.5s',
       }"
     >
       <span
@@ -108,57 +105,68 @@ export default defineComponent({
 
   button {
     display: none;
-    height: 40px;
-    width: 40px;
+    height: 36px;
+    width: 36px;
     position: absolute;
     border: none;
     outline: none;
     border-radius: 50%;
     background: white;
-    top: calc(50% - 20px);
-    animation: fade-in 0.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+    top: calc(50% - 18px);
+    // transform: translateY(-50%);
     cursor: pointer;
+    transition: 0.3s; /** 不起作用 */
   }
 
   .pre {
     left: 30px;
+    animation: fade-in-left 0.3s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
   }
 
   .next {
     right: 30px;
+    animation: fade-in-right 0.3s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
   }
 
   &:hover {
     button {
       display: inline-block;
-      transition: 0.3s; /** 不起作用 */
+    }
+
+    .action-dots {
+      opacity: 1;
+      visibility: visible;
     }
   }
 
-  .shuffler-images  {
+  .shuffler-images {
     transition: 0.5s;
     display: flex;
     margin-top: 0;
   }
 
-  .action-dots  {
+  .action-dots {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
+    bottom: 16px;
+    width: 100%;
     display: flex;
+    opacity: 0;
+    visibility: hidden;
+    justify-content: center;
+    transition: all 0.3s ease-in-out;
 
     div {
       width: 10px;
       height: 10px;
       cursor: pointer;
-      margin: 0 3px;
+      margin: 0 3px;
       border-radius: 50%;
-      border: 1px solid;
-      color: #fff;
+      opacity: .48;
+      background: #fff;
     }
 
-    div.active  {
-      background: #fff;
+    div.active {
+      opacity: 1;
     }
   }
 }
@@ -185,12 +193,25 @@ li {
  * animation fade-in
  * ----------------------------------------
  */
-@keyframes fade-in {
+@keyframes fade-in-right {
   0% {
     opacity: 0;
+    transform: translateX(10px);
   }
   100% {
     opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 

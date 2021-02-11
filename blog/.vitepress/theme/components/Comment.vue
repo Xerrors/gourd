@@ -137,7 +137,6 @@ export default {
     const frontMatter = useFrontmatter();
 
     let path = ref(frontMatter.value.permalink);
-    console.log(path);
     let commenter = reactive({
       hidden: true,
       loading: false,

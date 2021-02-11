@@ -17,3 +17,5 @@ instance
 
 # 数据文件
 *.db
+
+dist

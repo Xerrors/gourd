@@ -26,17 +26,32 @@
 
     <div class="blogs">
       <div
-        class="blog-card"
         v-for="(page, ind) in filtedPages"
         :key="ind"
         >
-        <div class="blog-card__image" @click="goToPage(page.regularPath)">
-          <img :src="page.frontMatter.cover + '?x-oss-process=image/resize,m_fill,h_180,w_340'" alt="">
+        <div class="week-card" v-if="page.frontMatter.categories=='周报'">
+          <div class="week-card__header">
+            {{ page.frontMatter.formattedDate }}周报
+          </div>
+          <div class="week-card__title" @click="goToPage(page.regularPath)">
+            {{ page.frontMatter.title }}
+          </div>
+          <div class="week-card__cover" @click="goToPage(page.regularPath)">
+            <img :src="page.frontMatter.cover" alt="">
+          </div>
+          <div class="week-card__content">
+            {{ page.frontMatter.abstract }}
+          </div>
         </div>
+        <div class="blog-card" v-else>
+          <div class="blog-card__image" @click="goToPage(page.regularPath)">
+            <img :src="page.frontMatter.cover + '?x-oss-process=image/resize,m_fill,h_180,w_340'" alt="">
+          </div>
 
-        <div class="blog-card__info">
-          <h3 @click="goToPage(page.regularPath)">{{ page.frontMatter.title }}</h3>
-          <span>{{ page.frontMatter.formattedDate }}</span>
+          <div class="blog-card__info">
+            <h3 @click="goToPage(page.regularPath)">{{ page.frontMatter.title }}</h3>
+            <span>{{ page.frontMatter.formattedDate }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -215,6 +230,7 @@ export default defineComponent({
         cursor: pointer;
         max-height: 56px;
         overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       span {
@@ -240,6 +256,60 @@ export default defineComponent({
       padding-right: 32px;
     }
   }
+}
+
+.blogs .week-card {
+  display: grid;
+  grid-template-rows: 50px 30px 100px;
+  grid-template-columns: auto 256px;
+  grid-gap: 14px;
+
+  padding: 24px 28px;
+  border: 1px solid #f2f2f2;
+  margin-bottom: 24px;
+
+  &__header {
+    grid-column: span 2;
+
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 24px;
+    color: var(--accent-color);
+
+    border-bottom: 2px solid #f2f2f2;
+    margin-bottom: 10px;
+  }
+
+  &__title {
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 24px;
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__content {
+    font-size: 16px;
+    line-height: 24px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__cover {
+    grid-row: span 2;
+    width: 100%;
+    overflow: hidden;
+    cursor: pointer;
+
+    img {
+      object-fit: cover;
+      height: 100%;
+      border-radius: 4px;
+    }
+  }
+
 }
 
 .blog-right {
