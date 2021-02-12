@@ -59,6 +59,7 @@
             :placement="theme.carbonAds.placement"
           />
         </slot>
+        <Comment />
       </template>
     </Page>
   </div>
