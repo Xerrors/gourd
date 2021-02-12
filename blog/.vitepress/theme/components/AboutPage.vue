@@ -1,9 +1,9 @@
 <template>
   <div class="about-container">
     <div class="about-header">
-      <h1>Xerrors</h1>
+      <h1>{{ author }}</h1>
       <a :href="'mailto:' + mailAddress"><MailOutlined style="margin-right: 16px;" />联系我</a>
-      <p>江南大学 · 2017级 · 计算机科学与技术专业 · 学习方向：计算机视觉、图像处理</p>
+      <p>{{ info }}</p>
     </div>
 
     <div class="about-body">
@@ -30,9 +30,13 @@ export default defineComponent({
   setup() {
     const data = useSiteDataByRoute();
     const mailAddress = data.value.themeConfig.mail;
+    const author = data.value.themeConfig.author;
+    const info = data.value.themeConfig.info;
 
     return {
       mailAddress,
+      author,
+      info,
     }
   }
 })
@@ -47,7 +51,7 @@ export default defineComponent({
 .about-header {
   max-width: var(--page-width);
   margin: 0 auto;
-  padding: 80px 0 40px 0;
+  padding: 40px 0 40px 0;
   display: grid;
   grid-template-rows: 80px 30px;
   grid-template-columns: auto 120px;

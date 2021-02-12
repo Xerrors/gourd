@@ -1,7 +1,7 @@
 <template>
   <div class="blog-container">
     <div class="slideshow">
-      <Shuffler :sliderArray="pics"/>
+      <Shuffler :sliderArray="frontmatter.banner"/>
     </div>
 
     <div class="categories">
@@ -73,7 +73,7 @@
 
 <script>
 import { defineComponent, ref, reactive, computed } from 'vue';
-import { useSiteDataByRoute, useRouter } from "vitepress";
+import { useSiteDataByRoute, useRouter, useFrontmatter } from "vitepress";
 import { formatTime } from "../../utils/format";
 import { SearchOutlined } from '@ant-design/icons-vue';
 
@@ -86,6 +86,9 @@ export default defineComponent({
     Shuffler,
   },
   setup() {
+    const siteData = useSiteDataByRoute().value;
+    const frontmatter = useFrontmatter().value;
+
     const searcher = reactive({
       value: "",
       onSearch: () => {
@@ -93,38 +96,16 @@ export default defineComponent({
       }
     });
 
-    const pics = ref([
-      {
-        cover: "https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20210207164933.png",
-        link: "https://www.xerrors.fun",
-      },
-      {
-        cover: "https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20210207165125.png",
-        link: "https://www.xerrors.fun",
-      },
-      {
-        cover: "https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20210207165254.png",
-        link: "https://www.xerrors.fun",
-      },
-      {
-        cover: "https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20210207165322.png",
-        link: "https://www.xerrors.fun",
-      },
-      {
-        cover: "https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20210207165403.png",
-        link: "https://www.xerrors.fun",
-      },
-    ])
-
+    const labels = frontmatter.blogCategories;
     const categories = reactive({
-      labels: ["全部", "前端", "人工智能", "算法", "基础"],
-      active: "全部",
+      labels: labels,
+      active: labels[0] || "全部",
       selectCategory: (link) => {
         categories.active = link;
       }
     })
 
-    let pages = useSiteDataByRoute().value.themeConfig.pages;
+    let pages = siteData.themeConfig.pages;
     let filtedPages = computed(() => {
       if (categories.active != "全部") {
         return pages.filter(item => {
@@ -143,10 +124,10 @@ export default defineComponent({
 
     return {
       filtedPages,
+      frontmatter,
       categories,
       goToPage,
       searcher,
-      pics,
     }
   }
 })
@@ -162,7 +143,7 @@ export default defineComponent({
 
   display: grid;
   grid-template-columns: 9fr 3fr;
-  grid-template-rows: 420px 60px auto;
+  grid-template-rows: 380px 60px auto;
   grid-column-gap: 30px;
   grid-row-gap: 20px;
 }

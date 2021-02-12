@@ -13,14 +13,16 @@ import HomePage from "./components/HomePage.vue";
 import ZonePage from "./components/ZonePage.vue";
 import AboutPage from "./components/AboutPage.vue";
 
+const myTheme = { ...DefaultTheme, Layout: { ...DefaultTheme.Layout } }
 
 export default {
-  ...DefaultTheme,
+  ...myTheme,
+  NotFound: () => 'custom 404',
   enhanceApp({ app, router, siteData }) {
     
     // 注册组件
     // app.use(Antd);
-    app.component("IconifyIcon", IconifyIcon);
+    // app.component("IconifyIcon", IconifyIcon);
     app.component("Comment", Comment);
     app.component("HomePage", HomePage);
     app.component("BlogPage", BlogPage);
