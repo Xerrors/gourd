@@ -94,11 +94,26 @@ export default defineComponent({
     });
 
     const pics = ref([
-      "https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20210207164933.png",
-      "https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20210207165125.png",
-      "https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20210207165254.png",
-      "https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20210207165322.png",
-      "https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20210207165403.png",
+      {
+        cover: "https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20210207164933.png",
+        link: "https://www.xerrors.fun",
+      },
+      {
+        cover: "https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20210207165125.png",
+        link: "https://www.xerrors.fun",
+      },
+      {
+        cover: "https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20210207165254.png",
+        link: "https://www.xerrors.fun",
+      },
+      {
+        cover: "https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20210207165322.png",
+        link: "https://www.xerrors.fun",
+      },
+      {
+        cover: "https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20210207165403.png",
+        link: "https://www.xerrors.fun",
+      },
     ])
 
     const categories = reactive({

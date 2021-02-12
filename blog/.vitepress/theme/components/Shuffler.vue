@@ -15,10 +15,9 @@
         @mouseleave="shuffler.autoStart"
         @mouseenter="shuffler.autoStop"
       >
-        <img :src="item" alt="" />
+        <a :href="item.link" target="_blank"><img :src="item.cover" alt="" /></a>
       </span>
     </div>
-    <!-- 不知道为什么不起作用 -->
     <div class="action-dots">
       <div
         v-for="(item, ind) of sliderArray"
