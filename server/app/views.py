@@ -8,6 +8,31 @@ from app.config import DOMAIN_PRE, TOKEN
 from datetime import datetime
 
 
+@app.route("/visit", method=["GET"])
+def visit():
+    path = request.args.get('path')
+
+    if not path:
+        abort(403, "有毛病吧！")
+
+    from app.tables import PageViewTable
+    db.session.add(PageViewTable(
+        ip=request.environ.get('HTTP_X_REAL_IP', request.remote_addr),
+        path=path,
+        user_agent=request.user_agent.browser,
+    ))
+    db.session.commit()
+
+    query = request.args.get("count")
+    count = 0
+
+    if not query:
+        count = db.session.query(PageViewTable).all().count()
+    else:
+        count = db.session.query(PageViewTable).filter(path=query).all().count()
+
+    return jsonify({"message": "Welcome", "data": count})
+
 ###
 # 1. 博客动态相关
 ###
