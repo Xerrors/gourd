@@ -39,7 +39,7 @@
 }
 
 .sidebar:hover .sidebar-links .sidebar-link .sidebar-link-item {
-  color: #989191;
+  color: inherit;
 }
 
 .sidebar .sidebar-links .sidebar-link .sidebar-link-item::before {
@@ -54,11 +54,20 @@
   transition: 0.3s;
 }
 
-.sidebar .sidebar-links .sidebar-link .sidebar-link-item.active {
-  color: #8e8787;
-  border: none;
-}
-
 .sidebar .sidebar-links .sidebar-link .sidebar-link-item.active::before {
   background-color: #8e8787;
 }
+
+.sidebar > .sidebar-links > .sidebar-link > .sidebar-links > .sidebar-link > .sidebar-link-item {
+  font-weight: bold;
+}
+
+.sidebar > .sidebar-links > .sidebar-link > .sidebar-links > .sidebar-link > .sidebar-link-item::before {
+  width: 10px;
+}
+
+.sidebar .sidebar-links .sidebar-link .sidebar-link-item.active {
+  color: inherit;
+  border: none;
+}
+
