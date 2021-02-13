@@ -10,6 +10,34 @@ tag:
 categories: 前端
 ---
 
+<div class="header">
+  <img class="header__cover" :src="$frontmatter.cover" alt="cover" />
+  <h1 class="header__title">{{ $frontmatter.title }}</h1>
+  <p class="header__info">{{ $frontmatter.date }}</p>
+</div>
+
+<script>
+// import { formatTime } from "";
+</script>
+
+<style lang="scss" scoped>
+.header {
+  &__cover {
+    border-radius: 4px;
+  }
+
+  &__title {
+    font-size: 2rem;
+  }
+
+  &__info {
+    font-size: 14px;
+    line-height: 24px;
+    color: #41414E;
+  }
+}
+</style>
+
 ## 1. 前言
 
 随着各个系统都加入了「亮色/暗色模式」切换，Chrome 和 Edge 浏览器也支持了根据系统切换主题，作为互联网前沿的弄潮儿（没错，说你呢），咱们也要追上潮流不是，所以通过这篇文章你可以学习到如何在自己的 Vuepress 博客里面使用暗色模式。[预览](https://www.xerrors.fun)
@@ -44,8 +72,6 @@ categories: 前端
 
 所以我首先分析了少数派的亮色与暗色的文字以及背景的颜色（一个个取色器取出来的），下面是少数派官网的几个截图，上面对主要的颜色进行了标注（看不太清，没关系，后面有色卡）：
 
-![少数派暗色主页](https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20200519021033.png)
-
 最终，提取出来有代表性的颜色，其他的几个相近的颜色可以在 stylus 里面由 lighten 和 darken 内置函数来转换得到：
 
 ```stylus
@@ -76,8 +102,6 @@ $darkMask = rgba(0, 0, 0, 0.9)
 
 在上面为了有更好的适用性，我增加了两种模式的「遮罩颜色」，当然在此基础上还可以进行补充，比如设置不同等级的 border color，或者增加不同的 box-shadow 来实现更好的阴影以及高光效果，各位有才的同学自行添加。下面是两种主题的配色板：
 
-![](https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20200519022433.png)
-
 这里顺带提一句题外话，少数派的配色使用的是「纯白背景 + 灰色字体 」和 「灰色背景 + 淡白字体」的组合，这样不会让眼睛因为对比度过大，而感受到刺激强让眼睛疲劳，同时主题的红色也在暗色模式下降低了亮度。
 
 ## 3. 测试亮色以及暗色的表现
@@ -89,8 +113,6 @@ $darkMask = rgba(0, 0, 0, 0.9)
 所以我花费了大量的时间在将全局的颜色进行统一。我们可以先将上面的颜色保存到 `.vuepress/style/palette.styl` 里面（方便测试），这样我们可以直接在主题中的其他文件中使用这些颜色变量不需要导入。
 
 那么下一步就是修改自己的其他页面所用到的颜色了，我是用的是最笨的方法，「搜索替换」（我找不到更好的办法了）
-
-![](https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20200519121523.png)
 
 这里我们需要把之前混乱的颜色，使用咱们上面「配色板」里面的颜色来替代，如果感觉颜色不够用，可以适当添加合适的颜色。
 
@@ -212,569 +234,9 @@ export default ({
 
 这是我的测试结果，尚可：
 
-![](https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20200519085226.png)
-
-![](https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20200519085307.png)
-
-##  4. 实现主题的切换功能
-
-到这一步的话，说明已经对两种配色都进行了单独的测试，且颜色适配的都挺好；那么关于主题切换可以使用下面的步骤：
-
-### CSS 媒体特性
-
-[prefers-color-scheme](https://developer.mozilla.org/zh-CN/docs/Web/CSS/@media/prefers-color-scheme) 是 CSS 的一个新特性，用于检测用户是否有将系统的主题色设置为亮色或者暗色；现在已经被主流浏览器所支持。
-
-![浏览器兼容性](https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20200519090120.png)
-
-但是单单使用 prefer-color-scheme 无法实现手动切换主题，而且也没法对 ElementUI 的主题切换，所以还需要采用其他的办法。
-
-### CSS变量
-
-对于切换方法我本身是一点头绪都没有的，但是后来我看到了「 [vuepress-theme-reco](https://vuepress-theme-reco.recoluan.com/) 」这个主题，这个主题的主题切换功能写的很棒啊，可不可以~借鉴一下啊~嘿嘿，所以后面的主题切换方法是借鉴了这个作者的实现方法。[自定义属性 (--*)：CSS变量](https://developer.mozilla.org/zh-CN/docs/Web/CSS/--*)
-
-首先，我们创建一个样式文件 `docs/.vuepress/theme/styles/mode.styl`：
-
-```stylus
-:root
-  --main-color $lightMainColor
-  --regular-text $lightRegularText
-  --secondary-text $lightSecondaryText
-  --primary-text $lightPrimaryText
-  --bg-color $lightbgColor
-  --card-color $lightCard
-  --border-color $lightBorder
-  --box-shadow $lightShadow
-  --mask-color $lightMaskColor
-  @media (prefers-color-scheme: dark)
-    --main-color $darkMainColor
-    --regular-text $darkRegularText
-    --secondary-text $darkSecondaryText
-    --primary-text $darkPrimaryText
-    --bg-color $darkbgColor
-    --card-color $darkCard
-    --border-color $darkBorder
-    --box-shadow $darkShadow
-    --mask-color $darkMaskColor
-```
-
-第一行的 `:root` 会在后面用到；样式文件里带有前缀`--`的属性名，比如 `--main--color`，表示的是带有值的「[自定义属性](https://developer.mozilla.org/zh-CN/docs/Web/CSS/--*)」，其可以通过 [`var`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/var) 函数在全文档范围内复用的。例如：
-
-```vue
-<style lang="stylus" scoped>
-.tetle
-    color var(--main-color)
-</style>
-```
-
-这里要注意在 `docs/.vuepress/theme/styles/index.styl` 中引入这个新建的样式文件：
-
-```stylus
-……
-@require './toc'
-@require './mode' // 这里
-……
-```
-
-### 创建 Mode 组件
-
-首先在 `docs/.vuepress/theme/components/Mode` 文件夹下面新建 4 个文件，为了不影响也读体验，文件里面的代码在本小节的最后面可以看到。
-
-```
-Mode
- ├── applyMode.js
- ├── index.vue
- ├── modeOptions.js
- └── ModePicker.vue
-```
-
-调用关系有一丢丢复杂，有基础的同学可能更容易理解，我这里就简单的介绍一下这些文件的功能以及工作原理：
-
-- `modeOption.js` 里面是亮色以及暗色的「颜色变量」。
-- `applyMode.js` 里面定义了两个函数一个是 `render (mode)`，用来「渲染主题」，主要功能是将颜色变量应用到文档（mode.styl）里面。`applyMode (mode)` 函数就是实现手动与自动的「切换逻辑」，原理很简单，可以自行阅读。
-- `ModePicker` 和 `index.vue` 就是实现样式切换的组件，读一读就能理解工作原理。
-
-![](https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20200519102528.png)
-
-上图是我对工作原理的一种简化描述，这个方法的核心就是利用动态修改定义于 `mode.styl` 里面的 CSS 变量；这样我们就可以在项目中使用动态的 CSS 变量来表示样式。所以在此基础上，还需要把文档中的 `$MainColor` 之类的修改为 `var(--main-color)` 等等；在 VS Code 里面进行「搜索替换」的速度还是很快的。
-
-```
-var(--main-color)      <-   $MainColor
-var(--regular-text)    <-   $RegularText
-var(--secondary-text)  <-   $SecondaryText
-var(--primary-text)    <-   $PrimaryText
-var(--bg-color)        <-   $bgColor
-var(--card-color)      <-   $Card
-var(--border-color)    <-   $Border
-var(--box-shadow)      <-   $Shadow
-var(--mask-color)      <-   $MaskColor
-```
-
-但是，这也就导致了一个问题，使用 CSS 变量之后，就不能使用 「lighten」和「darken」这些 Stylus 内置的函数了，`lighten(var(--main-color), 30%)` 是无效的，因为 Stylus 在进行预处理的时候变量的值还没确定，所以没有办法使用这些内置函数，也就是没辙了呗……（如果读者有什么解决办法，务必告诉我，拜托了）
-
-> modeOption.js
-
-```js
-// modeOption.js
-const modeOptions = {
-    light: {
-        '--main-color' : '#d71a1b',
-        '--regular-text' : '#4c4e4d',
-        '--secondary-text' : '#8e8787',
-        '--primary-text' : '#292525',
-        '--bg-color' : '#f4f4f4',
-        '--card-color' : '#ffffff',
-        '--border-color' : '#e5e5e5',
-        '--box-shadow' : 'rgba(34, 36, 38, 0.15)',
-        '--mask-color' : 'rgba(255,255,255,0.9)'
-    },
-    dark: {      
-        '--main-color' : '#f94135',
-        '--regular-text' : '#b8b8b8',
-        '--secondary-text' : '#7f7f7f',
-        '--primary-text' : '#ffffff',
-        '--bg-color' : '#171514',
-        '--card-color' : '#232222',
-        '--border-color' : '#373737',
-        '--box-shadow' : 'rgba(34, 36, 38, 0.15)',
-        '--mask-color' : 'rgba(0,0,0,0.9)'
-    }
-  }
-  
-  export default modeOptions
-```
-
-> applyMode.js
-
-```js
-// applyMode.js
-import modeOptions from './modeOptions'
-
-// 渲染主题
-function render (mode) {
-  // mode.styl
-  const rootElement = document.querySelector(':root')
-  const options = modeOptions[mode]
-  for (const k in options) {
-    rootElement.style.setProperty(k, options[k])
-  }
-  // 修改 body 的类
-  document.getElementsByTagName('body')[0].className = mode + '-mode'
-}
-
-/**
- * Sets a color scheme for the website.
- * If browser supports "prefers-color-scheme", 'auto' mode will respect the setting for light or dark mode
- * otherwise it will set a dark theme during night time
- */
-// 应用主题
-export default function applyMode (mode) {
-  if (mode !== 'auto') {
-    render(mode)
-    return
-  }
-
-  const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
-  const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
-
-  if (isDarkMode) render('dark')
-  if (isLightMode) render('light')
-
-  if (!isDarkMode && !isLightMode) {
-    console.log('You specified no preference for a color scheme or your browser does not support it. I schedule dark mode during night time.')
-    const hour = new Date().getHours()
-    if (hour < 6 || hour >= 18) render('dark')
-    else render('light')
-  }
-}
-```
-
-> ModePicker.vue
-
-```vue
-<template>
-  <div class="mode-options">
-    <h4 class="title">切换主题</h4>
-    <ul class="color-mode-options">
-      <li
-        v-for="(mode, index) in modeOptions"
-        :key="index"
-        :class="getClass(mode.mode)"
-        @click="selectMode(mode.mode)"
-      >{{ mode.title }}</li>
-    </ul>
-  </div>
-</template>
-
-<script>
-import applyMode from './applyMode.js'
-export default {
-  name: 'ModeOptions',
-  data () {
-    return {
-      modeOptions: [
-        { mode: 'dark', title: '暗' },
-        { mode: 'auto', title: '自动' },
-        { mode: 'light', title: '亮' }
-      ],
-      currentMode: 'auto'
-    }
-  },
-  mounted () {
-    // modePicker 开启时默认使用用户主动设置的模式
-    this.currentMode = localStorage.getItem('mode') || this.$themeConfig.mode || 'auto'
-    // Dark and Light autoswitches
-    // 为了避免在 server-side 被执行，故在 Vue 组件中设置监听器
-    var that = this
-    window.matchMedia('(prefers-color-scheme: dark)').addListener(() => {
-      that.$data.currentMode === 'auto' && applyMode(that.$data.currentMode)
-    })
-    window.matchMedia('(prefers-color-scheme: light)').addListener(() => {
-      that.$data.currentMode === 'auto' && applyMode(that.$data.currentMode)
-    })
-    applyMode(this.currentMode)
-  },
-  methods: {
-    selectMode (mode) {
-      if (mode !== this.currentMode) {
-        this.currentMode = mode
-        applyMode(mode)
-        localStorage.setItem('mode', mode)
-      }
-    },
-    getClass (mode) {
-      return mode !== this.currentMode ? mode : `${mode} active`
-    }
-  }
-}
-</script>
-
-<style lang="stylus">
-@require '../../styles/mode.styl'
-.mode-options
-  background-color var(--bg-color)
-  min-width: 125px;
-  margin: 0;
-  padding: 1em;
-  box-shadow var(--box-shadow);
-  border-radius: 3px;
-  .title
-    margin-top 0
-    margin-bottom .6rem
-    font-weight bold
-    color var(--regular-text)
-  .color-mode-options
-    display: flex;
-    flex-wrap wrap
-    li
-      text-align: center;
-      font-size 12px
-      color var(--regular-text)
-      line-height 18px
-      padding 3px 6px
-      border-top 1px solid #666
-      border-bottom 1px solid #666
-      background-color var(--bg-color)
-      cursor pointer
-      &.dark
-        border-radius: 3px 0 0 3px
-        border-left 1px solid #666
-      &.light
-        border-radius: 0 3px 3px 0
-        border-right 1px solid #666
-      &.active
-        background-color: $accentColor;
-        color #fff
-      &:not(.active)
-        border-right 1px solid #666
-</style>
-```
-
-> index.vue
-
-```vue
-<template>
-	<div v-click-outside="hideMenu" class="color-picker">
-		<a class="color-button" @click.prevent="showMenu = !showMenu">
-			切换
-		</a>
-		<transition name="menu-transition" mode="out-in">
-			<div v-show="showMenu" class="color-picker-menu">
-				<ModePicker />
-			</div>
-		</transition>
-	</div>
-</template>
-
-<script>
-import ClickOutside from 'vue-click-outside'
-import ModePicker from './ModePicker'
-import applyMode from './applyMode'
-export default {
-  name: 'UserSettings',
-  directives: {
-    'click-outside': ClickOutside
-  },
-  components: {
-    ModePicker
-  },
-  data () {
-    return {
-      showMenu: false
-    }
-  },
-  // 为了在保证 modePicker 在 SSR 中正确开关，并实现管理，Mode 组件将负责 modePicker 关闭的情况
-  mounted () {
-    // modePicker 关闭时默认使用主题设置的模式
-    const themeMode = this.$themeConfig.mode || 'auto'
-    const { modePicker } = this.$themeConfig
-    if (modePicker === false) {
-      // 为 'auto' 模式设置监听器
-      if (themeMode === 'auto') {
-        window.matchMedia('(prefers-color-scheme: dark)').addListener(() => {
-          applyMode(themeMode)
-        })
-        window.matchMedia('(prefers-color-scheme: light)').addListener(() => {
-          applyMode(themeMode)
-        })
-      }
-      applyMode(themeMode)
-    }
-  },
-  methods: {
-    hideMenu () {
-      this.showMenu = false
-    }
-  }
-}
-</script>
-
-<style lang="stylus">
-@require '../../styles/mode.styl'
-.color-picker {
-	position: relative;
-	margin-right: 1em;
-  cursor pointer;
-	.color-button {
-		align-items: center;
-		height: 100%;
-		.iconfont {
-			font-size 1.4rem
-			color: $accentColor
-		}
-	}
-	.color-picker-menu {
-		position: absolute;
-		top: 40px;
-		left: 50%;
-		transform: translateX(-50%);
-		z-index: 150;
-		&.menu-transition-enter-active,
-		&.menu-transition-leave-active {
-			transition: all 0.25s ease-in-out;
-		}
-		&.menu-transition-enter,
-		&.menu-transition-leave-to {
-			top: 50px;
-			opacity: 0;
-		}
-		ul {
-			list-style-type: none;
-			margin: 0;
-			padding: 0;
-		}
-	}
-}
-@media (max-width: $MQMobile) {
-	.color-picker {
-		margin-right: 1rem;
-		.color-picker-menu {
-			left: calc(50% - 35px);
-			&::before {
-				left: calc(50% + 35px);
-			}
-		}
-	}
-}
-</style>
-```
-
-「**好，刹车，别往后滑了**」
-
-上面的文件中使用到了一个工具需要自行安装：
-
-```shell
-$ yarn add vue-click-outside -D
-```
-
-然后我们需要在项目中里面调用 Mode 组件，这里我选择了在 `docs/.vuepress/theme/components/Navbar.vue` 里面调用
-
-```vue
-<template>
-  <header class="navbar">
-    <!-- 前部分省略 -->
-    <div
-      class="links"
-      :style="linksWrapMaxWidth ? {
-        'max-width': linksWrapMaxWidth + 'px'
-      } : {}"
-    >
-    <Mode />     <!-- 搁这儿呢~ template 里就添加一行~ -->
-    <AlgoliaSearchBox
-      v-if="isAlgoliaSearch"
-      :options="algolia"
-    />
-    <!-- 后半部分省略 -->
-    </div>
-  </header>
-</template>
-
-<script>
-/* 前部分省略 */
-import Mode from '@theme/components/Mode' // 引入
-
-export default {
-  components: { SidebarButton, NavLinks, SearchBox, AlgoliaSearchBox, Mode },
-  // 不想关的省略了
-}
-</script>
-```
 
 经过上面的修改之后，幸运的话，应该就可以是实现基本的亮色暗色主题的切换了。如果不是那么幸运的话，要多多在 devtools 里面调试，然后找到问题的源头，加油。
 
-![](https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20200519111515.png)
-
-这时候其实我们还差最后一步……
-
-### 动态切换 Element UI 主题
-
-上面「vuepress-theme-reco」的思路虽然实现了手动切换主题，但是并没有涉及到 Element UI 主题的切换，所以下一步就是实现动态切换 Element UI 主题。
-
-不知道读者有没有注意到，在上面的 `applyMode.js` 里面有这么一句：
-
-```js {10}
-// 渲染主题
-function render (mode) {
-  // mode.styl
-  const rootElement = document.querySelector(':root')
-  const options = modeOptions[mode]
-  for (const k in options) {
-    rootElement.style.setProperty(k, options[k])
-  }
-  // 修改 body 的类
-  document.getElementsByTagName('body')[0].className = mode + '-mode'
-}
-```
-
-加上这句话之后，在动态切换主题的同时会修改 body 元素的类，如果是暗色模式，body 的类就会变成 `dark-mode`，如果是亮色模式，body 的类就会变成 `light-mode`，那么如果我们在 ElementUI 的 css 文件里面，加上命名空间 `.dark-mode`，这不就能够实现动态切换主题了吗~；也就是说，原本的 `dark.css` 和 `light.css` 是这么定义的：
-
-```css
-/* dark.css */
-.el-button {
-    color: red;
-}
-
-/* light.css */
-.el-button {
-    color: blue;
-}
-```
-
-当我们同时引入两个样式文件的时候，肯定是没有办法进行主题切换的，那么我们只要加上「前缀」就可以实现了，我们给 `dark.css` 加上 `.dark-mode` ，给 `light.css` 加上 `.light-mode` ：
-
-```css
-/* dark.css */
-.dark-mode .el-button {
-    color: red;
-}
-
-/* light.css */
-.light-mode .el-button {
-    color: blue;
-}
-```
-
-这样当 body 的类是 `dark-mode` 时，就会使用暗色的样式，否则就会使用亮色的样式。
-
-那么问题来了，加上前缀说起来容易，可是 `dark.css` 有一万多行……这可不是一般人能完成得了的。
-
-![](https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20200519111428.png)
-
-所以就需要使用「[gulp](https://www.gulpjs.com.cn/)」这个工具：
-
-首先安装这些工具：
-
-```shell
-$ yarn global add gulp gulp-clean-css gulp-css-wrap
-```
-
-然后创建 `docs/.vuepress/public/style/theme/gulpfile.js` ：
-
-```js
-// gulpfile.js
-
-var path = require('path')
-var gulp = require('gulp')
-var cleanCSS = require('gulp-clean-css')
-var cssWrap = require('gulp-css-wrap')
-
-gulp.task('css-wrap-dark', function() {
-  return gulp.src( path.resolve('./dark.css')) // 样式文件
-    .pipe(cssWrap({selector: '.dark-mode'}))   // 前缀名称
-    .pipe(cleanCSS())
-    .pipe(gulp.dest('./dist')) // 保存的路径，会生成 ./dist/dark.css
-})
-
-gulp.task('css-wrap-light', function() {
-  return gulp.src( path.resolve('./light.css'))
-    .pipe(cssWrap({selector: '.light-mode'}))
-    .pipe(cleanCSS())
-    .pipe(gulp.dest('./dist'))
-})
-
-gulp.task('move-font', function() {
-  return gulp.src(['./fonts/**']).pipe(gulp.dest('./dist/fonts'));
-});
-```
-
-这里我不清楚为什么对任务进行组合执行的时候会出问题，索性就分开执行吧！也不麻烦：
-
-```shell
-$ gulp css-wrap-dark
-$ gulp css-wrap-light
-$ gulp move-font
-```
-
-这样我们就会得到下面这样的目录结构 `docs/.vuepress/public/style`：
-
-```
-style
- ├── config.json
- └── theme
-     ├── dist
-     │   ├── fonts
-     │   ├── light.css // 转换后的样式表
-     │   └── dark.css  // 转换后的样式表
-     ├── fonts
-     ├── gulpfile.js
-     ├── light.css // 原始的样式表
-     └── dark.css  // 原始的样式表
-```
-
-之后我们在 `enhanceApp.js` 里面「同时引入」这两个文件就好了：
-
-```js
-import Vue from 'vue'
-import Element from 'element-ui'
-import './public/style/theme/dist/light.css' // 转换后的样式表
-import './public/style/theme/dist/dark.css'  // 转换后的样式表
-import animated from 'animate.css'
-
-export default ({
-  Vue,
-}) => {
-  Vue.use(Element, animated)
-}
-```
 
 当当当当，大功告成！撒花~撒花~撒花~
 

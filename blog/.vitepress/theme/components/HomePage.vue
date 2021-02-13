@@ -42,14 +42,14 @@ export default defineComponent({
   position: relative;
   height: 100vh;
   max-height: 1300px;
-  padding-top: 200px;
+  padding-top: calc(var(--header-height) + 2rem);
 
   h1 {
     margin-top: 0;
     font-style: normal;
     font-weight: bold;
-    font-size: 64px;
-    line-height: 80px;
+    font-size: 3.25rem;
+    line-height: 4rem;
     color: #1A1A26;
   }
 
@@ -66,15 +66,15 @@ export default defineComponent({
     border: none;
     cursor: pointer;
     font-weight: bold;
-    font-size: 18px;
-    line-height: 26px;
+    font-size: 1rem;
+    line-height: 1.75rem;
     letter-spacing: 4px;
     color: white;
     padding: 8px 32px;
     background: #000000;
-    border-radius: 4px;
+    border-radius: 8px;
 
-    margin-top: 60px;
+    margin-top: 3rem;
 
     &:hover {
       background-color: #1A1A26;
@@ -83,7 +83,6 @@ export default defineComponent({
 
   img {
     width: 900px;
-    height: 600px;
     position: absolute;
     right: 0;
     bottom: 0;

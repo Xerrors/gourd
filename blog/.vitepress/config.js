@@ -13,11 +13,12 @@ async function getConfig() {
     description: 'Just playing around.',
     themeConfig: {
       pages: await getPages(),
-      author: "玉川",
+      author: "Xerrors",
       mail: "xerrors@163.com",
+      info: "江南大学 · 2017级 · 计算机科学与技术专业 · 学习方向：计算机视觉、图像处理",
       github: "https://www.github.com/Xerrors",
       search: false,
-      sidebar: false,
+      // sidebar: "auto",
       nav: [
         { text: "首页", link: "/" },
         { text: "测试", link: "/pages/guide" },

@@ -455,7 +455,7 @@ export default {
 
   .msg-card {
     .comment-header {
-      height: 30px;
+      height: 1.5rem;
       font-size: 15px;
       &-name {
         color: #1a1a26;
