@@ -6,6 +6,7 @@ from app import db
 from app.config import BLOG_PATH
 from app.tables import LocalArticlesTable, LocalArticlesComment
 from app.tables import CsdnArticlesTable, CsdnCount
+from app.utils.database import get_page_view_by_path
 
 
 def get_article_list_from_dirs():
@@ -64,7 +65,7 @@ def get_articles_from_db():
     for item in query_result:
         item_dict = {}
         item_dict['like_count'] = item.like_count
-        item_dict['read_count'] = item.read_count
+        item_dict['read_count'] = get_page_view_by_path(item.path)
         item_dict.update(parse_markdown(item.local_path).metadata)
         item_dict['comment_count'] = LocalArticlesComment.query.filter_by(path=item.path).count()
         article_list.append(item_dict)

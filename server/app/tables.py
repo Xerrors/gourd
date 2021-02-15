@@ -104,6 +104,16 @@ class Messages(db.Model):
         return json_msgs
 
 
+class PageViewTable(db.Model):
+    __tablename__ = "PageViewTable"
+    id = db.Column(db.Integer, primary_key=True)
+    ip = db.Column(db.String(30))
+    domain = db.Column(db.String(30), default="")
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+    path = db.Column(db.String(50)) # 去除协议和域名的路径部分
+    user_agent = db.Column(db.String(20))
+
+
 # 暂时觉得没有启用的必要
 class Visitors(db.Model):
     __tablename__ = "Visitors"
