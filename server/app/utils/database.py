@@ -1,10 +1,16 @@
 from app import db
-from app.tables import Zone, Messages, PageViewTable
+from app.tables import Zone, Messages, PageViewTable, FriendsTable
 
 def rtn_zones():
     query_result = Zone.query.all()
     zones = [zone.to_json() for zone in query_result]
     return zones
+
+
+def rtn_friends():
+    query_result = db.session.query(FriendsTable).all()
+    friends = [friend.to_json() for friend in query_result]
+    return friends
 
 
 def get_all_messages():

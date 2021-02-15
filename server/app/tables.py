@@ -104,6 +104,28 @@ class Messages(db.Model):
         return json_msgs
 
 
+class FriendsTable(db.Model):
+    __tablename__ = "FriendsTable"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20))
+    avatar = db.Column(db.String(50))
+    title = db.Column(db.String(20))
+    mail = db.Column(db.String(20))
+    site = db.Column(db.String(20))
+    quote = db.Column(db.String(50))
+
+    def to_json(self):
+        json_friends = {
+            'id':  self.id,
+            'name':  self.name,
+            'avatar':  self.avatar,
+            'title': self.title,
+            'mail': self.mail,
+            'site': self.site,
+            'quote': self.quote,
+        }
+
+
 class PageViewTable(db.Model):
     __tablename__ = "PageViewTable"
     id = db.Column(db.Integer, primary_key=True)

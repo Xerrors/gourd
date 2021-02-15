@@ -3,7 +3,7 @@ from app import app, db
 from app.utils.articles import get_article_list_from_dirs, get_articles_from_db, scan_article_to_db, rename_markdown
 from app.utils.articles import get_articles_from_zhihu, get_articles_from_csdn, parse_markdown
 from app.utils.validate import validate_server_token
-from app.utils.database import rtn_zones, get_all_messages, get_page_view_by_path
+from app.utils.database import rtn_zones, get_all_messages, get_page_view_by_path, rtn_friends
 from app.config import DOMAIN_PRE, TOKEN
 from datetime import datetime
 
@@ -77,6 +77,57 @@ def create_zone():
     db.session.add(Zone(msg=msg, status=status, date=datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
     db.session.commit()
     return jsonify({"data": rtn_zones()})
+
+
+@app.route('./friends', methods=["GET"])
+def get_friends():
+    from app.tables import FriendsTable
+    id = request.args.get('id')
+    if id:
+        friend = FriendsTable.query.get(id)
+        if friend:
+            return jsonify({"message": "ok", "data": friend.to_json()})
+        else:
+            return jsonify({"message": "没有该动态~"}), 404
+    return jsonify({"data": rtn_friends()})
+
+
+@app.route('./friends', methods=["POST"])
+def add_friend():
+    from app.tables import FriendsTable
+    name = request.args.get("name")
+    avatar = request.args.get("avatar")
+    title = request.args.get("title")
+    mail = request.args.get("mail")
+    site = request.args.get("site")
+    quote = request.args.get("quote")
+
+    if not name or not site or not quote:
+        abort(403, "信息不全~")
+    
+    db.session.add(FriendsTable(name=name, avatar=avatar, title=title, mail=mail, site=site, quote=quote))
+    db.session.commit()
+    return jsonify({"data": rtn_friends()})
+
+
+@app.route('/friends', methods=['DELETE'])
+def del_zone():
+    from app.tables import FriendsTable
+    id = request.args.get('id')
+    token = request.args.get('token')
+
+    if token != TOKEN:
+        abort(403, "Token 不对劲！")
+    elif id:
+        friend = FriendsTable.query.get(id)
+        if friend:
+            db.session.delete(friend)
+            db.session.commit()
+            return jsonify({"message": "已删除", "data": rtn_friends()})
+        else:
+            return abort(403, "删除错误~")
+    else:
+        return abort(403, "请提供id")
 
 
 ###
