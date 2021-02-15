@@ -79,7 +79,7 @@ def create_zone():
     return jsonify({"data": rtn_zones()})
 
 
-@app.route('./friends', methods=["GET"])
+@app.route('/friends', methods=["GET"])
 def get_friends():
     from app.tables import FriendsTable
     id = request.args.get('id')
@@ -92,7 +92,7 @@ def get_friends():
     return jsonify({"data": rtn_friends()})
 
 
-@app.route('./friends', methods=["POST"])
+@app.route('/friends', methods=["POST"])
 def add_friend():
     from app.tables import FriendsTable
     name = request.args.get("name")
@@ -101,6 +101,10 @@ def add_friend():
     mail = request.args.get("mail")
     site = request.args.get("site")
     quote = request.args.get("quote")
+    token = request.args.get('token')
+
+    if token != TOKEN:
+        abort(403, "Token 不对劲！")
 
     if not name or not site or not quote:
         abort(403, "信息不全~")
@@ -111,7 +115,7 @@ def add_friend():
 
 
 @app.route('/friends', methods=['DELETE'])
-def del_zone():
+def del_friend():
     from app.tables import FriendsTable
     id = request.args.get('id')
     token = request.args.get('token')
