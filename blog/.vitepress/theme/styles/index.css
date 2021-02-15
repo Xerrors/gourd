@@ -1,4 +1,5 @@
 @import "./cover.css";
+@import "./code.css";
 
 body {
   font-family: serif;
@@ -14,6 +15,8 @@ body {
     /* color */
     --c-brand: #e63657;
     --accent-color: #e63657;
+    --code-bg-color: #f6f6f6;
+    --code-inline-bg-color: inherit;
 
     /* width */
     --page-width-w: 1136px;
