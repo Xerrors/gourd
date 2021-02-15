@@ -14,6 +14,7 @@
 <script>
 import { defineComponent, ref } from "vue";
 import { useFrontmatter, useRouter } from "vitepress";
+import axios from 'axios';
 export default defineComponent({
   name: "Home",
   setup() {
@@ -24,9 +25,31 @@ export default defineComponent({
       router.go(path);
     }
 
+    const viewCount = ref(0);
+
+    new Promise((resolve, reject) => {
+      axios({
+        url: "http://116.62.110.131:5000/visit",
+        method: 'get',
+        params: {
+          path: 'cycle-gan-reading-note',
+          count: 'cycle-gan-reading-note'
+        }
+      })
+      .then(res => {
+        console.log(res.data.data);
+        viewCount.value = res.data.data;
+        resolve(res);
+      })
+      .catch(err => {
+        resolve(err);
+      })
+    })
+
     return {
       data,
       action,
+      viewCount,
     };
   },
 });

@@ -404,7 +404,7 @@ export default defineComponent({
       content: '';
       position: absolute;
       left: -6px;
-      background: #797777;
+      background: #999;
       height: 14px;
       margin-top: 11px;
       border-radius: 100%;
@@ -415,19 +415,21 @@ export default defineComponent({
     &__head {
       position: relative;
       padding: 0.5rem;
-      background-color: #f5f5f5;
+      // background-color: #f5f5f5;
+      border: 1px solid #f5f5f5;
+      border-bottom-width: 0;
       border-radius: 4px 4px 0 0;
-      &::before {
-        position: absolute;
-        right: 100%;
-        content: "";
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 10px 18px 10px 0;
-        border-width: 10px 15px 10px 0;
-        border-color: transparent #f5f5f5 transparent transparent;
-      }
+      // &::before {
+      //   position: absolute;
+      //   right: 100%;
+      //   content: "";
+      //   width: 0;
+      //   height: 0;
+      //   border-style: solid;
+      //   border-width: 10px 18px 10px 0;
+      //   border-width: 10px 15px 10px 0;
+      //   border-color: transparent #f5f5f5 transparent transparent;
+      // }
     }
 
     &__body {
