@@ -13,6 +13,7 @@ import BlogPage from "./components/BlogPage.vue";
 import HomePage from "./components/HomePage.vue";
 import ZonePage from "./components/ZonePage.vue";
 import AboutPage from "./components/AboutPage.vue";
+import FriendPage from "./components/FriendPage.vue";
 
 const myTheme = { ...DefaultTheme, Layout: { ...DefaultTheme.Layout } }
 
@@ -29,6 +30,7 @@ export default {
     app.component("BlogPage", BlogPage);
     app.component("ZonePage", ZonePage);
     app.component("AboutPage", AboutPage);
+    app.component("FriendPage", FriendPage);
     app.component("Loading", Loading);
 
     // app is the Vue 3 app instance from createApp()

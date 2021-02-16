@@ -61,7 +61,7 @@
         广告位招租
       </div>
 
-      <h4>我的专栏</h4>
+      <h4 class="border-left-h">我的专栏</h4>
 
       <div class="zhuanlan-slideshow">
         <img src="https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20201009130905.png" alt="">
@@ -326,9 +326,7 @@ export default defineComponent({
   h4 {
     margin-top: 16px;
     font-weight: normal;
-    padding: 2px 16px;
     margin-bottom: 12px;
-    border-left: 4px solid var(--accent-color);
   }
 
   h4:first-child {

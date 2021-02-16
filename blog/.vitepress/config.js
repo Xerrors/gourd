@@ -25,6 +25,7 @@ async function getConfig() {
         { text: "博客", link: "/pages/blogs" },
         { text: "动态", link: "/pages/zone" },
         { text: "关于", link: "/pages/about" },
+        { text: "友链", link: "/pages/friends" },
       ],
     },
     dest: "public",

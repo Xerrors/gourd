@@ -1,5 +1,6 @@
 @import "./cover.css";
 @import "./code.css";
+@import "./classes.css";
 
 body {
   font-family: serif;
