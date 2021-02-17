@@ -130,6 +130,27 @@ def del_zone():
         return abort(403, "请提供id")
 
 
+@app.route('/zhuanlan', methods=["GET"])
+def get_zhuanlan():
+    from app.tables import ZhuanlanTable
+
+    if request.args.get("name"):
+        result = db.session.query(ZhuanlanTable).filter_by(name=request.args.get("name"))
+        return jsonify({"message": "here", "data": result.to_json()})
+    else:
+        result = db.session.query(ZhuanlanTable).all()
+        zhuanlans = [item.to_json() for item in result]
+
+        return jsonify({"message": "here", "data": zhuanlans})
+
+
+@app.route('/zhuanlan', methods=["POST"])
+def add_zhuanlan():
+    from app.tables import ZhuanlanTable
+    
+
+
+
 ###
 # 1. 博客动态相关
 ###

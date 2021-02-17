@@ -136,6 +136,24 @@ class PageViewTable(db.Model):
     user_agent = db.Column(db.String(20))
 
 
+def ZhuanlanTable(db.Model):
+    __tablename__ = "ZhuanlanTable"
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+    name = db.Column(db.String(10))
+    title = db.Column(db.String(30))
+    description = db.Column(db.Text)
+
+    def to_json(self):
+        json_data = {
+            "name": self.name,
+            "date": self.date
+            "title": self.title,
+            "description": self.description,
+        }
+        return json_data
+
+
 # 暂时觉得没有启用的必要
 class Visitors(db.Model):
     __tablename__ = "Visitors"
