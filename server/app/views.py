@@ -139,7 +139,7 @@ def get_zhuanlan():
     from app.tables import ZhuanlanTable
 
     if request.args.get("name"):
-        result = db.session.query(ZhuanlanTable).filter_by(name=request.args.get("name"))
+        result = db.session.query(ZhuanlanTable).filter_by(name=request.args.get("name")).first()
         return jsonify({"message": "here", "data": result.to_json()})
     else:
         return jsonify({"message": "here", "data": get_all_zhuanlan()})
@@ -151,27 +151,29 @@ def add_zhuanlan():
     name = request.args.get("name")
     title = request.args.get("title")
     cover = request.args.get("cover")
+    details = request.args.get("details")
     description = request.args.get("description")
     token = request.args.get('token')
 
     if token != TOKEN:
         abort(403, "Token 不对劲！")
-    else if not name or not title or not description:
+    elif not name or not title or not description:
         abort(403, "你就不对劲！")
     else:
         db.session.add(ZhuanlanTable(
             name=name,
             title=title,
             cover=cover,
+            details=details,
             description=description
         ))
-        db.session.add()
+        db.session.commit()
         return jsonify({"message": "success", "data": get_all_zhuanlan()})
 
 
 
 @app.route('/zhuanlan', methods=['DELETE'])
-def del_friend():
+def del_zhuanlan():
     from app.tables import ZhuanlanTable
     id = request.args.get('id')
     token = request.args.get('token')

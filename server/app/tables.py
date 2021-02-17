@@ -137,23 +137,25 @@ class PageViewTable(db.Model):
     user_agent = db.Column(db.String(20))
 
 
-def ZhuanlanTable(db.Model):
+class ZhuanlanTable(db.Model):
     __tablename__ = "ZhuanlanTable"
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, default=datetime.utcnow)
     name = db.Column(db.String(10))
     title = db.Column(db.String(30))
     cover = db.Column(db.String(50))
-    description = db.Column(db.Text)
+    description = db.Column(db.String(100))
+    details = db.Column(db.Text)
 
     def to_json(self):
         json_data = {
             "id": self.id,
             "name": self.name,
-            "date": self.date
+            "date": self.date,
             "title": self.title,
             "cover": self.cover,
             "description": self.description,
+            "details": self.details,
         }
         return json_data
 
