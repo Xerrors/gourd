@@ -150,6 +150,7 @@ def add_zhuanlan():
     from app.tables import ZhuanlanTable
     name = request.args.get("name")
     title = request.args.get("title")
+    cover = request.args.get("cover")
     description = request.args.get("description")
     token = request.args.get('token')
 
@@ -161,6 +162,7 @@ def add_zhuanlan():
         db.session.add(ZhuanlanTable(
             name=name,
             title=title,
+            cover=cover,
             description=description
         ))
         db.session.add()

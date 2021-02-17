@@ -143,6 +143,7 @@ def ZhuanlanTable(db.Model):
     date = db.Column(db.DateTime, default=datetime.utcnow)
     name = db.Column(db.String(10))
     title = db.Column(db.String(30))
+    cover = db.Column(db.String(50))
     description = db.Column(db.Text)
 
     def to_json(self):
@@ -151,6 +152,7 @@ def ZhuanlanTable(db.Model):
             "name": self.name,
             "date": self.date
             "title": self.title,
+            "cover": self.cover,
             "description": self.description,
         }
         return json_data
