@@ -2,7 +2,7 @@ import DefaultTheme from 'vitepress/theme';
 // import DefaultTheme from "../theme-default";
 // import IconifyIcon from '@iconify/vue';
 
-import './styles/index.css';
+import './styles/index.scss';
 
 // import Antd from 'ant-design-vue';
 // import 'ant-design-vue/dist/antd.css';
@@ -14,6 +14,7 @@ import HomePage from "./components/HomePage.vue";
 import ZonePage from "./components/ZonePage.vue";
 import AboutPage from "./components/AboutPage.vue";
 import FriendPage from "./components/FriendPage.vue";
+import ZhuanlanPage from "./components/ZhuanlanPage.vue";
 
 const myTheme = { ...DefaultTheme, Layout: { ...DefaultTheme.Layout } }
 
@@ -31,6 +32,7 @@ export default {
     app.component("ZonePage", ZonePage);
     app.component("AboutPage", AboutPage);
     app.component("FriendPage", FriendPage);
+    app.component("ZhuanlanPage", ZhuanlanPage);
     app.component("Loading", Loading);
 
     // app is the Vue 3 app instance from createApp()
