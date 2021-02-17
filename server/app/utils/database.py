@@ -1,5 +1,5 @@
 from app import db
-from app.tables import Zone, Messages, PageViewTable, FriendsTable
+from app.tables import Zone, Messages, PageViewTable, FriendsTable, ZhuanlanTable
 
 def rtn_zones():
     query_result = Zone.query.all()
@@ -17,6 +17,12 @@ def get_all_messages():
     query_result = Messages.query.all()
     msgs = [msg.to_json() for msg in query_result]
     return msgs
+
+
+def get_all_zhuanlan():
+    result = db.session.query(ZhuanlanTable).all()
+    zhuanlans = [item.to_json() for item in result]
+    return zhuanlans
 
 
 def get_page_view_by_path(path):

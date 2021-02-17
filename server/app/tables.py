@@ -147,6 +147,7 @@ def ZhuanlanTable(db.Model):
 
     def to_json(self):
         json_data = {
+            "id": self.id,
             "name": self.name,
             "date": self.date
             "title": self.title,

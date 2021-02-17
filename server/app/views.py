@@ -3,7 +3,7 @@ from app import app, db
 from app.utils.articles import get_article_list_from_dirs, get_articles_from_db, scan_article_to_db, rename_markdown
 from app.utils.articles import get_articles_from_zhihu, get_articles_from_csdn, parse_markdown
 from app.utils.validate import validate_server_token
-from app.utils.database import rtn_zones, get_all_messages, get_page_view_by_path, rtn_friends
+from app.utils.database import rtn_zones, get_all_messages, get_all_zhuanlan, get_page_view_by_path, rtn_friends
 from app.config import DOMAIN_PRE, TOKEN
 from datetime import datetime
 
@@ -142,18 +142,50 @@ def get_zhuanlan():
         result = db.session.query(ZhuanlanTable).filter_by(name=request.args.get("name"))
         return jsonify({"message": "here", "data": result.to_json()})
     else:
-        result = db.session.query(ZhuanlanTable).all()
-        zhuanlans = [item.to_json() for item in result]
-
-        return jsonify({"message": "here", "data": zhuanlans})
+        return jsonify({"message": "here", "data": get_all_zhuanlan()})
 
 
 @app.route('/zhuanlan', methods=["POST"])
 def add_zhuanlan():
     from app.tables import ZhuanlanTable
-    
+    name = request.args.get("name")
+    title = request.args.get("title")
+    description = request.args.get("description")
+    token = request.args.get('token')
+
+    if token != TOKEN:
+        abort(403, "Token 不对劲！")
+    else if not name or not title or not description:
+        abort(403, "你就不对劲！")
+    else:
+        db.session.add(ZhuanlanTable(
+            name=name,
+            title=title,
+            description=description
+        ))
+        db.session.add()
+        return jsonify({"message": "success", "data": get_all_zhuanlan()})
 
 
+
+@app.route('/zhuanlan', methods=['DELETE'])
+def del_friend():
+    from app.tables import ZhuanlanTable
+    id = request.args.get('id')
+    token = request.args.get('token')
+
+    if token != TOKEN:
+        abort(403, "Token 不对劲！")
+    elif id:
+        zhuanlan = ZhuanlanTable.query.get(id)
+        if zhuanlan:
+            db.session.delete(zhuanlan)
+            db.session.commit()
+            return jsonify({"message": "success", "data": get_all_zhuanlan()})
+        else:
+            return abort(403, "删除错误~")
+    else:
+        return abort(403, "请提供id")
 
 ###
 # 1. 博客动态相关
