@@ -124,6 +124,7 @@ class FriendsTable(db.Model):
             'site': self.site,
             'quote': self.quote,
         }
+        return json_friends
 
 
 class PageViewTable(db.Model):
