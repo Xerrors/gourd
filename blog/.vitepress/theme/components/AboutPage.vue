@@ -8,7 +8,7 @@
 
     <div class="about-body">
       <div v-for="(item, ind) in content" :key="ind">
-        <h3>{{ item.title }}</h3>
+        <h3 class="border-left-h">{{ item.title }}</h3>
         <p v-for="(p, i) in item.details">{{ p }}</p>
       </div>
     </div>
@@ -93,10 +93,6 @@ export default defineComponent({
   h3 {
     font-size: 24px;
     line-height: 32px;
-    letter-spacing: 2px;
-    color: #1A1A26;
-    padding-left: 16px;
-    border-left: 4px solid var(--accent-color);
     margin-bottom: 36px;
     margin-top: 56px;
   }
