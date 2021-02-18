@@ -64,7 +64,8 @@
       <h4 class="border-left-h">我的专栏</h4>
 
       <div class="zhuanlan-slideshow">
-        <img src="https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20201009130905.png" alt="">
+        <Shuffler :sliderArray="zhuanlan"/>
+        <!-- <img src="https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/20201009130905.png" alt=""> -->
       </div>
 
     </div>
@@ -76,6 +77,7 @@ import { defineComponent, ref, reactive, computed } from 'vue';
 import { useSiteDataByRoute, useRouter, useFrontmatter } from "vitepress";
 import { formatTime } from "../../utils/format";
 import { SearchOutlined } from '@ant-design/icons-vue';
+import axios from 'axios';
 
 import Shuffler from "./Shuffler.vue";
 
@@ -117,6 +119,26 @@ export default defineComponent({
       }
     })
 
+    const zhuanlan = ref([])
+    function getZhuanlan() {
+      new Promise((resolve, reject) => {
+        axios({
+          url: "http://116.62.110.131:5000/zhuanlan",
+        })
+        .then(res => {
+          console.log(res.data.data);
+          zhuanlan.value = res.data.data.map(item => {
+            const temp = {
+              cover: item.cover,
+              link: '/pages/zhuanlan?name=' + item.name,
+            }
+            return temp;
+          });
+        })
+      })
+    }
+    getZhuanlan();
+
     const router = useRouter();
     const goToPage = (path) => {
       router.go(path)
@@ -128,6 +150,7 @@ export default defineComponent({
       categories,
       goToPage,
       searcher,
+      zhuanlan
     }
   }
 })
@@ -196,7 +219,7 @@ export default defineComponent({
     margin-bottom: 24px;
     border: 1px solid #F2F2F2;
     transition: all 0.3s ease-in-out;
-    animation: slide-in-blurred-bottom 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
+    // animation: slide-in-blurred-bottom 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
 
     &__image {
       overflow: hidden;
@@ -259,6 +282,7 @@ export default defineComponent({
   grid-template-rows: 50px 30px 100px;
   grid-template-columns: auto 256px;
   grid-gap: 14px;
+  // animation: slide-in-blurred-bottom 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
 
   padding: 24px 28px;
   border: 1px solid #f2f2f2;
@@ -336,11 +360,7 @@ export default defineComponent({
   .zhuanlan-slideshow {
     height: 380px;
     overflow: hidden;
-
-    & > img {
-      object-fit: cover;
-      border-radius: 8px;
-    }
+    border-radius: 8px;
   }
 }
 

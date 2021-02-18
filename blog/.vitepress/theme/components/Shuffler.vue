@@ -15,7 +15,7 @@
         @mouseleave="shuffler.autoStart"
         @mouseenter="shuffler.autoStop"
       >
-        <a :href="item.link" target="_blank"><img :src="item.cover" alt="" /></a>
+        <a @click="goToPage(item.link)" target="_blank"><img :src="item.cover" alt="" /></a>
       </span>
     </div>
     <div class="action-dots">
@@ -31,6 +31,7 @@
 
 <script>
 import { defineComponent, ref, reactive, onMounted, toRefs } from "vue";
+import { useRouter } from 'vitepress';
 import { LeftOutlined, RightOutlined } from "@ant-design/icons-vue";
 export default defineComponent({
   name: "Slider",
@@ -84,13 +85,18 @@ export default defineComponent({
       next: next,
       pre: pre,
     });
-    
-    
+
+    const router = useRouter();
+    const goToPage = (path) => {
+      router.go(path)
+    }
+
     shuffler.autoStart();
 
     return {
       shuffler,
       sliderArray,
+      goToPage,
     };
   },
 });
@@ -139,9 +145,17 @@ export default defineComponent({
   }
 
   .shuffler-images {
-    transition: 0.5s;
+    height: 100%;
+    transition: margin 0.5s ease-in-out;
     display: flex;
     margin-top: 0;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      object-fit: cover;
+      height: 100%;
+    }
   }
 
   .action-dots {

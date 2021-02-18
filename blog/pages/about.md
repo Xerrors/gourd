@@ -2,6 +2,7 @@
 title: 关于
 permalink: about
 customLayout: About
+sidebar: false
 content: 
 - title: 关于我
   details:
