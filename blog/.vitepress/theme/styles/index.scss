@@ -3,7 +3,7 @@
 @import "./classes.scss";
 
 body {
-  font-family: serif;
+  font-family: 'Source Han Serif SC','Source Han Serif','source-han-serif-sc','PT Serif','SongTi SC','MicroSoft Yahei',Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif;
 }
 
 ::-webkit-scrollbar {
@@ -18,6 +18,11 @@ body {
     --accent-color: #e63657;
     --code-bg-color: #f6f6f6;
     --code-inline-bg-color: inherit;
+
+    --c-text-light-1: #1a1a26;
+    --c-text-light-2: #20202f;
+    --c-text-light-3: #41414e;
+
 
     /* width */
     --page-width-w: 1136px;

@@ -64,7 +64,7 @@ export default defineComponent({
   p {
     font-size: 16px;
     line-height: 24px;
-    color: #20202f;
+    color: var(--c-text-light-2);
     grid-column: span 2;
   }
 

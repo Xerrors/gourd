@@ -87,6 +87,7 @@ export default defineComponent({
   button {
     display: block;
     border: none;
+    outline: none;
     cursor: pointer;
     font-weight: bold;
     font-size: 1rem;

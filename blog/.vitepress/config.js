@@ -5,6 +5,7 @@ async function getConfig() {
     head: [
       ["meta", { name: "keywords", content: "Gourd" }],
       ['link', { rel: 'manifest', href: '/manifest.json' }],
+      ['script', { src: '/font.js', type: 'application/javascript' }],
       ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }]
     ],
     extend: '@vitepress/theme-default',
@@ -20,7 +21,6 @@ async function getConfig() {
       search: false,
       sidebar: "auto",
       nav: [
-        { text: "首页", link: "/" },
         { text: "测试", link: "/pages/guide" },
         { text: "博客", link: "/pages/blogs" },
         { text: "动态", link: "/pages/zone" },
