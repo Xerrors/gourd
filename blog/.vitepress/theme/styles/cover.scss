@@ -23,6 +23,8 @@
     height: var(--header-height) !important;
     border-bottom: none !important;
     padding: 0 !important;
+    position: absolute !important;
+    top: 0;
   
     &::before {
       content: "";

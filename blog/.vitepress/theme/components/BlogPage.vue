@@ -187,7 +187,11 @@ export default defineComponent({
 
 .categories {
   height: 100%;
-  padding-top: 12px;
+  position: sticky;
+  top: 0;
+  padding-top: 18px;
+  background: white;
+  z-index: 1;
 
   span {
     font-size: 20px;
@@ -335,6 +339,7 @@ export default defineComponent({
 .blog-right {
   position: sticky;
   top: var(--header-height);
+  top: 60px;
   height: fit-content;
 
   .adversizement {
