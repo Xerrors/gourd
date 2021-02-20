@@ -192,7 +192,7 @@ export default defineComponent({
       addLike: () => {
         new Promise((resolve, reject) => {
           request({
-            url: "/api/articles/like",
+            url: "http://116.62.110.131:5000/articles/like",
             method: "post",
             params: {
               path: commenter.params.path,
@@ -225,7 +225,7 @@ export default defineComponent({
       getComments: () => {
         new Promise((resolve, reject) => {
           request({
-            url: "/api/articles/comment",
+            url: "http://116.62.110.131:5000/articles/comment",
             method: "get",
             params: {
               path: path.value,
@@ -270,7 +270,7 @@ export default defineComponent({
       commenter.loading = true;
       new Promise((resolve, reject) => {
         request({
-          url: "/api/articles/comment",
+          url: "http://116.62.110.131:5000/articles/comment",
           method: "post",
           params: commenter.params,
           data: commenter.content,

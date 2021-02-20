@@ -5,10 +5,12 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   plugins: [vue()],
-  alias: {
-    // 键必须以斜线开始和结束
-    '/@/': resolve(__dirname, './src')
-    // '/@components/': path.resolve(__dirname, './src/components')
+  resolve: {
+    alias: {
+      // 键必须以斜线开始和结束
+      '/@/': resolve(__dirname, './src')
+      // '/@components/': path.resolve(__dirname, './src/components')
+    },
   },
   optimizeDeps: {
     include: [
@@ -18,15 +20,15 @@ export default defineConfig({
       '@kangc/v-md-editor/lib/theme/github.js',
     ]
   },
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://116.62.110.131:5000/',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
-    }
-  },
+  // server: {
+  //   proxy: {
+  //     '/api': {
+  //       target: 'http://116.62.110.131:5000/',
+  //       changeOrigin: true,
+  //       rewrite: (path) => path.replace(/^\/api/, '')
+  //     }
+  //   }
+  // },
   css: {
     preprocessorOptions: {
       scss: {

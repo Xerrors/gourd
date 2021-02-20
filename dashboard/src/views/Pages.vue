@@ -113,7 +113,7 @@ export default defineComponent({
         data.source = source;
         new Promise((resolve, reject): void => {
           request({
-            url: "/api/articles",
+            url: "http://116.62.110.131:5000/articles",
             method: "get",
             params: { source: source },
           })
@@ -144,6 +144,8 @@ export default defineComponent({
               data.filted_articles = articles.filter(data.filter_date);
               data.loading = false;
               message.success("加载完成");
+
+              resolve(res);
             })
             .catch((err) => {
               reject(err);
