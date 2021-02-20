@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="zl-body__container zl-body__details" v-else>
-          <p>{{ data.details }}</p>
+          <pre>{{ data.details }}</pre>
         </div>
       </div>
     </div>
@@ -194,8 +194,10 @@ export default defineComponent({
   }
 
   &__details {
-    p {
+    pre {
       text-align: justify;
+      white-space: pre-wrap;
+      word-wrap: break-word;
     }
   }
 }

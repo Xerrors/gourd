@@ -42,7 +42,14 @@
       <div style="width: 100%;">
         <div class="msg-card">
           <div class="comment-header">
-            <span class="comment-header-name">{{ msg.reviewer }}</span>
+            <span class="comment-header-name">
+              <a v-if="msg.reviewer_mail" :href="'mailto:'+msg.reviewer_mail">
+                {{ msg.reviewer }}
+              </a>
+              <span v-else>
+                {{ msg.reviewer }}
+              </span>
+            </span>
             <span class="comment-header-date">{{ msg.date }}</span>
             <button
               class="comment-header-reply"
@@ -55,7 +62,7 @@
             class="content"
             style="text-align: justify; text-justify: inter-ideograph"
           >
-            {{ msg.content }}
+            <pre><p>{{ msg.content }}</p></pre>
           </div>
         </div>
         <!-- 追评 -->
@@ -65,7 +72,14 @@
           class="follow-comment msg-card"
         >
           <div class="comment-header">
-            <span class="comment-header-name">{{ follow_msg.reviewer }}</span>
+            <span class="comment-header-name">
+              <a v-if="follow_msg.reviewer_mail" :href="'mailto:'+follow_msg.reviewer_mail">
+                {{ follow_msg.reviewer }}
+              </a>
+              <span v-else>
+                {{ follow_msg.reviewer }}
+              </span>
+            </span>
             <span class="comment-header-text"> 回复 </span>
             <span class="comment-header-name">{{ follow_msg.follow_name }}</span>
             <span class="comment-header-date">{{ follow_msg.date }}</span>
@@ -80,7 +94,7 @@
             class="content"
             style="text-align: justify; text-justify: inter-ideograph"
           >
-            {{ follow_msg.content }}
+            <pre><p>{{ follow_msg.content }}</p></pre>
           </div>
         </div>
         <div class="comment-box reply-box" v-if="commenter.params.follow_id == msg.id">
@@ -229,9 +243,12 @@ export default {
 
     // 解析服务器传回来的评论数据并进行初步处理
     const praseComments = (comments) => {
+      console.log(comments[0].content)
       let comment_groups = [];
       comments.sort((a, b) => Number(a.id) - Number(b.id));
       for (var i in comments) {
+          
+        console.log(comments[i].content)
         comments[i].date = formatTime(new Date(comments[i].date));
         if (!comments[i].follow_id) {
           comments[i].follows = [];
@@ -298,7 +315,7 @@ export default {
     // 同时也解决的相同的昵称不一样头像的问题。
     const randomAvatar = (name) => {
       const color = Math.abs(customHash(name)).toString(16).slice(2).toUpperCase();
-      return "https://api.prodless.com/avatar.png?size=40&color=" + color;
+      return "https://api.prodless.com/avatar.png?size=40&backgroundColor=f0f2f4&color=" + color;
     }
 
     commentList.getComments();
@@ -327,7 +344,7 @@ export default {
 .comment-box {
   margin-top: 50px;
   padding: 4px 12px 16px 12px;
-  border: 1px solid #aaa;
+  border: 1px solid #efefef;
   border-radius: 8px;
 
   .input-area {
@@ -382,6 +399,7 @@ export default {
       margin-right: 16px;
       border-radius: 4px;
       cursor: pointer;
+      outline: none;
     }
 
     button.btn-comment {
@@ -436,8 +454,8 @@ export default {
 }
 
 .comments {
-  font-family: none;
-  margin-top: 50px;
+  // font-family: none;
+  margin-top: 150px;
 }
 
 .comment-card {
@@ -456,12 +474,16 @@ export default {
   .msg-card {
     .comment-header {
       height: 1.5rem;
-      font-size: 15px;
+      font-size: 14px;
       &-name {
         color: #1a1a26;
-        font-weight: 500;
-        letter-spacing: 1px;
+        font-weight: bold;
+        letter-spacing: 2px;
         // border-bottom: 1px dashed red;
+
+        a {
+          color: inherit;
+        }
       }
       &-date {
         color: #666;
@@ -478,12 +500,19 @@ export default {
     }
 
     .content {
-      background: #f2f5f5;
-      padding: 10px 16px;
+      background: #f9fbfe;
+      padding: 2px 16px;
       color: #666;
       border-radius: 0 12px 12px 12px;
       width: fit-content;
       line-height: 1.7;
+      font-size: 1rem;
+      letter-spacing: 1px;
+
+      pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
     }
   }
 

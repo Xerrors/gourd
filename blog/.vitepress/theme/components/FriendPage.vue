@@ -126,7 +126,8 @@ export default defineComponent({
 }
 
 .friend-card {
-  border: 1px solid #f5f5f5;
+  border: 1px solid var(--border-color-light);
+  max-width: 380px;
   border-radius: 4px;
   padding: 16px;
   transition: 0.2s;
@@ -140,7 +141,7 @@ export default defineComponent({
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border: 1px dashed #f5f5f5;
+    border: 1px dashed var(--border-color-light);
     border-radius: 4px;
   }
 
@@ -171,7 +172,7 @@ export default defineComponent({
   }
 
   &:hover {
-    box-shadow: 0 0 10px 0 rgba(0,0,0,.05);
+    box-shadow: var(--shadow-1);
 
     span > a {
       opacity: 1;

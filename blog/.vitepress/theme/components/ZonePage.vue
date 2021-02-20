@@ -38,12 +38,12 @@
     <div v-else class="posts">
       <div class="post-card" v-for="post in posts" :key="post.id">
         <div class="post-card__head">
-          <span class="post-card__date" @click="msgCtrl.delMsg(post.id)">{{ post.date }}</span>
           <span class="post-card__status">{{ post.status }}</span>
+          <span class="post-card__date" @click="msgCtrl.delMsg(post.id)">{{ post.date }}</span>
           <div class="btn-love" :class="{'love-active': post.active}" @click="msgCtrl.love(post.id)"></div>
         </div>
         <div class="post-card__body">
-          <p>{{ post.msg }}</p>
+          <pre>{{ post.msg }}</pre>
         </div>
       </div>
     </div>
@@ -386,37 +386,37 @@ export default defineComponent({
   width: 100%;
   position: relative;
   user-select: none;
-  &::before {
-    content: '';
-    width: 2px;
-    height: 100%;
-    background: #f5f5f5;
-    position: absolute;
-  }
+  // &::before {
+  //   content: '';
+  //   width: 2px;
+  //   height: 100%;
+  //   background: var(--border-color-light);
+  //   position: absolute;
+  // }
 
   .post-card {
-    margin-bottom :2.5rem;
+    margin-bottom:2.5rem;
     border-radius: 3px;
-    padding-left: 2rem;
+    // padding-left: 2rem;
     animation: swing-in-top-fwd 0.3s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
-    &::before {
-      z-index: 3;
-      content: '';
-      position: absolute;
-      left: -6px;
-      background: #999;
-      height: 14px;
-      margin-top: 11px;
-      border-radius: 100%;
-      width: 14px;
-      border: 2px solid #f5f5f5;
-    }
+    // &::before {
+    //   z-index: 3;
+    //   content: '';
+    //   position: absolute;
+    //   left: -6px;
+    //   background: #999;
+    //   height: 14px;
+    //   margin-top: 11px;
+    //   border-radius: 100%;
+    //   width: 14px;
+    //   border: 2px solid var(--border-color-light);
+    // }
 
     &__head {
       position: relative;
       padding: 0.5rem;
-      // background-color: #f5f5f5;
-      border: 1px solid #f5f5f5;
+      // background-color: var(--border-color-light);
+      border: 1px solid var(--border-color-light);
       border-bottom-width: 0;
       border-radius: 4px 4px 0 0;
       // &::before {
@@ -428,15 +428,20 @@ export default defineComponent({
       //   border-style: solid;
       //   border-width: 10px 18px 10px 0;
       //   border-width: 10px 15px 10px 0;
-      //   border-color: transparent #f5f5f5 transparent transparent;
+      //   border-color: transparent var(--border-color-light) transparent transparent;
       // }
     }
 
     &__body {
-      border: 1px solid #f5f5f5;
+      border: 1px solid var(--border-color-light);
       border-radius: 0 0 4px 4px;
       letter-spacing: 1px;
       padding: 0 1rem;
+
+      pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
     }
 
     &__status {

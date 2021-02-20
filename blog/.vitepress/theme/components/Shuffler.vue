@@ -151,6 +151,10 @@ export default defineComponent({
     margin-top: 0;
     cursor: pointer;
 
+    span {
+      width: 100%;
+    }
+
     img {
       width: 100%;
       object-fit: cover;

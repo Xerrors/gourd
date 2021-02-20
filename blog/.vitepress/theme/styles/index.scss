@@ -6,15 +6,25 @@ body {
   font-family: 'Source Han Serif SC','Source Han Serif','source-han-serif-sc','PT Serif','SongTi SC','MicroSoft Yahei',Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif;
 }
 
+button {
+  font-family: inherit !important;
+}
+
 ::-webkit-scrollbar {
   width: 0!important;
   height: .4rem!important;
   cursor: pointer;
 }
 
+::selection {
+  background: #79ffe1;
+  color: #000;
+}
+
 :root {
     /* color */
     --c-brand: #e63657;
+    --c-brand-light: #e84a67;
     --accent-color: #e63657;
     --code-bg-color: #f6f6f6;
     --code-inline-bg-color: inherit;
@@ -22,6 +32,9 @@ body {
     --c-text-light-1: #1a1a26;
     --c-text-light-2: #20202f;
     --c-text-light-3: #41414e;
+    --c-text-light-4: #686260;
+
+    --border-color-light: #f2f3f6;
 
 
     /* width */
