@@ -23,3 +23,5 @@ instance
 dist
 
 /blog/blog/*
+dist-ssr
+*.local
