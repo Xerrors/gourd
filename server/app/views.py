@@ -305,7 +305,7 @@ def get_comments():
 @app.route('/articles/md_source', methods=["POST"])
 def upload_markdown():
     if not session.get('login'):
-        return jsonify({"message": '登录之后再试~', 'code': 1001}), 403
+        return jsonify({"message": '登录之后再试~', 'code': 2000})
 
     # 修改逻辑：对于已经存在的文章，应该发来该文章的 path，通过比对两次的 local 的 path
     # 是否相同，然后决定是否对目录下的文章进行扫描
@@ -368,7 +368,7 @@ def admin_login():
         from datetime import timedelta
         session.permanent =True
         app.permanent_session_lifetime =timedelta(minutes=60)#存活60分钟
-        session['login'] = True
+        session['login'] = 'True'
         return jsonify({"message": '登录成功~', "code": '1000'})
     else:
         return jsonify({"message": '你不对劲！', "code": '1001'})
@@ -377,7 +377,7 @@ def admin_login():
 @app.route('/admin/messages', methods=["GET"])
 def get_messages():
     if not session.get('login'):
-        abort(403, "登录之后再试~")
+        return jsonify({"message": '登录之后再试~', 'code': 2000})
 
     source = request.args.get('source')
     if source == 'db':
@@ -390,7 +390,7 @@ def get_messages():
 @app.route('/admin/readmessage', methods=["POST"])
 def read_message():
     if not session.get('login'):
-        abort(403, "登录之后再试~")
+        return jsonify({"message": '登录之后再试~', 'code': 2000})
 
     from app.tables import Messages
 
@@ -420,7 +420,7 @@ def admin_logout():
         session.pop('login')
         return jsonify({"message": '退出成功~', "code": '1000'})
     else:
-        return jsonify({"message": '还没登录，你不对劲~', "code": '1002'})
+        return jsonify({"message": '还没登录，你不对劲~', "code": '2000'})
 
 
 @app.route('/server/status', methods=["GET"])
