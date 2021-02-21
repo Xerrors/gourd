@@ -1,8 +1,9 @@
 # Logs
 logs
-*.log
 node_modules
 package-lock.json
+yarn.lock
+
 .vscode
 .temp
 .cache
@@ -17,6 +18,8 @@ instance
 
 # 数据文件
 *.db
+*.log
 
 dist
-yarn.lock
+
+/blog/blog/*
