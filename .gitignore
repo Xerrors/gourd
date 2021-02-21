@@ -19,3 +19,4 @@ instance
 *.db
 
 dist
+yarn.lock

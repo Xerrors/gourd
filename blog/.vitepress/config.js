@@ -8,10 +8,10 @@ async function getConfig() {
       ['script', { src: '/font.js', type: 'application/javascript' }],
       ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }]
     ],
-    extend: '@vitepress/theme-default',
     title: "Gourd",
     lang: 'zh-CN',
     description: 'Just playing around.',
+    extend: '@vitepress/theme-default',
     themeConfig: {
       pages: await getPages(),
       author: "Xerrors",
@@ -27,6 +27,18 @@ async function getConfig() {
         { text: "关于", link: "/pages/about" },
         { text: "友链", link: "/pages/friends" },
       ],
+    },
+    markdown: {
+      // lineNumbers: true,
+      config: (md) => {
+        md.use(require('@iktakahiro/markdown-it-katex'));
+        md.render = function () {
+          return md
+            .render
+            .apply(this, arguments)
+            .replace(/<span class="katex">/g, '<span v-pre class="katex">')
+        }
+      },
     },
     dest: "public",
   };
