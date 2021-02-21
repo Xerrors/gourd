@@ -15,18 +15,18 @@ axios.interceptors.request.use(
   }
 )
 
+/** 1001: 需要登陆 */
+
 // 响应拦截器
 axios.interceptors.response.use(
   response => {
+    if (response.data.code === 2000) {
+      Cookies.remove('logged');
+      return Promise.reject(new Error('未登录'))
+    }
     return response
   },
   error => {
-    if (error.code === 1001) {
-      Cookies.remove('logged');
-      return Promise.reject(new Error('error'))
-    }
-    // 当请求连接不通的时候
-    // cosole.log('error' + error) // for debug
     return Promise.reject(error)
   }
 )
