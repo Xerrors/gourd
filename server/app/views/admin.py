@@ -1,17 +1,20 @@
 from flask import Blueprint
 from flask import request, jsonify, abort, json, session
-from app import app, db
+from app import db
 from app.utils.articles import get_article_list_from_dirs, get_articles_from_db, scan_article_to_db, rename_markdown
-from app.utils.articles import get_articles_from_zhihu, get_articles_from_csdn, parse_markdown
+from app.utils.articles import get_articles_from_zhihu, get_articles_from_csdn
 from app.utils.validate import validate_server_token
-from app.utils.database import rtn_zones, get_all_messages, get_all_zhuanlan, get_page_view_by_path, rtn_friends
-from app.config import DOMAIN_PRE, TOKEN
-from datetime import datetime
+from app.utils.database import get_all_messages
+from app.tables import LocalArticlesTable, Messages
+
+import frontmatter
 
 mod = Blueprint('admin', __name__, url_prefix='/admin')
 
+
 def not_login(msg='登录之后再试~'):
     return jsonify({"message": '登录之后再试~', 'code': 2000})
+
 
 # 获取文章列表
 @mod.route('/articles', methods=["GET"])
@@ -38,15 +41,14 @@ def get_markdown():
     if not session.get('login'):
         return not_login()
 
-    from app.tables import LocalArticlesTable
     path = request.args.get('path')
 
-    item = LocalArticlesTable.query.filter_by(path=path).first()
+    item = db.session.query(LocalArticlesTable).filter_by(path=path).first()
 
     if not item:
         scan_article_to_db()
-        item = LocalArticlesTable.query.filter_by(path=path).first()
-    
+        item = db.session.query(LocalArticlesTable).filter_by(path=path).first()
+
     if item:
         with open(item.local_path, encoding='UTF-8') as f:
             data = f.read()
@@ -62,8 +64,6 @@ def upload_markdown():
 
     # 修改逻辑：对于已经存在的文章，应该发来该文章的 path，通过比对两次的 local 的 path
     # 是否相同，然后决定是否对目录下的文章进行扫描
-    import frontmatter
-    from app.tables import LocalArticlesTable
 
     md = request.get_data()
     with open('temp.md', 'wb+') as f:
@@ -76,7 +76,7 @@ def upload_markdown():
 
     file_path = rename_markdown(md)
     path = request.args.get('path')
-    item = LocalArticlesTable.query.filter_by(path=path).first()
+    item = db.session.query(LocalArticlesTable).filter_by(path=path).first()
 
     if not item or file_path != item.local_path:
         scan_article_to_db()
@@ -100,8 +100,8 @@ def admin_login():
 
     if validate_server_token(username, password):
         from datetime import timedelta
-        session.permanent =True
-        app.permanent_session_lifetime =timedelta(minutes=60)#存活60分钟
+        session.permanent = True
+        app.permanent_session_lifetime = timedelta(minutes=60)  # 存活60分钟
         session['login'] = 'True'
         return jsonify({"message": '登录成功~', "code": '1000'})
     else:
@@ -126,18 +126,16 @@ def read_message():
     if not session.get('login'):
         return not_login()
 
-    from app.tables import Messages
-
     id = request.args.get('id')
     if not id:
         abort(404, "请提供id~")
     if id == 'all':
-        msgs = Messages.query.all()
+        msgs = db.session.query(Messages).all()
         for msg in msgs:
             msg.set_as_readed()
         db.session.commit()
     else:
-        msg = Messages.query.get(id)
+        msg = db.session.query(Messages).get(id)
         if msg:
             msg.set_as_readed()
             db.session.commit()

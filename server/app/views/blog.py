@@ -1,14 +1,14 @@
 from flask import Blueprint
-from flask import request, jsonify, abort, json, session
-from app import app, db
-from app.utils.articles import get_article_list_from_dirs, get_articles_from_db, scan_article_to_db, rename_markdown
-from app.utils.articles import get_articles_from_zhihu, get_articles_from_csdn, parse_markdown
-from app.utils.validate import validate_server_token
-from app.utils.database import rtn_zones, get_all_messages, get_all_zhuanlan, get_page_view_by_path, rtn_friends
+from flask import request, jsonify, abort
+from app import db
+from app.utils.articles import parse_markdown
+from app.utils.database import rtn_zones, get_all_zhuanlan, get_page_view_by_path, rtn_friends
 from app.config import DOMAIN_PRE, TOKEN
+from app.tables import Zone, FriendsTable, ZhuanlanTable, LocalArticlesTable, LocalArticlesComment, Messages
 from datetime import datetime
 
-mod = Blueprint('blog', __name__, url_prefix='/blog')
+mod = Blueprint('blog', __name__)
+
 
 @mod.route("/visit", methods=["GET"])
 def visit():
@@ -33,10 +33,9 @@ def visit():
 
 @mod.route('/zones', methods=['GET'])
 def get_zones():
-    from app.tables import Zone
     id = request.args.get('id')
     if id:
-        zone = Zone.query.get(id)
+        zone = db.session.query(Zone).get(id)
         if zone:
             return jsonify({"data": zone.to_json()})
         else:
@@ -47,14 +46,13 @@ def get_zones():
 
 @mod.route('/zones', methods=['DELETE'])
 def del_zone():
-    from app.tables import Zone
     id = request.args.get('id')
     token = request.args.get('token')
 
     if token != TOKEN:
         abort(403, "Token 不对劲！")
     elif id:
-        zone = Zone.query.get(id)
+        zone = db.session.query(Zone).get(id)
         if zone:
             db.session.delete(zone)
             db.session.commit()
@@ -67,7 +65,6 @@ def del_zone():
 
 @mod.route('/zones', methods=["POST"])
 def create_zone():
-    from app.tables import Zone
     msg = request.args.get('msg')
     status = request.args.get('status')
     token = request.args.get('token')
@@ -84,10 +81,9 @@ def create_zone():
 
 @mod.route('/friends', methods=["GET"])
 def get_friends():
-    from app.tables import FriendsTable
     id = request.args.get('id')
     if id:
-        friend = FriendsTable.query.get(id)
+        friend = db.session.query(FriendsTable).get(id)
         if friend:
             return jsonify({"message": "ok", "data": friend.to_json()})
         else:
@@ -97,7 +93,6 @@ def get_friends():
 
 @mod.route('/friends', methods=["POST"])
 def add_friend():
-    from app.tables import FriendsTable
     name = request.args.get("name")
     avatar = request.args.get("avatar")
     title = request.args.get("title")
@@ -111,7 +106,7 @@ def add_friend():
 
     if not name or not site or not quote:
         abort(403, "信息不全~")
-    
+
     db.session.add(FriendsTable(name=name, avatar=avatar, title=title, mail=mail, site=site, quote=quote))
     db.session.commit()
     return jsonify({"data": rtn_friends()})
@@ -119,14 +114,13 @@ def add_friend():
 
 @mod.route('/friends', methods=['DELETE'])
 def del_friend():
-    from app.tables import FriendsTable
     id = request.args.get('id')
     token = request.args.get('token')
 
     if token != TOKEN:
         abort(403, "Token 不对劲！")
     elif id:
-        friend = FriendsTable.query.get(id)
+        friend = db.session.query(FriendsTable).get(id)
         if friend:
             db.session.delete(friend)
             db.session.commit()
@@ -142,8 +136,6 @@ def del_friend():
 
 @mod.route('/zhuanlan', methods=["GET"])
 def get_zhuanlan():
-    from app.tables import ZhuanlanTable
-
     if request.args.get("name"):
         result = db.session.query(ZhuanlanTable).filter_by(name=request.args.get("name")).first()
         return jsonify({"message": "here", "data": result.to_json()})
@@ -153,7 +145,6 @@ def get_zhuanlan():
 
 @mod.route('/zhuanlan', methods=["POST"])
 def add_zhuanlan():
-    from app.tables import ZhuanlanTable
     name = request.args.get("name")
     title = request.args.get("title")
     cover = request.args.get("cover")
@@ -179,14 +170,13 @@ def add_zhuanlan():
 
 @mod.route('/zhuanlan', methods=['DELETE'])
 def del_zhuanlan():
-    from app.tables import ZhuanlanTable
     id = request.args.get('id')
     token = request.args.get('token')
 
     if token != TOKEN:
         abort(403, "Token 不对劲！")
     elif id:
-        zhuanlan = ZhuanlanTable.query.get(id)
+        zhuanlan = db.session.query(ZhuanlanTable).get(id)
         if zhuanlan:
             db.session.delete(zhuanlan)
             db.session.commit()
@@ -203,9 +193,8 @@ def del_zhuanlan():
 # 文章点赞功能
 @mod.route('/articles/like', methods=['POST'])
 def add_like():
-    from app.tables import LocalArticlesTable, Messages
     path = request.args.get('path')
-    item = LocalArticlesTable.query.filter_by(path=path).first()
+    item = db.session.query(LocalArticlesTable).filter_by(path=path).first()
     if not item:
         abort(403, "你不对劲！")
 
@@ -225,20 +214,18 @@ def add_like():
 # 文章评论功能
 @mod.route('/articles/comment', methods=['POST'])
 def add_comment():
-    from app.tables import LocalArticlesTable, LocalArticlesComment, Messages
-
     path = request.args.get('path')
     reviewer = request.args.get('reviewer')
     reviewer_mail = request.args.get('reviewer_mail')
     content = request.get_data()
-    content = str(content, encoding = "utf-8")
+    content = str(content, encoding="utf-8")
     follow_id = request.args.get('follow_id')
     follow_name = request.args.get('follow_name')
-    item = LocalArticlesTable.query.filter_by(path=path).first()
+    item = db.session.query(LocalArticlesTable).filter_by(path=path).first()
 
     if not item:
         abort(403, "你不对劲！")
-    
+
     if len(content) == 0:
         return abort(403, "你不对劲~")
 
@@ -250,7 +237,7 @@ def add_comment():
         comment_msg = "有人评论了你的文章《{}》".format(md['title'])
 
     db.session.add(LocalArticlesComment(
-        path=path, 
+        path=path,
         reviewer=reviewer,
         reviewer_mail=reviewer_mail,
         content=content,
@@ -260,7 +247,7 @@ def add_comment():
     ))
     db.session.add(Messages(
         type="comment",
-        link=DOMAIN_PRE+path,
+        link=DOMAIN_PRE + path,
         content=comment_msg,
         date=datetime.today().strftime('%Y-%m-%d %H:%M:%S')
     ))
@@ -273,8 +260,6 @@ def get_comments():
     path = request.args.get('path')
     if not path:
         abort(403, "你就是不对劲，搞事情啊~")
-    
-    from app.tables import LocalArticlesComment
-    query_result = LocalArticlesComment.query.filter_by(path=path).all()
+    query_result = db.session.query(LocalArticlesComment).filter_by(path=path).all()
     comments = [result.to_json() for result in query_result]
-    return jsonify({"message": "Good!", "data": comments}) 
+    return jsonify({"message": "Good!", "data": comments})
