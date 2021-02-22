@@ -44,7 +44,7 @@ export default defineComponent({
         console.log(myEditor.text);
         new Promise((resolve, reject): void => {
           request({
-            url: "http://116.62.110.131:5000/admin/articles/md_source",
+            url: "/api/admin/articles/md_source",
             method: "post",
             data: myEditor.text,
             headers: {
@@ -85,7 +85,7 @@ export default defineComponent({
       } else {
         new Promise((resolve, reject): void => {
           request({
-            url: "http://116.62.110.131:5000/admin/articles/md_source",
+            url: "/api/admin/articles/md_source",
             method: "get",
             params: {
               path: route.params.path,

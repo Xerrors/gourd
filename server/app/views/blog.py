@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask import request, jsonify, abort
-from app import db
+from app import app, db
 from app.utils.articles import parse_markdown
 from app.utils.database import rtn_zones, get_all_zhuanlan, get_page_view_by_path, rtn_friends
 from app.config import DOMAIN_PRE, TOKEN

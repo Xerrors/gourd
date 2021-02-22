@@ -59,7 +59,7 @@ export default defineComponent({
         logoutObj.confirmLoading = true;
         new Promise((resolve, reject) => {
           request({
-            url: 'http://116.62.110.131:5000/admin/logout',
+            url: '/api/admin/logout',
             method: 'post',
           })
           .then(res => {

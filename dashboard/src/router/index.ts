@@ -74,7 +74,7 @@ router.beforeEach((to, from, next) => {
   else {
     new Promise((resolve, reject): void => {
       request({
-        url: 'http://116.62.110.131:5000/admin/login',
+        url: '/api/admin/login',
         method: 'post',
       })
       .then(res => {

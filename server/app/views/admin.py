@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask import request, jsonify, abort, json, session
-from app import db
+from app import app, db
 from app.utils.articles import get_article_list_from_dirs, get_articles_from_db, scan_article_to_db, rename_markdown
 from app.utils.articles import get_articles_from_zhihu, get_articles_from_csdn
 from app.utils.validate import validate_server_token
@@ -19,6 +19,7 @@ def not_login(msg='登录之后再试~'):
 # 获取文章列表
 @mod.route('/articles', methods=["GET"])
 def get_articles():
+    print(session.get('login'))
     if not session.get('login'):
         return not_login()
 
@@ -103,6 +104,7 @@ def admin_login():
         session.permanent = True
         app.permanent_session_lifetime = timedelta(minutes=60)  # 存活60分钟
         session['login'] = 'True'
+        print(session.get('login'))
         return jsonify({"message": '登录成功~', "code": '1000'})
     else:
         return jsonify({"message": '你不对劲！', "code": '1001'})

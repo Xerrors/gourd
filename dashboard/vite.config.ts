@@ -20,15 +20,15 @@ export default defineConfig({
       '@kangc/v-md-editor/lib/theme/github.js',
     ]
   },
-  // server: {
-  //   proxy: {
-  //     '/api': {
-  //       target: 'http://116.62.110.131:5000/',
-  //       changeOrigin: true,
-  //       rewrite: (path) => path.replace(/^\/api/, '')
-  //     }
-  //   }
-  // },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://116.62.110.131:5000/',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
+  },
   css: {
     preprocessorOptions: {
       scss: {
