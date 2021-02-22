@@ -191,7 +191,7 @@ export default {
       addLike: () => {
         new Promise((resolve, reject) => {
           axios({
-            url: "http://116.62.110.131:5000/articles/like",
+            url: "http://116.62.110.131:5000/blog/articles/like",
             method: "post",
             params: {
               path: commenter.params.path,
@@ -225,7 +225,7 @@ export default {
       getComments: () => {
         new Promise((resolve, reject) => {
           axios({
-            url: "http://116.62.110.131:5000/articles/comment",
+            url: "http://116.62.110.131:5000/blog/articles/comment",
             method: "get",
             params: {
               path: path.value,
@@ -274,7 +274,7 @@ export default {
       commenter.loading = true;
       new Promise((resolve, reject) => {
         axios({
-          url: "http://116.62.110.131:5000/articles/comment",
+          url: "http://116.62.110.131:5000/blog/articles/comment",
           method: "post",
           params: commenter.params,
           data: commenter.content,

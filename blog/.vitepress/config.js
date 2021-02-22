@@ -32,12 +32,12 @@ async function getConfig() {
       // lineNumbers: true,
       config: (md) => {
         md.use(require('@iktakahiro/markdown-it-katex'));
-        md.render = function () {
-          return md
-            .render
-            .apply(this, arguments)
-            .replace(/<span class="katex">/g, '<span v-pre class="katex">')
-        }
+        // md.render = function () {
+        //   return md
+        //     .render
+        //     .apply(this, arguments)
+        //     .replace(/<span class="katex">/g, '<span v-pre class="katex">')
+        // }
       },
     },
     dest: "public",

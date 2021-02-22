@@ -1,3 +1,4 @@
+from flask import Blueprint
 from flask import request, jsonify, abort, json, session
 from app import app, db
 from app.utils.articles import get_article_list_from_dirs, get_articles_from_db, scan_article_to_db, rename_markdown
@@ -7,8 +8,9 @@ from app.utils.database import rtn_zones, get_all_messages, get_all_zhuanlan, ge
 from app.config import DOMAIN_PRE, TOKEN
 from datetime import datetime
 
+mod = Blueprint('blog', __name__, url_prefix='/blog')
 
-@app.route("/visit", methods=["GET"])
+@mod.route("/visit", methods=["GET"])
 def visit():
     path = request.args.get('path')
 
@@ -26,12 +28,10 @@ def visit():
     count = get_page_view_by_path(request.args.get("count"))
     return jsonify({"message": "Welcome", "data": count})
 
-###
-# 1. 博客动态相关
-###
 
+# 动态相关
 
-@app.route('/zones', methods=['GET'])
+@mod.route('/zones', methods=['GET'])
 def get_zones():
     from app.tables import Zone
     id = request.args.get('id')
@@ -45,7 +45,7 @@ def get_zones():
         return jsonify({"data": rtn_zones()})
 
 
-@app.route('/zones', methods=['DELETE'])
+@mod.route('/zones', methods=['DELETE'])
 def del_zone():
     from app.tables import Zone
     id = request.args.get('id')
@@ -65,7 +65,7 @@ def del_zone():
         return jsonify({"message": "请提供删除的动态的 id"}), 403
 
 
-@app.route('/zones', methods=["POST"])
+@mod.route('/zones', methods=["POST"])
 def create_zone():
     from app.tables import Zone
     msg = request.args.get('msg')
@@ -79,7 +79,10 @@ def create_zone():
     return jsonify({"data": rtn_zones()})
 
 
-@app.route('/friends', methods=["GET"])
+# 友链信息
+
+
+@mod.route('/friends', methods=["GET"])
 def get_friends():
     from app.tables import FriendsTable
     id = request.args.get('id')
@@ -92,7 +95,7 @@ def get_friends():
     return jsonify({"data": rtn_friends()})
 
 
-@app.route('/friends', methods=["POST"])
+@mod.route('/friends', methods=["POST"])
 def add_friend():
     from app.tables import FriendsTable
     name = request.args.get("name")
@@ -114,7 +117,7 @@ def add_friend():
     return jsonify({"data": rtn_friends()})
 
 
-@app.route('/friends', methods=['DELETE'])
+@mod.route('/friends', methods=['DELETE'])
 def del_friend():
     from app.tables import FriendsTable
     id = request.args.get('id')
@@ -134,7 +137,10 @@ def del_friend():
         return abort(403, "请提供id")
 
 
-@app.route('/zhuanlan', methods=["GET"])
+# 专栏信息
+
+
+@mod.route('/zhuanlan', methods=["GET"])
 def get_zhuanlan():
     from app.tables import ZhuanlanTable
 
@@ -145,7 +151,7 @@ def get_zhuanlan():
         return jsonify({"message": "here", "data": get_all_zhuanlan()})
 
 
-@app.route('/zhuanlan', methods=["POST"])
+@mod.route('/zhuanlan', methods=["POST"])
 def add_zhuanlan():
     from app.tables import ZhuanlanTable
     name = request.args.get("name")
@@ -171,8 +177,7 @@ def add_zhuanlan():
         return jsonify({"message": "success", "data": get_all_zhuanlan()})
 
 
-
-@app.route('/zhuanlan', methods=['DELETE'])
+@mod.route('/zhuanlan', methods=['DELETE'])
 def del_zhuanlan():
     from app.tables import ZhuanlanTable
     id = request.args.get('id')
@@ -191,39 +196,12 @@ def del_zhuanlan():
     else:
         return abort(403, "请提供id")
 
-###
-# 1. 博客动态相关
-###
 
-
-# 获取文章列表
-@app.route('/articles', methods=["GET"])
-def get_articles():
-    source = request.args.get('source')
-    if source == 'csdn':
-        articles = get_articles_from_csdn()
-    elif source == 'zhihu':
-        articles = get_articles_from_zhihu()
-    elif source == 'db':
-        articles = get_articles_from_db()
-    elif source == 'local':
-        articles = get_article_list_from_dirs()
-    else:
-        return jsonify({"message": "没有该来源的文章~"}), 404
-    return jsonify({"data": articles})
-
-
-# TODO 仅用作测试使用
-@app.route('/scan-article-to-db', methods=['GET'])
-def scan_to_db():
-    scan_article_to_db()
-    articles = get_articles_from_db()
-    return jsonify({"data": articles})
-
+# 点赞评论
 
 # TODO 数据验证，多次点击验证 IP
 # 文章点赞功能
-@app.route('/articles/like', methods=['POST'])
+@mod.route('/articles/like', methods=['POST'])
 def add_like():
     from app.tables import LocalArticlesTable, Messages
     path = request.args.get('path')
@@ -245,7 +223,7 @@ def add_like():
 
 # TODO 数据验证
 # 文章评论功能
-@app.route('/articles/comment', methods=['POST'])
+@mod.route('/articles/comment', methods=['POST'])
 def add_comment():
     from app.tables import LocalArticlesTable, LocalArticlesComment, Messages
 
@@ -290,7 +268,7 @@ def add_comment():
     return jsonify({"message": "Good"})
 
 
-@app.route('/articles/comment', methods=['GET'])
+@mod.route('/articles/comment', methods=['GET'])
 def get_comments():
     path = request.args.get('path')
     if not path:
@@ -300,139 +278,3 @@ def get_comments():
     query_result = LocalArticlesComment.query.filter_by(path=path).all()
     comments = [result.to_json() for result in query_result]
     return jsonify({"message": "Good!", "data": comments}) 
-
-
-@app.route('/articles/md_source', methods=["POST"])
-def upload_markdown():
-    if not session.get('login'):
-        return jsonify({"message": '登录之后再试~', 'code': 2000})
-
-    # 修改逻辑：对于已经存在的文章，应该发来该文章的 path，通过比对两次的 local 的 path
-    # 是否相同，然后决定是否对目录下的文章进行扫描
-    import frontmatter
-    from app.tables import LocalArticlesTable
-
-    md = request.get_data()
-    with open('temp.md', 'wb+') as f:
-        f.write(md)
-    with open('temp.md', encoding='UTF-8') as f:
-        md = frontmatter.load(f)
-
-    if not md.get('title') or not md.get('date') or not md.get('permalink'):
-        abort(404, '请上传符合博客文章要求的文章~')
-
-    file_path = rename_markdown(md)
-    path = request.args.get('path')
-    item = LocalArticlesTable.query.filter_by(path=path).first()
-
-    if not item or file_path != item.local_path:
-        scan_article_to_db()
-
-    # TODO: 后续需要添加自动编译提交的功能，但考虑到 vuepress 编译太慢了
-    return jsonify({"message": "已经保存到{}".format(file_path)})
-
-
-@app.route('/articles/md_source', methods=["GET"])
-def get_markdown():
-    from app.tables import LocalArticlesTable
-    path = request.args.get('path')
-
-    item = LocalArticlesTable.query.filter_by(path=path).first()
-
-    if not item:
-        scan_article_to_db()
-        item = LocalArticlesTable.query.filter_by(path=path).first()
-
-    if item:
-        with open(item.local_path, encoding='UTF-8') as f:
-            data = f.read()
-            return jsonify({"data": data})
-    else:
-        abort(404, "不存在该文章！")
-
-
-@app.route('/admin/login', methods=["POST"])
-def admin_login():
-    if session.get('login'):
-        return jsonify({"message": '你已经登录过了~', "code": '1000'})
-
-    data = request.get_data()
-    data = json.loads(data)
-    username = data.get("username")
-    password = data.get("password")
-
-    if not username or not password:
-        return jsonify({"message": '把所有空都填上~别落下~', "code": '1001'})
-
-    if validate_server_token(username, password):
-        from datetime import timedelta
-        session.permanent =True
-        app.permanent_session_lifetime =timedelta(minutes=60)#存活60分钟
-        session['login'] = 'True'
-        return jsonify({"message": '登录成功~', "code": '1000'})
-    else:
-        return jsonify({"message": '你不对劲！', "code": '1001'})
-
-
-@app.route('/admin/messages', methods=["GET"])
-def get_messages():
-    if not session.get('login'):
-        return jsonify({"message": '登录之后再试~', 'code': 2000})
-
-    source = request.args.get('source')
-    if source == 'db':
-        msgs = get_all_messages()
-    else:
-        msgs = []
-    return jsonify({"data": msgs})
-
-
-@app.route('/admin/readmessage', methods=["POST"])
-def read_message():
-    if not session.get('login'):
-        return jsonify({"message": '登录之后再试~', 'code': 2000})
-
-    from app.tables import Messages
-
-    id = request.args.get('id')
-    if not id:
-        abort(404, "请提供id~")
-    if id == 'all':
-        msgs = Messages.query.all()
-        for msg in msgs:
-            msg.set_as_readed()
-        db.session.commit()
-    else:
-        msg = Messages.query.get(id)
-        if msg:
-            msg.set_as_readed()
-            db.session.commit()
-        else:
-            abort(403, "不存在该id")
-
-    msgs = get_all_messages()
-    return jsonify({"message": "Success", "data": msgs})
-
-
-@app.route('/admin/logout', methods=["POST"])
-def admin_logout():
-    if session.get('login'):
-        session.pop('login')
-        return jsonify({"message": '退出成功~', "code": '1000'})
-    else:
-        return jsonify({"message": '还没登录，你不对劲~', "code": '2000'})
-
-
-@app.route('/server/status', methods=["GET"])
-def get_server_status():
-    pass
-
-
-@app.errorhandler(404)
-def page_not_found(e):
-    return jsonify({"message": str(e)}), 404
-
-
-@app.errorhandler(403)
-def page_not_found(e):
-    return jsonify({"message": str(e)}), 403

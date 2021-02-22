@@ -8,4 +8,20 @@ app.config.from_pyfile('config.py')
 CORS(app, resources=r'/*')
 db = SQLAlchemy(app)
 
-from app import views, tables
+from app import tables
+from app.views import public, blog, admin, test
+
+app.register_blueprint(public.mod)
+app.register_blueprint(blog.mod)
+app.register_blueprint(admin.mod)
+app.register_blueprint(test.mod)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return jsonify({"message": str(e)}), 404
+
+
+@app.errorhandler(403)
+def page_not_found(e):
+    return jsonify({"message": str(e)}), 403
