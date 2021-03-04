@@ -7,7 +7,7 @@ from app.config import DOMAIN_PRE, TOKEN
 from app.tables import Zone, FriendsTable, ZhuanlanTable, LocalArticlesTable, LocalArticlesComment, Messages
 from datetime import datetime
 
-mod = Blueprint('blog', __name__)
+mod = Blueprint('blog', __name__, url_prefix='/blog')
 
 
 @mod.route("/visit", methods=["GET"])

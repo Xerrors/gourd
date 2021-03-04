@@ -1,5 +1,5 @@
 # coding=utf-8
-from flask import Flask
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 

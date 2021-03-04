@@ -315,7 +315,7 @@ export default {
     // 同时也解决的相同的昵称不一样头像的问题。
     const randomAvatar = (name) => {
       const color = Math.abs(customHash(name)).toString(16).slice(2).toUpperCase();
-      return "https:/http://116.62.110.131:5000.prodless.com/avatar.png?size=40&backgroundColor=f0f2f4&color=" + color;
+      return "https://api.prodless.com/avatar.png?size=40&backgroundColor=f0f2f4&color=" + color;
     }
 
     commentList.getComments();
@@ -512,6 +512,11 @@ export default {
       pre {
         white-space: pre-wrap;
         word-wrap: break-word;
+        margin: 10px 0;
+
+        p {
+          margin: 10px 0;
+        }
       }
     }
   }
