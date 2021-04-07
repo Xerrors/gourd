@@ -25,3 +25,6 @@ dist
 /blog/blog/*
 dist-ssr
 *.local
+
+# ssl 认证文件
+server/dert

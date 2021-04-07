@@ -1,13 +1,13 @@
 from flask import Blueprint
 from flask import request, jsonify, abort
 from app import app, db
-from app.utils.articles import parse_markdown
+from app.utils.articles import parse_markdown, get_articles_from_db
 from app.utils.database import rtn_zones, get_all_zhuanlan, get_page_view_by_path, rtn_friends
 from app.config import DOMAIN_PRE, TOKEN
 from app.tables import Zone, FriendsTable, ZhuanlanTable, LocalArticlesTable, LocalArticlesComment, Messages
 from datetime import datetime
 
-mod = Blueprint('blog', __name__, url_prefix='/blog')
+mod = Blueprint('blog', __name__)
 
 
 @mod.route("/visit", methods=["GET"])
@@ -187,6 +187,13 @@ def del_zhuanlan():
         return abort(403, "请提供id")
 
 
+# 获取文章列表
+@mod.route('/articles', methods=["GET"])
+def get_articles():
+    articles = get_articles_from_db()
+    return jsonify({"data": articles})
+
+
 # 点赞评论
 
 # TODO 数据验证，多次点击验证 IP
@@ -263,3 +270,4 @@ def get_comments():
     query_result = db.session.query(LocalArticlesComment).filter_by(path=path).all()
     comments = [result.to_json() for result in query_result]
     return jsonify({"message": "Good!", "data": comments})
+

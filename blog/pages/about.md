@@ -1,6 +1,6 @@
 ---
 title: 关于
-permalink: about
+permalink: /about
 customLayout: About
 sidebar: false
 content: 

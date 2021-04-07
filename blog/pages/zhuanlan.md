@@ -1,6 +1,6 @@
 ---
 title: 专栏
-permalink: zhuanlan
+permalink: /zhuanlan
 customLayout: ZhuanlanPage
 sidebar: false
 ---

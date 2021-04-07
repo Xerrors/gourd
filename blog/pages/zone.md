@@ -1,6 +1,6 @@
 ---
 title: 动态
-permalink: zone
+permalink: /zone
 customLayout: ZonePage
 sidebar: false
 ---

@@ -1,5 +1,7 @@
 # 代办事项
 
+现在已经尝试将博客部分迁移到 vuepress v2 了，更多的插件支持，也更加容易自定义：https://github.com/Xerrors/Meco
+
 - prompt、alert 暂时使用的是默认样式，之后需要进行优化
 - CSDN 文章爬虫优化（不想做但是不得不做）
 - CSDN 知乎爬虫设计（不想做但是不得不做）
@@ -12,11 +14,12 @@
 
 - 周报日报页面设计以及后端支持（实现周报，日报暂缓）
 - vitepress 暂时不支持 permalink 的问题（官方并不支持，观望是否会有后续插件）
+- 【后端】数据库的备份与恢复
 
 - 博客页面的搜索功能（等待vitepress正式上线）
 - 文章详情页面的UI实现（等待vitepress正式上线）
-- footer 组件设计（等待vitepress正式上线）
-- Navbar 设计（等待vitepress正式上线）
+- 【博客】footer 组件设计（等待vitepress正式上线）
+- 【博客】Navbar 设计（等待vitepress正式上线）
 
 ## 🛠2021.02.20
 

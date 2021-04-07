@@ -30,7 +30,7 @@ export default defineComponent({
     const oriText: string =
       "---\ntitle: \ndate: " +
       date +
-      "\npermalink: draft\ncover: \ntags: \n- \ncategories: \n\n---\n";
+      "\npermalink: /draft\ncover: \ntags: \n- \ncategories: \n\n---\n";
 
     let route = useRoute();
     let router = useRouter();
