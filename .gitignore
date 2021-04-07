@@ -27,4 +27,4 @@ dist-ssr
 *.local
 
 # ssl 认证文件
-server/dert
+server/cert
