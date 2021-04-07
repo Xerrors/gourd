@@ -1,6 +1,7 @@
-# Gourd 🎅
+<h1 style="text-align: center">Gourd</h1>
 
-> 【提醒】项目处于起步阶段 In Progress
+<p style="text-align: center">鉴于 vitepress 无法满足开发需要，将陆续迁移到 vuepress-next</p>
+
 
 ![preview](https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/homepage1.png)
 
