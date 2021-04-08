@@ -7,6 +7,8 @@ from app.config import DOMAIN_PRE, TOKEN
 from app.tables import Zone, FriendsTable, ZhuanlanTable, LocalArticlesTable, LocalArticlesComment, Messages
 from datetime import datetime
 
+from app.utils.zones import get_zones, delete_zone, update_zone, add_zone
+
 mod = Blueprint('blog', __name__)
 
 
@@ -32,33 +34,20 @@ def visit():
 # 动态相关
 
 @mod.route('/zones', methods=['GET'])
-def get_zones():
-    id = request.args.get('id')
-    if id:
-        zone = db.session.query(Zone).get(id)
-        if zone:
-            return jsonify({"data": zone.to_json()})
-        else:
-            return jsonify({"message": "没有该动态~"}), 404
-    else:
-        return jsonify({"data": rtn_zones()})
+def get_zones_view():
+    return jsonify({"data": get_zones()})
 
 
 @mod.route('/zones', methods=['DELETE'])
 def del_zone():
-    id = request.args.get('id')
+    _id = request.args.get('id')
     token = request.args.get('token')
 
     if token != TOKEN:
         abort(403, "Token 不对劲！")
-    elif id:
-        zone = db.session.query(Zone).get(id)
-        if zone:
-            db.session.delete(zone)
-            db.session.commit()
-            return jsonify({"message": "已删除", "data": rtn_zones()})
-        else:
-            return jsonify({"message": "没有该动态~"}), 404
+    elif _id:
+        delete_zone(_id)
+        return jsonify({"message": "已删除", "data": get_zones()})
     else:
         return jsonify({"message": "请提供删除的动态的 id"}), 403
 
@@ -71,9 +60,12 @@ def create_zone():
 
     if token != TOKEN:
         abort(403, "Token 不对劲！")
-    db.session.add(Zone(msg=msg, status=status, date=datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
-    db.session.commit()
-    return jsonify({"data": rtn_zones()})
+    add_zone({
+        'msg': msg,
+        'status': status,
+        'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    })
+    return jsonify({"data": get_zones()})
 
 
 # 友链信息

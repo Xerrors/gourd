@@ -161,10 +161,10 @@ class ZhuanlanTable(db.Model):
 
 
 # 暂时觉得没有启用的必要
-class Visitors(db.Model):
-    __tablename__ = "Visitors"
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20))
-    avatar = db.Column(db.String(50))  # 头像的链接，暂时不启用
-    email = db.Column(db.String(20))
-    site = db.Column(db.String(20))
+# class Visitors(db.Model):
+#     __tablename__ = "Visitors"
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(20))
+#     avatar = db.Column(db.String(50))  # 头像的链接，暂时不启用
+#     email = db.Column(db.String(20))
+#     site = db.Column(db.String(20))

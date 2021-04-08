@@ -12,8 +12,12 @@ if WIN:  # 如果是 Windows 系统，使用三个斜线
 else:  # 否则使用四个斜线
     prefix = 'sqlite:////'
 
+DATABASE = '../data/data.db'
+
+JSON_PATH = 'data'
+
 SQLALCHEMY_TRACK_MODIFICATIONS = False
-SQLALCHEMY_DATABASE_URI = prefix + os.path.join(app.root_path, '../data', 'data.db')
+SQLALCHEMY_DATABASE_URI = prefix + os.path.join(app.root_path, DATABASE)
 
 SECRET_KEY = "&%J87jVyt68JbF68IbvTG79kBy*"
 
