@@ -1,9 +1,9 @@
 <h1 style="text-align: center">Gourd</h1>
 
-<p style="text-align: center">鉴于 vitepress 无法满足开发需要，将陆续迁移到 vuepress-next</p>
+## 🎁 News
 
+项目迁移；为了方便管理，此项目现有的三个部分已经迁移到三个新的 repo （[Meco](https://github.com/Xerrors/Meco)，[Meco-MS](https://github.com/Xerrors/Meco-MS)，[Meco-Server](https://github.com/Xerrors/Meco-Server)）
 
-![preview](https://xerrors.oss-cn-shanghai.aliyuncs.com/imgs/homepage1.png)
 
 ## 项目介绍
 
